@@ -4,12 +4,7 @@ interface Props {
   onOpenManager: () => void;
 }
 
-/** Admin-only route manager launcher. Public users never see this —
- *  gated by the `?admin` query param (on ANY viewport). */
-const ADMIN = new URLSearchParams(window.location.search).has("admin");
-
 export function RoutesToggle({ onOpenManager }: Props) {
-  if (!ADMIN) return null;
   return (
     <div className="absolute bottom-14 left-3 md:bottom-14 md:left-4 z-[1000] flex flex-col gap-2">
       <button

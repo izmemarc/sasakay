@@ -108,7 +108,6 @@ export function RouteEditor({ initialId }: Props) {
   >("idle");
   const [warning, setWarning] = useState<string | null>(null);
   const [hoveredNodeId, setHoveredNodeId] = useState<number | null>(null);
-  const saveTimerRef = useRef<number | null>(null);
   const initialLoadDone = useRef(false);
 
   useEffect(() => {
@@ -159,36 +158,41 @@ export function RouteEditor({ initialId }: Props) {
     };
   }, [initialId]);
 
-  // Auto-save.
-  useEffect(() => {
-    if (!initialLoadDone.current) return;
+  // NO auto-save. Saving is manual via the Save button, so the editor
+  // can never clobber on-disk changes by itself. `dirty` tracks whether
+  // there are unsaved changes so the Save button can show a badge.
+  const [dirty, setDirty] = useState(false);
+
+  const saveNow = useCallback(async () => {
     if (!meta.id) return;
-    if (saveTimerRef.current) window.clearTimeout(saveTimerRef.current);
-    saveTimerRef.current = window.setTimeout(async () => {
-      setSaveState("saving");
-      try {
-        const body: RouteFile = { ...meta, path };
-        const res = await fetch("/__write-route", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
-        if (!res.ok) throw new Error(await res.text());
-        setSaveState("saved");
-        window.setTimeout(() => setSaveState("idle"), 1000);
-      } catch (e) {
-        console.error("auto-save failed", e);
-        setSaveState("error");
-      }
-    }, 400);
-    return () => {
-      if (saveTimerRef.current) window.clearTimeout(saveTimerRef.current);
-    };
+    setSaveState("saving");
+    try {
+      const body: RouteFile = { ...meta, path };
+      const res = await fetch("/__write-route", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      setSaveState("saved");
+      setDirty(false);
+      window.setTimeout(() => setSaveState("idle"), 1500);
+    } catch (e) {
+      console.error("save failed", e);
+      setSaveState("error");
+    }
   }, [meta, path]);
 
   const pushHistory = useCallback((prev: number[]) => {
+    setDirty(true);
     setHistory((h) => [...h.slice(-49), prev]);
     setFuture([]);
+  }, []);
+
+  /** Use for user-initiated meta changes so the Save button shows dirty. */
+  const updateMeta = useCallback((next: Meta) => {
+    setDirty(true);
+    setMeta(next);
   }, []);
 
   const addNode = useCallback(
@@ -232,6 +236,7 @@ export function RouteEditor({ initialId }: Props) {
 
   const undo = useCallback(() => {
     if (history.length === 0) return;
+    setDirty(true);
     const prev = history[history.length - 1];
     setHistory((h) => h.slice(0, -1));
     setFuture((f) => [...f, path]);
@@ -240,6 +245,7 @@ export function RouteEditor({ initialId }: Props) {
 
   const redo = useCallback(() => {
     if (future.length === 0) return;
+    setDirty(true);
     const next = future[future.length - 1];
     setFuture((f) => f.slice(0, -1));
     setHistory((h) => [...h, path]);
@@ -280,9 +286,29 @@ export function RouteEditor({ initialId }: Props) {
     setPath([]);
   }, [path, pushHistory]);
 
+  // Warn on close/navigate if there are unsaved changes. Browsers still
+  // require `returnValue` to be set even though it's marked deprecated
+  // in the types — preventDefault alone does not trigger the dialog.
+  useEffect(() => {
+    if (!dirty) return;
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, [dirty]);
+
   // Keyboard shortcuts.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      // Ctrl/Cmd+S → save, even when focused on an input.
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        void saveNow();
+        return;
+      }
       const target = e.target as HTMLElement | null;
       if (target && ["INPUT", "TEXTAREA"].includes(target.tagName)) return;
       if (e.key === "z" && !e.shiftKey) {
@@ -301,7 +327,7 @@ export function RouteEditor({ initialId }: Props) {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [undo, redo, reversePath, removeLast]);
+  }, [undo, redo, reversePath, removeLast, saveNow]);
 
   // Reconstructed polyline from current path.
   const pathSteps = useMemo(() => {
@@ -480,25 +506,45 @@ export function RouteEditor({ initialId }: Props) {
       </div>
 
       <aside className="bg-white border-l border-gray-200 flex flex-col">
-        <div className="p-3 border-b border-gray-200 flex items-center justify-between">
+        <div className="p-3 border-b border-gray-200 flex items-center justify-between gap-2">
           <a
             href="/"
-            className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900"
+            className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 shrink-0"
           >
             <ArrowLeft size={14} /> Back
           </a>
-          <h1 className="text-sm font-bold">
+          <h1 className="text-sm font-bold truncate">
             {loadedExisting ? "Edit route" : "New route"}
+            {dirty && (
+              <span className="ml-1 text-amber-600" title="Unsaved changes">
+                •
+              </span>
+            )}
           </h1>
-          <div className="w-16 text-right text-[10px] text-gray-500">
-            {saveState === "saving" && "saving…"}
-            {saveState === "saved" && (
-              <span className="text-emerald-600">saved ✓</span>
-            )}
-            {saveState === "error" && (
-              <span className="text-red-600">save error</span>
-            )}
-          </div>
+          <button
+            type="button"
+            onClick={saveNow}
+            disabled={!dirty || saveState === "saving"}
+            className={`shrink-0 px-3 py-1.5 text-xs font-semibold rounded-md transition-colors ${
+              !dirty
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                : saveState === "saving"
+                ? "bg-emerald-200 text-emerald-800 cursor-wait"
+                : saveState === "error"
+                ? "bg-red-600 text-white hover:bg-red-700"
+                : "bg-emerald-600 text-white hover:bg-emerald-700"
+            }`}
+          >
+            {saveState === "saving"
+              ? "Saving…"
+              : saveState === "saved"
+              ? "Saved ✓"
+              : saveState === "error"
+              ? "Retry"
+              : dirty
+              ? "Save"
+              : "Saved"}
+          </button>
         </div>
 
         <div className="p-3 space-y-2 border-b border-gray-200 text-sm">
@@ -509,7 +555,7 @@ export function RouteEditor({ initialId }: Props) {
               </span>
               <input
                 value={meta.id}
-                onChange={(e) => setMeta({ ...meta, id: e.target.value })}
+                onChange={(e) => updateMeta({ ...meta, id: e.target.value })}
                 className="w-full px-2 py-1 border border-gray-300 rounded"
               />
             </label>
@@ -519,7 +565,7 @@ export function RouteEditor({ initialId }: Props) {
               </span>
               <input
                 value={meta.code}
-                onChange={(e) => setMeta({ ...meta, code: e.target.value })}
+                onChange={(e) => updateMeta({ ...meta, code: e.target.value })}
                 className="w-full px-2 py-1 border border-gray-300 rounded"
               />
             </label>
@@ -530,7 +576,7 @@ export function RouteEditor({ initialId }: Props) {
             </span>
             <input
               value={meta.name}
-              onChange={(e) => setMeta({ ...meta, name: e.target.value })}
+              onChange={(e) => updateMeta({ ...meta, name: e.target.value })}
               className="w-full px-2 py-1 border border-gray-300 rounded"
             />
           </label>
@@ -544,7 +590,7 @@ export function RouteEditor({ initialId }: Props) {
                   <button
                     key={c}
                     type="button"
-                    onClick={() => setMeta({ ...meta, color: c })}
+                    onClick={() => updateMeta({ ...meta, color: c })}
                     className={`w-5 h-5 rounded border ${
                       meta.color === c
                         ? "ring-2 ring-offset-1 ring-gray-900 border-gray-900"
@@ -563,7 +609,7 @@ export function RouteEditor({ initialId }: Props) {
                 type="number"
                 value={meta.fare}
                 onChange={(e) =>
-                  setMeta({ ...meta, fare: Number(e.target.value) || 0 })
+                  updateMeta({ ...meta, fare: Number(e.target.value) || 0 })
                 }
                 className="w-full px-2 py-1 border border-gray-300 rounded"
               />
@@ -578,7 +624,7 @@ export function RouteEditor({ initialId }: Props) {
                 <button
                   key={t}
                   type="button"
-                  onClick={() => setMeta({ ...meta, topology: t })}
+                  onClick={() => updateMeta({ ...meta, topology: t })}
                   className={`flex-1 px-2 py-1 text-xs rounded border ${
                     meta.topology === t
                       ? "bg-emerald-600 text-white border-emerald-600"
