@@ -1,0 +1,3824 @@
+[
+  {
+    "id": "101-shopping-mall",
+    "name": "101 Shopping Mall",
+    "aliases": [
+      "4QW2+FCG, Luis San Los Baños Avenue, Corner F. Imperial Street, Barangay Capantawan, Legazpi City"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.75106900000002,
+      13.146179799999999
+    ],
+    "address": "4QW2+FCG, Luis San Los Baños Avenue, Corner F. Imperial Street, Barangay Capantawan, Legazpi City"
+  },
+  {
+    "id": "daraga-public-market",
+    "name": "Daraga Public Market",
+    "aliases": [
+      "4PX8+J5V, General Luna, Legaspi City, Albay, Daraga"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.7154242,
+      13.149115199999999
+    ],
+    "address": "4PX8+J5V, General Luna, Legaspi City, Albay, Daraga"
+  },
+  {
+    "id": "hong-enterprises",
+    "name": "HONG Enterprises",
+    "aliases": [
+      "F. Imperial St, Barangay Capantawan, Legazpi City"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.75132400000001,
+      13.1464967
+    ],
+    "address": "F. Imperial St, Barangay Capantawan, Legazpi City"
+  },
+  {
+    "id": "j-f-mall-daraga",
+    "name": "J&F Mall Daraga",
+    "aliases": [
+      "5P29+969, Maroroy Rd, Daraga"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.71812120000001,
+      13.1509217
+    ],
+    "address": "5P29+969, Maroroy Rd, Daraga"
+  },
+  {
+    "id": "lcc-ayala",
+    "name": "LCC AYALA",
+    "aliases": [
+      "ayala malls, anchor 2 3/f, Legazpi City"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.75171119999997,
+      13.1470992
+    ],
+    "address": "ayala malls, anchor 2 3/f, Legazpi City"
+  },
+  {
+    "id": "lcc-daraga",
+    "name": "LCC Daraga",
+    "aliases": [
+      "Daraga"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.71652300000001,
+      13.1492911
+    ],
+    "address": "Daraga"
+  },
+  {
+    "id": "lcc-hello-shopping",
+    "name": "LCC Hello Shopping",
+    "aliases": [
+      "LCC, Peñaranda St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.7533517,
+      13.147229399999999
+    ],
+    "address": "LCC, Peñaranda St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "lcc-supermarket-legazpi",
+    "name": "LCC Supermarket - Legazpi",
+    "aliases": [
+      "LCC, Peñaranda St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.75362529999998,
+      13.147680500000002
+    ],
+    "address": "LCC, Peñaranda St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "legazpi-pasalubong-center",
+    "name": "Legazpi Pasalubong Center",
+    "aliases": [
+      "4PRV+VG9, Tahao Rd, Legazpi City"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.74385099999999,
+      13.142172599999999
+    ],
+    "address": "4PRV+VG9, Tahao Rd, Legazpi City"
+  },
+  {
+    "id": "liberty-center",
+    "name": "Liberty Center",
+    "aliases": [
+      "Quezon Ave, Legazpi Port District, Legazpi City"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.75204380000001,
+      13.1467916
+    ],
+    "address": "Quezon Ave, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "metro",
+    "name": "Metro",
+    "aliases": [
+      "Metro Gaisano, F. Imperial St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.74902439999998,
+      13.1443294
+    ],
+    "address": "Metro Gaisano, F. Imperial St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "mini-box-shopping-plaza",
+    "name": "Mini Box Shopping Plaza",
+    "aliases": [
+      "200 Regidor St, Daraga"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.7170373,
+      13.1507544
+    ],
+    "address": "200 Regidor St, Daraga"
+  },
+  {
+    "id": "pacific-mall",
+    "name": "Pacific Mall",
+    "aliases": [
+      "4PWX+3VP, Landco Business Park, F. Imperial St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.7496972,
+      13.1452035
+    ],
+    "address": "4PWX+3VP, Landco Business Park, F. Imperial St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "puregold-embarcadero",
+    "name": "Puregold Embarcadero",
+    "aliases": [
+      "Legazpi Blvd, Legazpi Port District, Legazpi City"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.75892019999999,
+      13.1433096
+    ],
+    "address": "Legazpi Blvd, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "robinsons-supermarket-albay",
+    "name": "Robinsons Supermarket Albay",
+    "aliases": [
+      "Rizal St, Old Albay District, Legazpi City"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.73664380000001,
+      13.138771199999999
+    ],
+    "address": "Rizal St, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "sm-city-legazpi",
+    "name": "SM City Legazpi",
+    "aliases": [
+      "Zone 9 Imelda Roces Ave, Legazpi City"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.74383129999998,
+      13.143761699999999
+    ],
+    "address": "Zone 9 Imelda Roces Ave, Legazpi City"
+  },
+  {
+    "id": "sm-store-legazpi",
+    "name": "SM Store - Legazpi",
+    "aliases": [
+      "SM City, Legazpi Port District, Legazpi City"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.7443236,
+      13.1444216
+    ],
+    "address": "SM City, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "sm-supermarket-sm-city-legazpi",
+    "name": "SM Supermarket | SM City Legazpi",
+    "aliases": [
+      "LKY Metro Transport and Lifestyle Hub, UV Express Terminal, Jeepney Terminal, Terminal Rd 1, Legazpi Port District, Legazpi City"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.74518970000001,
+      13.1437659
+    ],
+    "address": "LKY Metro Transport and Lifestyle Hub, UV Express Terminal, Jeepney Terminal, Terminal Rd 1, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "unitop-legazpi",
+    "name": "Unitop Legazpi",
+    "aliases": [
+      "4PQQ+889, Barangay 15‑Ilawod East Poblacion, Old Albay District, Legazpi City"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.73835310000001,
+      13.1382847
+    ],
+    "address": "4PQQ+889, Barangay 15‑Ilawod East Poblacion, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "yashano-mall-legazpi",
+    "name": "Yashano Mall Legazpi",
+    "aliases": [
+      "Terminal Road 1 Corner, F. Imperial St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "mall",
+    "coordinates": [
+      123.74611290000001,
+      13.146343
+    ],
+    "address": "Terminal Road 1 Corner, F. Imperial St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "anislag-daraga",
+    "name": "Anislag Daraga",
+    "aliases": [
+      "Daraga"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.70147159999999,
+      13.0770428
+    ],
+    "address": "Daraga"
+  },
+  {
+    "id": "bagtang",
+    "name": "Bagtang",
+    "aliases": [
+      "Daraga"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.72577000000001,
+      13.14951
+    ],
+    "address": "Daraga"
+  },
+  {
+    "id": "camalig",
+    "name": "Camalig",
+    "aliases": [
+      "Poblacion, Camalig"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.65601699999999,
+      13.182018999999999
+    ],
+    "address": "Poblacion, Camalig"
+  },
+  {
+    "id": "capantawan",
+    "name": "Capantawan",
+    "aliases": [
+      "Legazpi Port District, Legazpi City"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.74761000000001,
+      13.14397
+    ],
+    "address": "Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "cigi-bus-stop",
+    "name": "CIGI Bus Stop",
+    "aliases": [
+      "City Light Industrial Park, Legazpi Diversion Rd, Bogtong, Legazpi City"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.73645420000001,
+      13.161001299999999
+    ],
+    "address": "City Light Industrial Park, Legazpi Diversion Rd, Bogtong, Legazpi City"
+  },
+  {
+    "id": "daraga",
+    "name": "Daraga",
+    "aliases": [
+      "Daraga",
+      "Daraga"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.7159954,
+      13.1507681
+    ],
+    "branch": "Daraga",
+    "address": "Daraga"
+  },
+  {
+    "id": "daraga-1",
+    "name": "Daraga",
+    "aliases": [
+      "Daraga",
+      "Daraga"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.71131899999999,
+      13.148636
+    ],
+    "branch": "Daraga",
+    "address": "Daraga"
+  },
+  {
+    "id": "daraga-2",
+    "name": "Daraga",
+    "aliases": [
+      "Daraga",
+      "Daraga"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.71121699999999,
+      13.14855
+    ],
+    "branch": "Daraga",
+    "address": "Daraga"
+  },
+  {
+    "id": "daraga-3",
+    "name": "Daraga",
+    "aliases": [
+      "Daraga",
+      "Daraga"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.71026099999997,
+      13.155434999999999
+    ],
+    "branch": "Daraga",
+    "address": "Daraga"
+  },
+  {
+    "id": "daraga-bus-stop",
+    "name": "Daraga Bus Stop",
+    "aliases": [
+      "AH26, Bañag, Daraga"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.71078890000001,
+      13.154829300000001
+    ],
+    "address": "AH26, Bañag, Daraga"
+  },
+  {
+    "id": "legazpi",
+    "name": "Legazpi",
+    "aliases": [
+      "Peñaranda St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.75203420000001,
+      13.151529
+    ],
+    "address": "Peñaranda St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "legazpi-city",
+    "name": "Legazpi City",
+    "aliases": [
+      "Old Albay District, Legazpi City",
+      "Old Albay District"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.73441,
+      13.138537999999999
+    ],
+    "branch": "Old Albay District",
+    "address": "Old Albay District, Legazpi City"
+  },
+  {
+    "id": "legazpi-city-1",
+    "name": "Legazpi City",
+    "aliases": [
+      "Old Albay District, Legazpi City",
+      "Old Albay District"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.73444699999999,
+      13.138387
+    ],
+    "branch": "Old Albay District",
+    "address": "Old Albay District, Legazpi City"
+  },
+  {
+    "id": "legazpi-diversion",
+    "name": "Legazpi Diversion",
+    "aliases": [
+      "Legazpi City"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.7438133,
+      13.163081799999999
+    ],
+    "address": "Legazpi City"
+  },
+  {
+    "id": "legazpi-grand-central-terminal",
+    "name": "Legazpi Grand Central Terminal",
+    "aliases": [
+      "Legazpi Port District, Legazpi City"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.74584399999999,
+      13.1434687
+    ],
+    "address": "Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "passenger-terminal-building-pmo-legazpi",
+    "name": "Passenger Terminal Building PMO-Legazpi",
+    "aliases": [
+      "Legazpi City Port, Legazpi Blvd, Legazpi Port District, Legazpi City"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.75649100000001,
+      13.1450765
+    ],
+    "address": "Legazpi City Port, Legazpi Blvd, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "st-jude-transit-terminal",
+    "name": "St. Jude Transit Terminal",
+    "aliases": [
+      "Daraga - Legazpi City - Tiwi Rd, Bacacay"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.75871180000001,
+      13.2813511
+    ],
+    "address": "Daraga - Legazpi City - Tiwi Rd, Bacacay"
+  },
+  {
+    "id": "travesia",
+    "name": "Travesia",
+    "aliases": [
+      "Guinobatan"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.61542999999999,
+      13.19009
+    ],
+    "address": "Guinobatan"
+  },
+  {
+    "id": "tricycle-terminal-to-bacacay-town",
+    "name": "Tricycle Terminal to Bacacay Town",
+    "aliases": [
+      "Bacacay"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.7582544,
+      13.283309899999999
+    ],
+    "address": "Bacacay"
+  },
+  {
+    "id": "washington-drive",
+    "name": "Washington Drive",
+    "aliases": [
+      "Legazpi City"
+    ],
+    "category": "terminal",
+    "coordinates": [
+      123.73597000000001,
+      13.143849999999999
+    ],
+    "address": "Legazpi City"
+  },
+  {
+    "id": "amore-relocation-site-multipurpose-hall",
+    "name": "Amore Relocation Site Multipurpose Hall",
+    "aliases": [
+      "3MCW+PGG Amore Relocation Site, Anislag, Daraga"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.69631690000001,
+      13.0718085
+    ],
+    "address": "3MCW+PGG Amore Relocation Site, Anislag, Daraga"
+  },
+  {
+    "id": "bureau-of-fire-protection",
+    "name": "BUREAU OF FIRE PROTECTION",
+    "aliases": [
+      "4QR5+JX3, Governor Locsin Street, Legazpi Port District, Legazpi City"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.7599355,
+      13.141515
+    ],
+    "address": "4QR5+JX3, Governor Locsin Street, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "camalig-town-proper",
+    "name": "Camalig Town Proper",
+    "aliases": [
+      "5MJ4+Q69, Municipal Hall Camalig, Daraga"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.6555938,
+      13.181900899999999
+    ],
+    "address": "5MJ4+Q69, Municipal Hall Camalig, Daraga"
+  },
+  {
+    "id": "daraga-central-fire-station",
+    "name": "Daraga Central Fire Station",
+    "aliases": [
+      "5P49+4MF, Fernando Ave I, Daraga"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.7191579,
+      13.1553215
+    ],
+    "address": "5P49+4MF, Fernando Ave I, Daraga"
+  },
+  {
+    "id": "daraga-municipal-hall",
+    "name": "Daraga Municipal Hall",
+    "aliases": [
+      "4PX7+J6V, Toribio Perez Street, Daraga"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.71306100000001,
+      13.1491203
+    ],
+    "address": "4PX7+J6V, Toribio Perez Street, Daraga"
+  },
+  {
+    "id": "daraga-municipal-police-station",
+    "name": "Daraga Municipal Police Station",
+    "aliases": [
+      "5P49+2MV, Daraga"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.7191471,
+      13.155114699999999
+    ],
+    "address": "5P49+2MV, Daraga"
+  },
+  {
+    "id": "hall-of-justice",
+    "name": "HALL OF JUSTICE",
+    "aliases": [
+      "5Q73+V7C Regional Trial Court Building, Regional Government Center, Legazpi City"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.75313969999999,
+      13.164689099999999
+    ],
+    "address": "5Q73+V7C Regional Trial Court Building, Regional Government Center, Legazpi City"
+  },
+  {
+    "id": "legazpi-city-central-fire-station",
+    "name": "LEGAZPI CITY CENTRAL FIRE STATION",
+    "aliases": [
+      "4QR5+HXP, Legazpi Blvd, Legazpi Port District, Legazpi City"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.75993919999999,
+      13.1414647
+    ],
+    "address": "4QR5+HXP, Legazpi Blvd, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "legazpi-city-hall",
+    "name": "Legazpi City Hall",
+    "aliases": [
+      "4PQM+8RP, Old Albay District, Legazpi City"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.73458899999999,
+      13.1383411
+    ],
+    "address": "4PQM+8RP, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "legazpi-city-police-station",
+    "name": "Legazpi City Police Station",
+    "aliases": [
+      "4PWV+9WF, F. Imperial St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.7447863,
+      13.145929599999999
+    ],
+    "address": "4PWV+9WF, F. Imperial St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "manito-municipal-hall",
+    "name": "Manito Municipal Hall",
+    "aliases": [
+      "4VF8+CWR, Manito"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.86726100000001,
+      13.123602
+    ],
+    "address": "4VF8+CWR, Manito"
+  },
+  {
+    "id": "oro-site-multi-purpose-hall",
+    "name": "ORO SITE MULTI-PURPOSE HALL",
+    "aliases": [
+      "241 Quezon Ave, Legazpi Port District, Legazpi City"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.7507775,
+      13.1498314
+    ],
+    "address": "241 Quezon Ave, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "pamahalaang-bayan-ng-sto-domingo",
+    "name": "PAMAHALAANG BAYAN NG STO. DOMINGO",
+    "aliases": [
+      "6QPG+QWF, Santo Domingo"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.77731000000001,
+      13.23693
+    ],
+    "address": "6QPG+QWF, Santo Domingo"
+  },
+  {
+    "id": "philippines-national-police-legaspi-city-police-st",
+    "name": "Philippines National Police-Legaspi City Police Station",
+    "aliases": [
+      "4PXV+56H Soliman Bldg, Tahao Rd, Legazpi City"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.74309499999998,
+      13.1479306
+    ],
+    "address": "4PXV+56H Soliman Bldg, Tahao Rd, Legazpi City"
+  },
+  {
+    "id": "police-community-precinct-5",
+    "name": "Police Community Precinct 5",
+    "aliases": [
+      "Purok 4, Regional Government Center, Bgy. 42 - Rawis (Bgy. 65), 42, Legazpi City"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.7517022,
+      13.1686125
+    ],
+    "address": "Purok 4, Regional Government Center, Bgy. 42 - Rawis (Bgy. 65), 42, Legazpi City"
+  },
+  {
+    "id": "regional-trial-court",
+    "name": "Regional Trial Court",
+    "aliases": [
+      "Regional Trial Court Building, Regional Government Center, Legazpi City"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.75328809999998,
+      13.1647621
+    ],
+    "address": "Regional Trial Court Building, Regional Government Center, Legazpi City"
+  },
+  {
+    "id": "salugan-barangay-hall",
+    "name": "Salugan Barangay Hall",
+    "aliases": [
+      "5MP7+FC9 Barangay, National Road, Salugan, Camalig"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.663612,
+      13.186167
+    ],
+    "address": "5MP7+FC9 Barangay, National Road, Salugan, Camalig"
+  },
+  {
+    "id": "sto-domingo-fire-station",
+    "name": "Sto. Domingo Fire Station",
+    "aliases": [
+      "6QQG+4WG, Street, Santo Domingo"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.7773212,
+      13.2378123
+    ],
+    "address": "6QQG+4WG, Street, Santo Domingo"
+  },
+  {
+    "id": "taladong-barangay-hall",
+    "name": "Taladong Barangay Hall",
+    "aliases": [
+      "4MP4+QX7, Camalig"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.65740819999999,
+      13.136921599999999
+    ],
+    "address": "4MP4+QX7, Camalig"
+  },
+  {
+    "id": "taysan-fire-station",
+    "name": "Taysan Fire Station",
+    "aliases": [
+      "Ibalong Village, 1543 Bicol 640, Legazpi City"
+    ],
+    "category": "government",
+    "coordinates": [
+      123.74259810000001,
+      13.1202952
+    ],
+    "address": "Ibalong Village, 1543 Bicol 640, Legazpi City"
+  },
+  {
+    "id": "ace-medical-center-legazpi",
+    "name": "ACE Medical Center Legazpi",
+    "aliases": [
+      "5P5M+HHW, Legazpi City"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.7339644,
+      13.158995599999999
+    ],
+    "address": "5P5M+HHW, Legazpi City"
+  },
+  {
+    "id": "ago-general-hospital",
+    "name": "Ago General Hospital",
+    "aliases": [
+      "4PQJ+V98, Daraga - Legazpi City - Tiwi Rd, Old Albay District, Legazpi City"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.73094499999999,
+      13.139655000000001
+    ],
+    "address": "4PQJ+V98, Daraga - Legazpi City - Tiwi Rd, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "albay-doctors-hospital",
+    "name": "Albay Doctors Hospital",
+    "aliases": [
+      "4QX3+W86, Peñaranda St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.753278,
+      13.149789
+    ],
+    "address": "4QX3+W86, Peñaranda St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "bicol-cancer-center",
+    "name": "Bicol Cancer Center",
+    "aliases": [
+      "4PWF+FRW OPD Building, Legazpi City"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.72459049999999,
+      13.1462273
+    ],
+    "address": "4PWF+FRW OPD Building, Legazpi City"
+  },
+  {
+    "id": "bicol-regional-hospital-and-medical-center",
+    "name": "Bicol Regional Hospital and Medical Center",
+    "aliases": [
+      "4PWF+RV4 Administration Building, Legazpi City"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.72470440000001,
+      13.147006699999999
+    ],
+    "address": "4PWF+RV4 Administration Building, Legazpi City"
+  },
+  {
+    "id": "brhmc-regional-heart-center",
+    "name": "BRHMC Regional Heart Center",
+    "aliases": [
+      "4PWF+QJ8, Legazpi City"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.72408929999999,
+      13.1469232
+    ],
+    "address": "4PWF+QJ8, Legazpi City"
+  },
+  {
+    "id": "daraga-doctors-hospital",
+    "name": "Daraga Doctors Hospital",
+    "aliases": [
+      "Legaspi, DARAGA, Daraga"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.71097970000001,
+      13.1539489
+    ],
+    "address": "Legaspi, DARAGA, Daraga"
+  },
+  {
+    "id": "don-alfonso-bichara-memorial-hospital",
+    "name": "Don Alfonso Bichara Memorial Hospital",
+    "aliases": [
+      "3MCW+589, Daraga"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.69586579999998,
+      13.0704196
+    ],
+    "address": "3MCW+589, Daraga"
+  },
+  {
+    "id": "dr-esteban-v-ante-memorial-hospital",
+    "name": "Dr. Esteban V. Ante Memorial Hospital",
+    "aliases": [
+      "573 Rizal St, Old Albay District, Legazpi City"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.74284200000001,
+      13.1386506
+    ],
+    "address": "573 Rizal St, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "estevez-memorial-hospital-inc",
+    "name": "Estevez Memorial Hospital, Inc.",
+    "aliases": [
+      "4PQR+67P Estevez Memorial Hospital, Don Juan S. Estevez Street, Guevarra Subdivision, Legazpi City"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.7406944,
+      13.138086699999999
+    ],
+    "address": "4PQR+67P Estevez Memorial Hospital, Don Juan S. Estevez Street, Guevarra Subdivision, Legazpi City"
+  },
+  {
+    "id": "hiv-treatment-hub-brtth",
+    "name": "HIV Treatment Hub: BRTTH",
+    "aliases": [
+      "4PWF+QR9 Bicol Regional Hospital and Medical Center, Administration Building, Bagtang Rd, Daraga"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.7245995,
+      13.1469113
+    ],
+    "address": "4PWF+QR9 Bicol Regional Hospital and Medical Center, Administration Building, Bagtang Rd, Daraga"
+  },
+  {
+    "id": "ibalong-medical-center",
+    "name": "IBALONG MEDICAL CENTER",
+    "aliases": [
+      "Rizal Avenue, Old Albay District, Legazpi City"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.73733759999998,
+      13.1381952
+    ],
+    "address": "Rizal Avenue, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "jlp-medical-skinhealth-specialist",
+    "name": "JLP Medical & Skinhealth Specialist",
+    "aliases": [
+      "5P4F+QC6, Olbes St, Fernando Ave III, Daraga"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.723529,
+      13.15691
+    ],
+    "address": "5P4F+QC6, Olbes St, Fernando Ave III, Daraga"
+  },
+  {
+    "id": "legazpi-city-hospital",
+    "name": "Legazpi City Hospital",
+    "aliases": [
+      "Terminal Rd 3, Legazpi Port District, Legazpi City"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.74470400000001,
+      13.1453779
+    ],
+    "address": "Terminal Rd 3, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "llenaresas-lying-in-clinic",
+    "name": "Llenaresas Lying-in Clinic",
+    "aliases": [
+      "P5 Alcala, Daraga, Legazpi City"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.71306779999999,
+      13.1782205
+    ],
+    "address": "P5 Alcala, Daraga, Legazpi City"
+  },
+  {
+    "id": "manito-municipal-hospital",
+    "name": "Manito Municipal Hospital",
+    "aliases": [
+      "4VCC+FFV, Manito Municipal Hospital, Legazpi City - Punta de Jesus Rd, Manito"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.87117420000001,
+      13.1212454
+    ],
+    "address": "4VCC+FFV, Manito Municipal Hospital, Legazpi City - Punta de Jesus Rd, Manito"
+  },
+  {
+    "id": "rabvaxx-anti-rabies-center",
+    "name": "Rabvaxx Anti Rabies Center",
+    "aliases": [
+      "Unit 5, Matza Building, 4500 Rizal St, Old Albay District, Legazpi City"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.73066430000002,
+      13.1402285
+    ],
+    "address": "Unit 5, Matza Building, 4500 Rizal St, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "scmr-animal-bite-center",
+    "name": "SCMR Animal Bite Center",
+    "aliases": [
+      "708 Rizal St, Old Albay District, Legazpi City"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.73756689999999,
+      13.138669700000001
+    ],
+    "address": "708 Rizal St, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "tanchuling-general-hospital-inc",
+    "name": "Tanchuling General Hospital, Inc.",
+    "aliases": [
+      "Jasmin St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.75195260000001,
+      13.143709699999999
+    ],
+    "address": "Jasmin St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "university-of-santo-tomas-legazpi-hospital",
+    "name": "UNIVERSITY OF SANTO TOMAS - LEGAZPI HOSPITAL",
+    "aliases": [
+      "F. Aquende Dr, Legazpi City, Albay, Legazpi City"
+    ],
+    "category": "hospital",
+    "coordinates": [
+      123.734923,
+      13.146419999999999
+    ],
+    "address": "F. Aquende Dr, Legazpi City, Albay, Legazpi City"
+  },
+  {
+    "id": "albay-central-school-acs",
+    "name": "Albay Central School (ACS)",
+    "aliases": [
+      "Legazpi City"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.73618719999999,
+      13.140577799999999
+    ],
+    "address": "Legazpi City"
+  },
+  {
+    "id": "bagumbayan-central-school",
+    "name": "Bagumbayan Central School",
+    "aliases": [
+      "4PRP+J5V, F. Aquende Dr, Legazpi City"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.73543559999999,
+      13.1416237
+    ],
+    "address": "4PRP+J5V, F. Aquende Dr, Legazpi City"
+  },
+  {
+    "id": "bicol-college",
+    "name": "BICOL COLLEGE",
+    "aliases": [
+      "4PX9+6P2, Sagpon, Daraga"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.7192501,
+      13.1480109
+    ],
+    "address": "4PX9+6P2, Sagpon, Daraga"
+  },
+  {
+    "id": "bicol-university-daraga-campus",
+    "name": "Bicol University, Daraga Campus",
+    "aliases": [
+      "4PX9+76J, Rizal St, Daraga"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.71800689999999,
+      13.148215599999999
+    ],
+    "address": "4PX9+76J, Rizal St, Daraga"
+  },
+  {
+    "id": "bicol-university-east-campus",
+    "name": "Bicol University, East Campus",
+    "aliases": [
+      "4500 Daraga - Legazpi City - Tiwi Rd, Legazpi City"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.7296775,
+      13.1473394
+    ],
+    "address": "4500 Daraga - Legazpi City - Tiwi Rd, Legazpi City"
+  },
+  {
+    "id": "bicol-university-west-main-campus",
+    "name": "Bicol University, West (Main Campus)",
+    "aliases": [
+      "4PVF+P7J, Legazpi City"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.7231321,
+      13.1443405
+    ],
+    "address": "4PVF+P7J, Legazpi City"
+  },
+  {
+    "id": "catc-computer-arts-and-technological-college-inc",
+    "name": "CATC Computer Arts And Technological College Inc.",
+    "aliases": [
+      "Unit 8, CEA Building, Corner Rizal St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.75337080000001,
+      13.1445513
+    ],
+    "address": "Unit 8, CEA Building, Corner Rizal St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "daraga-community-college-dcomc",
+    "name": "Daraga Community College ( DComC )",
+    "aliases": [
+      "377 1, Daraga"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.6778793,
+      13.1774702
+    ],
+    "address": "377 1, Daraga"
+  },
+  {
+    "id": "divine-word-college-of-legazpi-north-campus",
+    "name": "Divine Word College of Legazpi - North Campus",
+    "aliases": [
+      "4PXP+RPF Divine Word College of Legazpi High School Campus, F. Aquende Dr, Legazpi City"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.73678679999999,
+      13.149553899999999
+    ],
+    "address": "4PXP+RPF Divine Word College of Legazpi High School Campus, F. Aquende Dr, Legazpi City"
+  },
+  {
+    "id": "divine-word-college-of-legazpi-south-campus",
+    "name": "Divine Word College of Legazpi - South Campus",
+    "aliases": [
+      "4PQP+982, Rizal Avenue, Old Albay District, Legazpi City"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.7357642,
+      13.1383995
+    ],
+    "address": "4PQP+982, Rizal Avenue, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "gogon-high-school",
+    "name": "Gogon High School",
+    "aliases": [
+      "5P3W+W64, Gogon, Legazpi City"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.74557159999999,
+      13.154757499999999
+    ],
+    "address": "5P3W+W64, Gogon, Legazpi City"
+  },
+  {
+    "id": "legazpi-city-national-high-school-formerly-pag-asa",
+    "name": "Legazpi City National High School (Formerly Pag-asa National High School)",
+    "aliases": [
+      "5PCX+V33, Pag-asa annex, PNR Rd, Legazpi City"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.74766890000001,
+      13.172140899999999
+    ],
+    "address": "5PCX+V33, Pag-asa annex, PNR Rd, Legazpi City"
+  },
+  {
+    "id": "marcial-o-ra-ola-memorial-school",
+    "name": "MARCIAL O. RAÑOLA MEMORIAL SCHOOL",
+    "aliases": [
+      "5JQ5+PQ5, 1, Guinobatan"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.60948179999998,
+      13.1892532
+    ],
+    "address": "5JQ5+PQ5, 1, Guinobatan"
+  },
+  {
+    "id": "putiao-pilar-sorsogon",
+    "name": "Putiao Pilar sorsogon",
+    "aliases": [
+      "2PC8+H2M, Pilar"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.7150526,
+      13.0214609
+    ],
+    "address": "2PC8+H2M, Pilar"
+  },
+  {
+    "id": "rawis-elementary-school",
+    "name": "Rawis Elementary School",
+    "aliases": [
+      "5QC2+WG9, Legazpi City"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.7513541,
+      13.172282599999999
+    ],
+    "address": "5QC2+WG9, Legazpi City"
+  },
+  {
+    "id": "st-agnes-academy",
+    "name": "St. Agnes' Academy",
+    "aliases": [
+      "4PQR+HJG, Rizal St, Legazpi City"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.74158680000001,
+      13.1389411
+    ],
+    "address": "4PQR+HJG, Rizal St, Legazpi City"
+  },
+  {
+    "id": "sti-college-legazpi",
+    "name": "STI College - Legazpi",
+    "aliases": [
+      "692 Rizal St, Old Albay District, Legazpi City"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.7494429,
+      13.1411866
+    ],
+    "address": "692 Rizal St, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "tanchuling-college",
+    "name": "Tanchuling College",
+    "aliases": [
+      "4QV3+G37, Jasmin St, Imperial Subdivision, Legazpi City"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.75267020000001,
+      13.1437864
+    ],
+    "address": "4QV3+G37, Jasmin St, Imperial Subdivision, Legazpi City"
+  },
+  {
+    "id": "taysan-elementary-school",
+    "name": "Taysan Elementary School",
+    "aliases": [
+      "4P8V+RH6, Legazpi City"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.74390410000001,
+      13.1170263
+    ],
+    "address": "4P8V+RH6, Legazpi City"
+  },
+  {
+    "id": "university-of-santo-tomas-legazpi",
+    "name": "University of Santo Tomas–Legazpi",
+    "aliases": [
+      "near Gate 2, 5P8X+4W8 Aquinas University of Legazpi, Inc, Legazpi City"
+    ],
+    "category": "school",
+    "coordinates": [
+      123.74925259999999,
+      13.1642228
+    ],
+    "address": "near Gate 2, 5P8X+4W8 Aquinas University of Legazpi, Inc, Legazpi City"
+  },
+  {
+    "id": "01-st-dominic-de-guzman-parish-church-san-pedro-sa",
+    "name": "01 St. Dominic de Guzman Parish Church - San Pedro, Santo Domingo, Albay (Diocese of Legazpi)",
+    "aliases": [
+      "St. Dominic De Guzman Church, Santo Domingo"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.77680000000001,
+      13.2369991
+    ],
+    "address": "St. Dominic De Guzman Church, Santo Domingo"
+  },
+  {
+    "id": "corpus-christi-monastery-of-saint-clare",
+    "name": "Corpus Christi Monastery of Saint Clare",
+    "aliases": [
+      "4P83+FRR, Daraga"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.70452050000002,
+      13.1162365
+    ],
+    "address": "4P83+FRR, Daraga"
+  },
+  {
+    "id": "cullat-daraga-albay",
+    "name": "Cullat, Daraga, Albay",
+    "aliases": [
+      "5P44+XR3, 1652 1, Daraga"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.7070133,
+      13.1574058
+    ],
+    "address": "5P44+XR3, 1652 1, Daraga"
+  },
+  {
+    "id": "daraga-church",
+    "name": "Daraga Church",
+    "aliases": [
+      "4PX6+WWW, Sta. Maria Street, Daraga"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.71231840000002,
+      13.149866099999999
+    ],
+    "address": "4PX6+WWW, Sta. Maria Street, Daraga"
+  },
+  {
+    "id": "mcgi-legazpi-city",
+    "name": "MCGI Legazpi City",
+    "aliases": [
+      "5P6P+2FX, Legazpi City"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.73624459999998,
+      13.1601001
+    ],
+    "address": "5P6P+2FX, Legazpi City"
+  },
+  {
+    "id": "our-lady-of-fatima-parish",
+    "name": "Our Lady of Fatima Parish",
+    "aliases": [
+      "4PXV+5HV Our Lady's Village, Legazpi City"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.74391430000001,
+      13.1479929
+    ],
+    "address": "4PXV+5HV Our Lady's Village, Legazpi City"
+  },
+  {
+    "id": "our-lady-of-guadalupe-shrine-brgy-buraguis-legazpi",
+    "name": "Our Lady of Guadalupe Shrine - Brgy. Buraguis, Legazpi",
+    "aliases": [
+      "PBN Subdivision, Buraguis, Legazpi City"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.7515231,
+      13.1375762
+    ],
+    "address": "PBN Subdivision, Buraguis, Legazpi City"
+  },
+  {
+    "id": "our-lady-of-salvation-chapel-arimbay-legazpi-city",
+    "name": "Our Lady of Salvation Chapel - Arimbay, Legazpi City",
+    "aliases": [
+      "5QP3+F98, Legazpi City"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.7534379,
+      13.1861533
+    ],
+    "address": "5QP3+F98, Legazpi City"
+  },
+  {
+    "id": "our-lady-of-salvation-parish-church-anislag-daraga",
+    "name": "Our Lady of Salvation Parish Church - Anislag, Daraga, Albay (Diocese of Legazpi)",
+    "aliases": [
+      "National Highway, Anislag, 677 1, Daraga"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.70393209999999,
+      13.070546199999999
+    ],
+    "address": "National Highway, Anislag, 677 1, Daraga"
+  },
+  {
+    "id": "our-mother-of-perpetual-help-shrine",
+    "name": "Our Mother of Perpetual Help Shrine",
+    "aliases": [
+      "5P4V+Q5M, Lakandula Dr, Legazpi City"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.74291099999999,
+      13.156960999999999
+    ],
+    "address": "5P4V+Q5M, Lakandula Dr, Legazpi City"
+  },
+  {
+    "id": "san-joaquin-barangay-chapel",
+    "name": "San Joaquin Barangay Chapel",
+    "aliases": [
+      "5PHV+W97, Pawa Rd, Legazpi City"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.7434269,
+      13.1797946
+    ],
+    "address": "5PHV+W97, Pawa Rd, Legazpi City"
+  },
+  {
+    "id": "san-ramon-nonato-parish-church-tagas-daraga-albay-",
+    "name": "San Ramon Nonato Parish Church - Tagas, Daraga, Albay (Diocese of Legazpi)",
+    "aliases": [
+      "5P4G+R33 Tagas Church (San Ramon Nonato Parish), Daraga"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.7251641,
+      13.1570179
+    ],
+    "address": "5P4G+R33 Tagas Church (San Ramon Nonato Parish), Daraga"
+  },
+  {
+    "id": "san-vicente-ferrer-parish-church-bigaa-legazpi-cit",
+    "name": "San Vicente Ferrer Parish Church - Bigaa, Legazpi City, Albay (Diocese of Legazpi)",
+    "aliases": [
+      "5QV3+MXH, Legazpi Port District, Legazpi City"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.7549949,
+      13.194183299999999
+    ],
+    "address": "5QV3+MXH, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "st-gregory-the-great-cathedral-catedral-de-san-gre",
+    "name": "St. Gregory the Great Cathedral (Catedral de San Gregorio Magno)",
+    "aliases": [
+      "4PQM+98C, Old Albay District, Legazpi City"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.7332522,
+      13.1384321
+    ],
+    "address": "4PQM+98C, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "st-john-the-baptist-parish-church",
+    "name": "St. John the Baptist Parish Church",
+    "aliases": [
+      "5MJ3+RVF, B. Buena St, Poblacion, Camalig"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.65468550000001,
+      13.182064599999999
+    ],
+    "address": "5MJ3+RVF, B. Buena St, Poblacion, Camalig"
+  },
+  {
+    "id": "st-jude-thaddeus-filipino-chinese-personal-parish-",
+    "name": "St. Jude Thaddeus Filipino Chinese Personal Parish and Diocesan Shrine",
+    "aliases": [
+      "4QW3+5FQ, Lapu-Lapu St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.7537282,
+      13.145466299999999
+    ],
+    "address": "4QW3+5FQ, Lapu-Lapu St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "st-padre-pio-chapel-embarcadero-de-legazpi",
+    "name": "St. Padre Pio Chapel, Embarcadero de Legazpi",
+    "aliases": [
+      "Ground Floor, Embarcadero de Legazpi, Building 3, Brgy. 27, Legazpi Port District, Legazpi City"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.7578221,
+      13.1435798
+    ],
+    "address": "Ground Floor, Embarcadero de Legazpi, Building 3, Brgy. 27, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "st-padre-pio-parish-and-diocesan-shrine-rawis-lega",
+    "name": "St. Padre Pio Parish and Diocesan Shrine - Rawis, Legazpi City, Albay (Diocese of Legazpi)",
+    "aliases": [
+      "5Q82+99R, Legazpi City"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.750897,
+      13.1659803
+    ],
+    "address": "5Q82+99R, Legazpi City"
+  },
+  {
+    "id": "st-raphael-the-archangel-parish-legazpi-port-distr",
+    "name": "St. Raphael the Archangel Parish - Legazpi Port District",
+    "aliases": [
+      "4QX3+HHV, Peñaranda St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.75393100000001,
+      13.148995999999999
+    ],
+    "address": "4QX3+HHV, Peñaranda St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "sto-cristo-chapel",
+    "name": "Sto. Cristo Chapel",
+    "aliases": [
+      "4PX5+JWP, Sto Cristo St, Daraga"
+    ],
+    "category": "church",
+    "coordinates": [
+      123.7098397,
+      13.1490814
+    ],
+    "address": "4PX5+JWP, Sto Cristo St, Daraga"
+  },
+  {
+    "id": "albay-park-wildlife",
+    "name": "Albay Park & Wildlife",
+    "aliases": [
+      "5P4J+W58, Daraga-Legazpi Diversion Rd, Bogtong, Legazpi City"
+    ],
+    "category": "landmark",
+    "coordinates": [
+      123.73046759999998,
+      13.157295
+    ],
+    "address": "5P4J+W58, Daraga-Legazpi Diversion Rd, Bogtong, Legazpi City"
+  },
+  {
+    "id": "black-lava-trail-helipad",
+    "name": "Black Lava Trail & Helipad",
+    "aliases": [
+      "Mayon Lava Front Helipad, Legazpi City"
+    ],
+    "category": "landmark",
+    "coordinates": [
+      123.7110426,
+      13.204196800000002
+    ],
+    "address": "Mayon Lava Front Helipad, Legazpi City"
+  },
+  {
+    "id": "cagsawa-ruins",
+    "name": "Cagsawa Ruins",
+    "aliases": [
+      "Daraga"
+    ],
+    "category": "landmark",
+    "coordinates": [
+      123.7011483,
+      13.165998799999999
+    ],
+    "address": "Daraga"
+  },
+  {
+    "id": "camalig-bypass-mayon-best-view",
+    "name": "Camalig Bypass - Mayon Best View",
+    "aliases": [
+      "5JHV+QC2, Camalig"
+    ],
+    "category": "landmark",
+    "coordinates": [
+      123.64404699999999,
+      13.1794503
+    ],
+    "address": "5JHV+QC2, Camalig"
+  },
+  {
+    "id": "giant-statue-of-nuestra-se-ora-de-salvacion",
+    "name": "Giant Statue of Nuestra Señora de Salvacion",
+    "aliases": [
+      "5PCQ+3MX, Legazpi City"
+    ],
+    "category": "landmark",
+    "coordinates": [
+      123.73924799999999,
+      13.1702277
+    ],
+    "address": "5PCQ+3MX, Legazpi City"
+  },
+  {
+    "id": "japanese-tunnel",
+    "name": "Japanese Tunnel",
+    "aliases": [
+      "5MC7+4M5, Legazpi City"
+    ],
+    "category": "landmark",
+    "coordinates": [
+      123.66422089999999,
+      13.170251799999999
+    ],
+    "address": "5MC7+4M5, Legazpi City"
+  },
+  {
+    "id": "kalayaan-park",
+    "name": "Kalayaan Park",
+    "aliases": [
+      "4500 Daraga - Legazpi City - Tiwi Rd, Legazpi City"
+    ],
+    "category": "landmark",
+    "coordinates": [
+      123.74716579999998,
+      13.1540553
+    ],
+    "address": "4500 Daraga - Legazpi City - Tiwi Rd, Legazpi City"
+  },
+  {
+    "id": "la-granja-de-tatin",
+    "name": "La Granja de Tatin",
+    "aliases": [
+      "Daraga"
+    ],
+    "category": "landmark",
+    "coordinates": [
+      123.70213729999999,
+      13.114517999999999
+    ],
+    "address": "Daraga"
+  },
+  {
+    "id": "mayon-black-lava-zipline-adventure",
+    "name": "Mayon Black Lava Zipline Adventure",
+    "aliases": [
+      "ATV Trail, Legazpi City"
+    ],
+    "category": "landmark",
+    "coordinates": [
+      123.7130368,
+      13.2024926
+    ],
+    "address": "ATV Trail, Legazpi City"
+  },
+  {
+    "id": "mayon-skydrive-atv-adventure",
+    "name": "Mayon SkyDrive ATV Adventure",
+    "aliases": [
+      "Mayon SkyDrive, ATV Adventure, Cagsawa Road, Daraga"
+    ],
+    "category": "landmark",
+    "coordinates": [
+      123.70146199999999,
+      13.164772200000002
+    ],
+    "address": "Mayon SkyDrive, ATV Adventure, Cagsawa Road, Daraga"
+  },
+  {
+    "id": "mayon-volcano-natural-park",
+    "name": "Mayon Volcano Natural Park",
+    "aliases": [
+      "Tabaco City"
+    ],
+    "category": "landmark",
+    "coordinates": [
+      123.68568909999999,
+      13.253619400000002
+    ],
+    "address": "Tabaco City"
+  },
+  {
+    "id": "mt-mayon-view-point",
+    "name": "Mt. Mayon View Point",
+    "aliases": [
+      "4QGF+X9V, Legazpi Blvd, Legazpi City"
+    ],
+    "category": "landmark",
+    "coordinates": [
+      123.773412,
+      13.127478
+    ],
+    "address": "4QGF+X9V, Legazpi Blvd, Legazpi City"
+  },
+  {
+    "id": "national-museum-of-the-philippines-bicol",
+    "name": "National Museum of the Philippines - Bicol",
+    "aliases": [
+      "Busay, Daraga"
+    ],
+    "category": "landmark",
+    "coordinates": [
+      123.7017497,
+      13.1645088
+    ],
+    "address": "Busay, Daraga"
+  },
+  {
+    "id": "pe-aranda-park",
+    "name": "Peñaranda Park",
+    "aliases": [
+      "4PQM+GRW, Old Albay District, Legazpi City"
+    ],
+    "category": "landmark",
+    "coordinates": [
+      123.73458360000001,
+      13.1388666
+    ],
+    "address": "4PQM+GRW, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "puro-legazpi-city",
+    "name": "Puro Legazpi City",
+    "aliases": [
+      "4QM8+PRM, Puro Rd, Legazpi City"
+    ],
+    "category": "landmark",
+    "coordinates": [
+      123.76703169999999,
+      13.1343438
+    ],
+    "address": "4QM8+PRM, Puro Rd, Legazpi City"
+  },
+  {
+    "id": "quituinan-hill",
+    "name": "Quituinan Hill",
+    "aliases": [
+      "5M98+W3X, Brgy. Daraga, Poblacion, Camalig"
+    ],
+    "category": "landmark",
+    "coordinates": [
+      123.6652402,
+      13.1698598
+    ],
+    "address": "5M98+W3X, Brgy. Daraga, Poblacion, Camalig"
+  },
+  {
+    "id": "quituinan-ranch",
+    "name": "Quituinan Ranch",
+    "aliases": [
+      "Camalig"
+    ],
+    "category": "landmark",
+    "coordinates": [
+      123.6649777,
+      13.1700491
+    ],
+    "address": "Camalig"
+  },
+  {
+    "id": "your-brother-mayon-atv-tour",
+    "name": "Your Brother Mayon Atv Tour",
+    "aliases": [
+      "Brgy, Legazpi City"
+    ],
+    "category": "landmark",
+    "coordinates": [
+      123.7337263,
+      13.170511999999999
+    ],
+    "address": "Brgy, Legazpi City"
+  },
+  {
+    "id": "anislag-public-market",
+    "name": "Anislag Public Market",
+    "aliases": [
+      "3PF2+9V4, Daraga"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.70218829999999,
+      13.0733751
+    ],
+    "address": "3PF2+9V4, Daraga"
+  },
+  {
+    "id": "banquerohan-public-market",
+    "name": "Banquerohan Public Market",
+    "aliases": [
+      "3P4W+JV6, Legazpi City"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.7468155,
+      13.0565792
+    ],
+    "address": "3P4W+JV6, Legazpi City"
+  },
+  {
+    "id": "bicol-egg-depot",
+    "name": "BICOL EGG DEPOT",
+    "aliases": [
+      "Daraga"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.71862649999998,
+      13.152592499999999
+    ],
+    "address": "Daraga"
+  },
+  {
+    "id": "camalig-wet-dry-public-market",
+    "name": "Camalig (Wet & Dry) Public Market",
+    "aliases": [
+      "5MH3+VXQ, G. Nobleza St, Poblacion, Camalig"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.65499299999999,
+      13.1797059
+    ],
+    "address": "5MH3+VXQ, G. Nobleza St, Poblacion, Camalig"
+  },
+  {
+    "id": "centro-market",
+    "name": "Centro Market",
+    "aliases": [
+      "Centro Market, 264 Bicol 640, Legazpi City"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.7439376,
+      13.1154241
+    ],
+    "address": "Centro Market, 264 Bicol 640, Legazpi City"
+  },
+  {
+    "id": "cinco-auto-garage-accessories-off-road",
+    "name": "CINCO AUTO GARAGE Accessories & Off-road",
+    "aliases": [
+      "Tahao Rd, Legazpi City"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.7431014,
+      13.150648700000001
+    ],
+    "address": "Tahao Rd, Legazpi City"
+  },
+  {
+    "id": "daphne-sari-sari-store",
+    "name": "DAPHNE SARI SARI STORE",
+    "aliases": [
+      "4PPM+P34, Mons. F. Reyes St, Old Albay District, Legazpi City"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.7327034,
+      13.1367645
+    ],
+    "address": "4PPM+P34, Mons. F. Reyes St, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "flea-market",
+    "name": "Flea Market",
+    "aliases": [
+      "Legazpi City"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.7447723,
+      13.139322199999999
+    ],
+    "address": "Legazpi City"
+  },
+  {
+    "id": "hana-s-agricultural-supply",
+    "name": "Hana's Agricultural Supply",
+    "aliases": [
+      "Purok 2, Daraga"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.70779950000001,
+      13.0630273
+    ],
+    "address": "Purok 2, Daraga"
+  },
+  {
+    "id": "happy-petals-flower-shop",
+    "name": "Happy Petals flower shop",
+    "aliases": [
+      "Lakandula Dr, Gogon, Legazpi City"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.74345890000001,
+      13.1560455
+    ],
+    "address": "Lakandula Dr, Gogon, Legazpi City"
+  },
+  {
+    "id": "highland-produce",
+    "name": "HIGHLAND PRODUCE",
+    "aliases": [
+      "21-133 Rizal St, Daraga"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.72014469999998,
+      13.1479509
+    ],
+    "address": "21-133 Rizal St, Daraga"
+  },
+  {
+    "id": "kristinas-kollectionsph",
+    "name": "Kristinas kollectionsph",
+    "aliases": [
+      "4PQV+JGF, Old Albay District, Legazpi City"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.74379949999998,
+      13.139062099999999
+    ],
+    "address": "4PQV+JGF, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "legazpi-city-public-market",
+    "name": "Legazpi City Public Market",
+    "aliases": [
+      "4QW2+P7W Legazpi Public Market Main Building, Legazpi Port District, Legazpi City"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.7506885,
+      13.146872
+    ],
+    "address": "4QW2+P7W Legazpi Public Market Main Building, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "manito-public-market",
+    "name": "Manito Public Market",
+    "aliases": [
+      "4VF8+RGW, Manito"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.866332,
+      13.1246115
+    ],
+    "address": "4VF8+RGW, Manito"
+  },
+  {
+    "id": "mapula-s-store",
+    "name": "MAPULA'S STORE",
+    "aliases": [
+      "5MJR+XF4, Daraga"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.691207,
+      13.1823842
+    ],
+    "address": "5MJR+XF4, Daraga"
+  },
+  {
+    "id": "maroroy-market-bagsakan",
+    "name": "Maroroy Market (Bagsakan)",
+    "aliases": [
+      "5P29+C73, Maroroy Rd, Daraga"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.71817310000002,
+      13.151015
+    ],
+    "address": "5P29+C73, Maroroy Rd, Daraga"
+  },
+  {
+    "id": "new-albay-public-market",
+    "name": "NEW ALBAY PUBLIC MARKET",
+    "aliases": [
+      "4PRM+5PM, Old Albay District, Legazpi City"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.73429220000001,
+      13.1404547
+    ],
+    "address": "4PRM+5PM, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "penshoppe",
+    "name": "Penshoppe",
+    "aliases": [
+      "Pacific Mall, Circumferrential Road, Legazpi Port District, Legazpi City"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.7498606,
+      13.145148299999999
+    ],
+    "address": "Pacific Mall, Circumferrential Road, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "tees-toes",
+    "name": "Tees&Toes",
+    "aliases": [
+      "P1. FVR - Relocation Site, Camalig"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.6386144,
+      13.1658685
+    ],
+    "address": "P1. FVR - Relocation Site, Camalig"
+  },
+  {
+    "id": "water-hub-refilling-station",
+    "name": "Water Hub Refilling Station",
+    "aliases": [
+      "PUROK 6, Daraga"
+    ],
+    "category": "market",
+    "coordinates": [
+      123.67575319999999,
+      13.181177199999999
+    ],
+    "address": "PUROK 6, Daraga"
+  },
+  {
+    "id": "9rock-garden",
+    "name": "9Rock Garden",
+    "aliases": [
+      "PUROK 3, Tagas, Daraga"
+    ],
+    "category": "park",
+    "coordinates": [
+      123.72555039999999,
+      13.1593403
+    ],
+    "address": "PUROK 3, Tagas, Daraga"
+  },
+  {
+    "id": "ako-bicol-marker",
+    "name": "AKO BICOL Marker",
+    "aliases": [
+      "6P69+38, Legazpi City"
+    ],
+    "category": "park",
+    "coordinates": [
+      123.71831399999999,
+      13.210163999999999
+    ],
+    "address": "6P69+38, Legazpi City"
+  },
+  {
+    "id": "bicol-heritage-park",
+    "name": "Bicol Heritage Park",
+    "aliases": [
+      "1 EM's Barrio N, Legazpi City"
+    ],
+    "category": "park",
+    "coordinates": [
+      123.72575200000001,
+      13.145045099999999
+    ],
+    "address": "1 EM's Barrio N, Legazpi City"
+  },
+  {
+    "id": "camalig-community-ecenter",
+    "name": "Camalig Community eCenter",
+    "aliases": [
+      "5MJ4+84M, Poblacion, Camalig"
+    ],
+    "category": "park",
+    "coordinates": [
+      123.6553043,
+      13.1808445
+    ],
+    "address": "5MJ4+84M, Poblacion, Camalig"
+  },
+  {
+    "id": "country-church",
+    "name": "Country Church",
+    "aliases": [
+      "4PH8+J6M, Lotivio Street, Daraga"
+    ],
+    "category": "park",
+    "coordinates": [
+      123.715536,
+      13.1290772
+    ],
+    "address": "4PH8+J6M, Lotivio Street, Daraga"
+  },
+  {
+    "id": "forest-lake-memorial-parks",
+    "name": "Forest Lake Memorial Parks",
+    "aliases": [
+      "4PHR+89P, Legazpi City"
+    ],
+    "category": "park",
+    "coordinates": [
+      123.74094819999999,
+      13.1283292
+    ],
+    "address": "4PHR+89P, Legazpi City"
+  },
+  {
+    "id": "green-lava",
+    "name": "Green Lava",
+    "aliases": [
+      "6M4M+J5W, Poblacion, Daraga"
+    ],
+    "category": "park",
+    "coordinates": [
+      123.68295549999999,
+      13.2066064
+    ],
+    "address": "6M4M+J5W, Poblacion, Daraga"
+  },
+  {
+    "id": "ibalong-park-legazpi-city-people-s-park",
+    "name": "Ibalong Park / Legazpi City People's Park",
+    "aliases": [
+      "Legazpi Blvd, Legazpi Port District, Legazpi City"
+    ],
+    "category": "park",
+    "coordinates": [
+      123.76560479999999,
+      13.134146
+    ],
+    "address": "Legazpi Blvd, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "lig-on-hill-nature-park",
+    "name": "Ligñon Hill Nature Park",
+    "aliases": [
+      "Ligñon Hill, Natures Park, 4500 Daraga - Legazpi City - Tiwi Rd, Barangay 41 Bogtong, Legazpi City"
+    ],
+    "category": "park",
+    "coordinates": [
+      123.729386,
+      13.1610373
+    ],
+    "address": "Ligñon Hill, Natures Park, 4500 Daraga - Legazpi City - Tiwi Rd, Barangay 41 Bogtong, Legazpi City"
+  },
+  {
+    "id": "quitinday-hills-and-nature-park",
+    "name": "Quitinday Hills and Nature Park",
+    "aliases": [
+      "4J28+2FX, Baligang - Caguiba Rd, Camalig"
+    ],
+    "category": "park",
+    "coordinates": [
+      123.61624580000002,
+      13.100124
+    ],
+    "address": "4J28+2FX, Baligang - Caguiba Rd, Camalig"
+  },
+  {
+    "id": "sawangan-park",
+    "name": "Sawangan Park",
+    "aliases": [
+      "4QR6+P7V, Legazpi Port District, Legazpi City"
+    ],
+    "category": "park",
+    "coordinates": [
+      123.76068289999999,
+      13.1418543
+    ],
+    "address": "4QR6+P7V, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "seventy-six-farm",
+    "name": "SEVENTY-SIX Farm",
+    "aliases": [
+      "5PWX+R93, Unnamed Road, Legazpi City"
+    ],
+    "category": "park",
+    "coordinates": [
+      123.74842670000001,
+      13.197
+    ],
+    "address": "5PWX+R93, Unnamed Road, Legazpi City"
+  },
+  {
+    "id": "sleeping-lion-kapuntukan-hill",
+    "name": "Sleeping Lion / Kapuntukan Hill",
+    "aliases": [
+      "4QR5+XJQ, Legazpi Blvd, Legazpi Port District, Legazpi City"
+    ],
+    "category": "park",
+    "coordinates": [
+      123.7591055,
+      13.1424509
+    ],
+    "address": "4QR5+XJQ, Legazpi Blvd, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "solong-eco-park",
+    "name": "Solong Eco Park",
+    "aliases": [
+      "4J8W+GQ4, Camalig"
+    ],
+    "category": "park",
+    "coordinates": [
+      123.6469486,
+      13.116257
+    ],
+    "address": "4J8W+GQ4, Camalig"
+  },
+  {
+    "id": "sumlang-lake",
+    "name": "Sumlang Lake",
+    "aliases": [
+      "5MHC+HJH, Poblacion, Camalig"
+    ],
+    "category": "park",
+    "coordinates": [
+      123.67161279999999,
+      13.178945299999999
+    ],
+    "address": "5MHC+HJH, Poblacion, Camalig"
+  },
+  {
+    "id": "sumlang-lake-nature-funtraventure",
+    "name": "Sumlang Lake / Nature Funtraventure",
+    "aliases": [
+      "Zone 4, Old PNR Rd, Sumlang, Camalig"
+    ],
+    "category": "park",
+    "coordinates": [
+      123.67013629999998,
+      13.180590599999999
+    ],
+    "address": "Zone 4, Old PNR Rd, Sumlang, Camalig"
+  },
+  {
+    "id": "aq-dome",
+    "name": "AQ Dome",
+    "aliases": [
+      "5P7X+5RP Aquinas University Dome, Legazpi City"
+    ],
+    "category": "sports",
+    "coordinates": [
+      123.7495897,
+      13.162964899999999
+    ],
+    "address": "5P7X+5RP Aquinas University Dome, Legazpi City"
+  },
+  {
+    "id": "kulamergz-gaming",
+    "name": "Kulamergz Gaming",
+    "aliases": [
+      "PUROK 2, Malobago, Daraga"
+    ],
+    "category": "sports",
+    "coordinates": [
+      123.7042668,
+      13.1639799
+    ],
+    "address": "PUROK 2, Malobago, Daraga"
+  },
+  {
+    "id": "casa-bicolandia-suites",
+    "name": "Casa Bicolandia Suites",
+    "aliases": [
+      "880, Kimantong, Daraga"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.71132109999999,
+      13.147539700000001
+    ],
+    "address": "880, Kimantong, Daraga"
+  },
+  {
+    "id": "daraga-tourist-inn",
+    "name": "Daraga Tourist Inn",
+    "aliases": [
+      "Doña Maria Subdivision, Lakandula Dr, Tagas, Daraga"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.72278489999998,
+      13.157315599999999
+    ],
+    "address": "Doña Maria Subdivision, Lakandula Dr, Tagas, Daraga"
+  },
+  {
+    "id": "farm-plate",
+    "name": "Farm Plate",
+    "aliases": [
+      "4PH8+V94, Daraga"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.71595570000001,
+      13.129649899999999
+    ],
+    "address": "4PH8+V94, Daraga"
+  },
+  {
+    "id": "hotel-lucca",
+    "name": "Hotel lucca",
+    "aliases": [
+      "Tanchuling Hotel Building, Jasmin St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.75098170000001,
+      13.143145899999999
+    ],
+    "address": "Tanchuling Hotel Building, Jasmin St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "hotel-sentro-legazpi",
+    "name": "Hotel Sentro Legazpi",
+    "aliases": [
+      "L. Los Baños Ave, F. Imperial St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.75090100000001,
+      13.14636
+    ],
+    "address": "L. Los Baños Ave, F. Imperial St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "hotel-st-ellis",
+    "name": "Hotel St. Ellis",
+    "aliases": [
+      "Brgy, Centro Bay-Bay, Rizal St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.75458689999998,
+      13.148216
+    ],
+    "address": "Brgy, Centro Bay-Bay, Rizal St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "la-piazza-hotel-and-convention-center",
+    "name": "La Piazza Hotel and Convention Center",
+    "aliases": [
+      "Imelda C. Roces Avenue, Legazpi City"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.7428113,
+      13.1522285
+    ],
+    "address": "Imelda C. Roces Avenue, Legazpi City"
+  },
+  {
+    "id": "mayon-lodging-house",
+    "name": "Mayon Lodging House",
+    "aliases": [
+      "KM3172, B National Road, Daraga, Legazpi City"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.6955488,
+      13.1656473
+    ],
+    "address": "KM3172, B National Road, Daraga, Legazpi City"
+  },
+  {
+    "id": "ninong-s-hotel",
+    "name": "Ninong's Hotel",
+    "aliases": [
+      "4PQP+QG2, Governor Locsin Street, Corner Ma. Clara Street, East, F. Aquende Dr, Legazpi City"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.7362734,
+      13.1393989
+    ],
+    "address": "4PQP+QG2, Governor Locsin Street, Corner Ma. Clara Street, East, F. Aquende Dr, Legazpi City"
+  },
+  {
+    "id": "on-due-hotel-events-place",
+    "name": "On Due Hotel & Events Place",
+    "aliases": [
+      "PUROK 1, SINANDAYAN SUA, Camalig"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.64447000000001,
+      13.1860774
+    ],
+    "address": "PUROK 1, SINANDAYAN SUA, Camalig"
+  },
+  {
+    "id": "papatantan-apartelle",
+    "name": "PapaTantan Apartelle",
+    "aliases": [
+      "4PRX+WWP, Legazpi Port District, Legazpi City"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.7498159,
+      13.1423437
+    ],
+    "address": "4PRX+WWP, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "parmview-inn",
+    "name": "ParmView Inn",
+    "aliases": [
+      "Juan S. Estevez St, Old Albay District, Legazpi City"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.74125430000001,
+      13.137636299999999
+    ],
+    "address": "Juan S. Estevez St, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "proxy-by-the-oriental-albay",
+    "name": "PROXY by The Oriental Albay",
+    "aliases": [
+      "Purok 1, Brgy 33 Peñaranda St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.7518275,
+      13.154181699999999
+    ],
+    "address": "Purok 1, Brgy 33 Peñaranda St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "reddoorz-pag-asa-rawis-legazpi",
+    "name": "RedDoorz @ Pag Asa Rawis Legazpi",
+    "aliases": [
+      "5PCW+FMX, 0375 Narra Dr, Legazpi City"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.74672070000001,
+      13.1712283
+    ],
+    "address": "5PCW+FMX, 0375 Narra Dr, Legazpi City"
+  },
+  {
+    "id": "reddoorz-s-l-apartelle-daraga-albay",
+    "name": "RedDoorz @ S & L Apartelle Daraga Albay",
+    "aliases": [
+      "4PV5+PWX, Daraga"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.70761470000001,
+      13.1466204
+    ],
+    "address": "4PV5+PWX, Daraga"
+  },
+  {
+    "id": "sampaguita-tourist-inn",
+    "name": "Sampaguita Tourist Inn",
+    "aliases": [
+      "4PXM+CP5, F. Aquende Dr, Legazpi City"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.73435939999999,
+      13.1485103
+    ],
+    "address": "4PXM+CP5, F. Aquende Dr, Legazpi City"
+  },
+  {
+    "id": "the-marison-hotel",
+    "name": "The Marison Hotel",
+    "aliases": [
+      "Corner Imelda Roces Ave, Legazpi City"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.7421026,
+      13.1556891
+    ],
+    "address": "Corner Imelda Roces Ave, Legazpi City"
+  },
+  {
+    "id": "the-oriental-legazpi",
+    "name": "The Oriental Legazpi",
+    "aliases": [
+      "Sto. Niño Village, City, Albay, Legazpi Blvd, Legazpi City"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.738749,
+      13.134506
+    ],
+    "address": "Sto. Niño Village, City, Albay, Legazpi Blvd, Legazpi City"
+  },
+  {
+    "id": "vela-hotel",
+    "name": "Vela Hotel",
+    "aliases": [
+      "5P4W+6RJ, Lakandula Dr, Legazpi City"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.74706250000001,
+      13.1555625
+    ],
+    "address": "5P4W+6RJ, Lakandula Dr, Legazpi City"
+  },
+  {
+    "id": "your-brother-house-tribal-village",
+    "name": "Your Brother House Tribal Village",
+    "aliases": [
+      "Pawa Rd, Legazpi City"
+    ],
+    "category": "hotel",
+    "coordinates": [
+      123.7337824,
+      13.168737
+    ],
+    "address": "Pawa Rd, Legazpi City"
+  },
+  {
+    "id": "1st-colonial-grill",
+    "name": "1st Colonial Grill",
+    "aliases": [
+      "4QW2+62M Pacific Mall Extension, Luis San Los Baños Avenue, Legazpi Port District, Legazpi City"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.7500619,
+      13.1455881
+    ],
+    "address": "4QW2+62M Pacific Mall Extension, Luis San Los Baños Avenue, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "1st-colonial-grill-express",
+    "name": "1st Colonial Grill Express",
+    "aliases": [
+      "4PWF+H2W, Rizal St, Brgy: Sagpon, Old Albay, Legazpi City"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.72257979999999,
+      13.146498699999999
+    ],
+    "address": "4PWF+H2W, Rizal St, Brgy: Sagpon, Old Albay, Legazpi City"
+  },
+  {
+    "id": "barisbis-filipino-restaurant",
+    "name": "Barisbis Filipino Restaurant",
+    "aliases": [
+      "Purok 2, Barangay, 10F, Salugan, Camalig"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.66196689999998,
+      13.1860068
+    ],
+    "address": "Purok 2, Barangay, 10F, Salugan, Camalig"
+  },
+  {
+    "id": "biggs-camalig",
+    "name": "Biggs Camalig",
+    "aliases": [
+      "Camalig Bypass Road, Camalig"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.64358190000002,
+      13.178142
+    ],
+    "address": "Camalig Bypass Road, Camalig"
+  },
+  {
+    "id": "cesar-s",
+    "name": "Cesar's",
+    "aliases": [
+      "Landco Business Park, Barangay Capantawan, Legazpi City"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.7486317,
+      13.1450154
+    ],
+    "address": "Landco Business Park, Barangay Capantawan, Legazpi City"
+  },
+  {
+    "id": "chowking",
+    "name": "Chowking",
+    "aliases": [
+      "Quickmart Building, Daraga"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.7147283,
+      13.148950399999999
+    ],
+    "address": "Quickmart Building, Daraga"
+  },
+  {
+    "id": "costa-palmera-resort",
+    "name": "Costa Palmera Resort",
+    "aliases": [
+      "Santo Domingo"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.7874195,
+      13.2381257
+    ],
+    "address": "Santo Domingo"
+  },
+  {
+    "id": "emmie-hotel",
+    "name": "Emmie Hotel",
+    "aliases": [
+      "16, Barangay, Kawit East, B.S. Imperial St, F. Aquende Dr, Pob, Legazpi City"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.7382713,
+      13.1459715
+    ],
+    "address": "16, Barangay, Kawit East, B.S. Imperial St, F. Aquende Dr, Pob, Legazpi City"
+  },
+  {
+    "id": "jollibee",
+    "name": "Jollibee",
+    "aliases": [
+      "Jollibee Building - Daraga, Rizal St, Poblacion, Daraga",
+      "Poblacion"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.7144599,
+      13.1490118
+    ],
+    "branch": "Poblacion",
+    "address": "Jollibee Building - Daraga, Rizal St, Poblacion, Daraga"
+  },
+  {
+    "id": "jollibee-1",
+    "name": "Jollibee",
+    "aliases": [
+      "4PQP+8G, Rizal St cor Braset St, City, Old Albay District, Legazpi City",
+      "Old Albay District"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.7363681,
+      13.1382614
+    ],
+    "branch": "Old Albay District",
+    "address": "4PQP+8G, Rizal St cor Braset St, City, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "jollikod",
+    "name": "Jollikod",
+    "aliases": [
+      "Marquez Street, Old Albay District, Legazpi City"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.7362071,
+      13.1370501
+    ],
+    "address": "Marquez Street, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "lets-pinangat",
+    "name": "Lets Pinangat",
+    "aliases": [
+      "5MM4+5GR, National Rd, Poblacion, Camalig"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.6562677,
+      13.182993399999999
+    ],
+    "address": "5MM4+5GR, National Rd, Poblacion, Camalig"
+  },
+  {
+    "id": "lola-s-bistro",
+    "name": "Lola's Bistro",
+    "aliases": [
+      "LGC Compound, 817 Lakandula Dr, Legazpi City"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.7384558,
+      13.155997999999999
+    ],
+    "address": "LGC Compound, 817 Lakandula Dr, Legazpi City"
+  },
+  {
+    "id": "mcdonald-s",
+    "name": "McDonald's",
+    "aliases": [
+      "Rizal St, Cor R. Rosario, Legazpi City",
+      "Old Albay District"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.73391000000001,
+      13.138829999999999
+    ],
+    "branch": "Old Albay District",
+    "address": "Rizal St, Cor R. Rosario, Legazpi City"
+  },
+  {
+    "id": "mcdonald-s-2",
+    "name": "McDonald's",
+    "aliases": [
+      "BU Arcade Building, Bicol University Arcade, Rizal St, Sagpon , Daraga, Legazpi City",
+      "Sagpon , Daraga"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.7163611,
+      13.1487419
+    ],
+    "branch": "Sagpon , Daraga",
+    "address": "BU Arcade Building, Bicol University Arcade, Rizal St, Sagpon , Daraga, Legazpi City"
+  },
+  {
+    "id": "mcdonald-s-1",
+    "name": "McDonald’s",
+    "aliases": [
+      "1, Daraga"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.6952766,
+      13.165807099999999
+    ],
+    "address": "1, Daraga"
+  },
+  {
+    "id": "red-labuyo-restaurant",
+    "name": "Red Labuyo Restaurant",
+    "aliases": [
+      "5P26+4V6, Sta. Maria Street, Daraga"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.7121463,
+      13.1502819
+    ],
+    "address": "5P26+4V6, Sta. Maria Street, Daraga"
+  },
+  {
+    "id": "small-talk-caf",
+    "name": "Small Talk Café",
+    "aliases": [
+      "4PQP+2X9, 15 Doña Aurora St, Old Albay District, Legazpi City"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.73711459999998,
+      13.1382412
+    ],
+    "address": "4PQP+2X9, 15 Doña Aurora St, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "socorro-s-lakeside-restaurant-and-grill",
+    "name": "Socorro's Lakeside Restaurant and Grill",
+    "aliases": [
+      "Purok 1, Brgy. Sumlang, 4502, Camalig"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.6730226,
+      13.178695999999999
+    ],
+    "address": "Purok 1, Brgy. Sumlang, 4502, Camalig"
+  },
+  {
+    "id": "tong-yang-sm-city-legazpi",
+    "name": "Tong Yang | SM City Legazpi",
+    "aliases": [
+      "3rd Floor, SM City Legazpi, Imelda Roces Ave, Legazpi Port District, Legazpi City"
+    ],
+    "category": "food",
+    "coordinates": [
+      123.74498249999998,
+      13.1445773
+    ],
+    "address": "3rd Floor, SM City Legazpi, Imelda Roces Ave, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "528-ilawod-cafe",
+    "name": "528 Ilawod Cafe",
+    "aliases": [
+      "4PX7+5F8, 528 4501 Daraga, Lotivio Street, Daraga"
+    ],
+    "category": "cafe",
+    "coordinates": [
+      123.714306,
+      13.145949
+    ],
+    "address": "4PX7+5F8, 528 4501 Daraga, Lotivio Street, Daraga"
+  },
+  {
+    "id": "5th-wave-coffee-house",
+    "name": "5th Wave Coffee House",
+    "aliases": [
+      "Barangay, Rosario St, 7 - Bano (Pob.), Old Albay District, Legazpi City"
+    ],
+    "category": "cafe",
+    "coordinates": [
+      123.7341045,
+      13.1404914
+    ],
+    "address": "Barangay, Rosario St, 7 - Bano (Pob.), Old Albay District, Legazpi City"
+  },
+  {
+    "id": "balay-sa-bikol",
+    "name": "Balay sa Bikol",
+    "aliases": [
+      "Pag-asa St, Daraga"
+    ],
+    "category": "cafe",
+    "coordinates": [
+      123.7105535,
+      13.1509685
+    ],
+    "address": "Pag-asa St, Daraga"
+  },
+  {
+    "id": "bec",
+    "name": "Bec.",
+    "aliases": [
+      "Blk2 lot2, east, F. Aquende Dr, brgy 16, Legazpi City"
+    ],
+    "category": "cafe",
+    "coordinates": [
+      123.74008359999999,
+      13.1437323
+    ],
+    "address": "Blk2 lot2, east, F. Aquende Dr, brgy 16, Legazpi City"
+  },
+  {
+    "id": "bee-s-coffee-house",
+    "name": "Bee’s Coffee House",
+    "aliases": [
+      "JLS1 Bldg, Benny Benjamin Imperial St, Legazpi City"
+    ],
+    "category": "cafe",
+    "coordinates": [
+      123.7416261,
+      13.1459766
+    ],
+    "address": "JLS1 Bldg, Benny Benjamin Imperial St, Legazpi City"
+  },
+  {
+    "id": "boulevard-blends",
+    "name": "Boulevard Blends",
+    "aliases": [
+      "Legazpi Blvd, Legazpi City"
+    ],
+    "category": "cafe",
+    "coordinates": [
+      123.7640189,
+      13.1345435
+    ],
+    "address": "Legazpi Blvd, Legazpi City"
+  },
+  {
+    "id": "cafe-fabrika",
+    "name": "Cafe Fabrika",
+    "aliases": [
+      "LG paran bldg, Daraga"
+    ],
+    "category": "cafe",
+    "coordinates": [
+      123.7095416,
+      13.147262999999999
+    ],
+    "address": "LG paran bldg, Daraga"
+  },
+  {
+    "id": "casablanca-hotel",
+    "name": "Casablanca Hotel",
+    "aliases": [
+      "238 Peñaranda St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "cafe",
+    "coordinates": [
+      123.7522989,
+      13.1523357
+    ],
+    "address": "238 Peñaranda St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "department-of-health-regional-office-v",
+    "name": "Department of Health Regional Office V",
+    "aliases": [
+      "4PXG+963 Department of Health Regional Compound, Daraga"
+    ],
+    "category": "cafe",
+    "coordinates": [
+      123.72553149999999,
+      13.148384799999999
+    ],
+    "address": "4PXG+963 Department of Health Regional Compound, Daraga"
+  },
+  {
+    "id": "dunkin-drive-thru-legazpi",
+    "name": "Dunkin' Drive thru Legazpi",
+    "aliases": [
+      "5Q62+7G9, Bgy. 39 - Bonot, Legazpi City"
+    ],
+    "category": "cafe",
+    "coordinates": [
+      123.7513719,
+      13.1606737
+    ],
+    "address": "5Q62+7G9, Bgy. 39 - Bonot, Legazpi City"
+  },
+  {
+    "id": "j-co",
+    "name": "J.Co",
+    "aliases": [
+      "4QW2+VX2, Ground Floor Ayala Malls Legazpi, Quezon Ave, Legazpi Port District, Legazpi City"
+    ],
+    "category": "cafe",
+    "coordinates": [
+      123.75240459999999,
+      13.147148999999999
+    ],
+    "address": "4QW2+VX2, Ground Floor Ayala Malls Legazpi, Quezon Ave, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "kape-cita",
+    "name": "Kape Cita",
+    "aliases": [
+      "207 Purok 3, Daraga"
+    ],
+    "category": "cafe",
+    "coordinates": [
+      123.68405039999999,
+      13.1770696
+    ],
+    "address": "207 Purok 3, Daraga"
+  },
+  {
+    "id": "kape-winika",
+    "name": "Kape Winika",
+    "aliases": [
+      "Tourism Mega Hwy, Legazpi City"
+    ],
+    "category": "cafe",
+    "coordinates": [
+      123.74652390000001,
+      13.1216751
+    ],
+    "address": "Tourism Mega Hwy, Legazpi City"
+  },
+  {
+    "id": "kapihan",
+    "name": "Kapihan",
+    "aliases": [
+      "5P3W+3RR, Legazpi City"
+    ],
+    "category": "cafe",
+    "coordinates": [
+      123.74690410000001,
+      13.1527786
+    ],
+    "address": "5P3W+3RR, Legazpi City"
+  },
+  {
+    "id": "kin-coffee",
+    "name": "KIN Coffee",
+    "aliases": [
+      "The Vinson, Cor. Doña Aurora, Rizal St, Legazpi City"
+    ],
+    "category": "cafe",
+    "coordinates": [
+      123.73718249999997,
+      13.138580399999999
+    ],
+    "address": "The Vinson, Cor. Doña Aurora, Rizal St, Legazpi City"
+  },
+  {
+    "id": "la-veranda-cafe-daraga-legazpi",
+    "name": "La Veranda Cafe - Daraga/Legazpi",
+    "aliases": [
+      "Doña Maria Subdivision, 25 Jaucian St, Daraga"
+    ],
+    "category": "cafe",
+    "coordinates": [
+      123.7207772,
+      13.1545069
+    ],
+    "address": "Doña Maria Subdivision, 25 Jaucian St, Daraga"
+  },
+  {
+    "id": "starbucks-the-gregorian-legazpi",
+    "name": "Starbucks - The Gregorian Legazpi",
+    "aliases": [
+      "Unit G5 & G6, The, Gregorian Mall, Old Albay District, Legazpi City"
+    ],
+    "category": "cafe",
+    "coordinates": [
+      123.73389440000001,
+      13.1390528
+    ],
+    "address": "Unit G5 & G6, The, Gregorian Mall, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "starbucks-sm-city-legazpi",
+    "name": "Starbucks | SM City Legazpi",
+    "aliases": [
+      "G/F, SM City Legazpi, Imelda Roces Ave, Legazpi City"
+    ],
+    "category": "cafe",
+    "coordinates": [
+      123.7440488,
+      13.143585999999999
+    ],
+    "address": "G/F, SM City Legazpi, Imelda Roces Ave, Legazpi City"
+  },
+  {
+    "id": "aub",
+    "name": "AUB",
+    "aliases": [
+      "4QW2+95P, F. Imperial St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.75046300000001,
+      13.1459727
+    ],
+    "address": "4QW2+95P, F. Imperial St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "bangko-sentral-ng-pilipinas",
+    "name": "Bangko Sentral ng Pilipinas",
+    "aliases": [
+      "4PRW+486, Legazpi Port District, Legazpi City"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.74575670000002,
+      13.1402998
+    ],
+    "address": "4PRW+486, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "bdo-albay-daraga",
+    "name": "BDO Albay - Daraga",
+    "aliases": [
+      "Rizal St., corner Burgos St Brgy. Centro, Daraga"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.71275290000001,
+      13.1480836
+    ],
+    "address": "Rizal St., corner Burgos St Brgy. Centro, Daraga"
+  },
+  {
+    "id": "bdo-legazpi-city-rizal-st",
+    "name": "BDO Legazpi City - Rizal St.",
+    "aliases": [
+      "AMR Bldg, Rizal St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.7529155,
+      13.1446905
+    ],
+    "address": "AMR Bldg, Rizal St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "bdo-legazpi-city-rotonda",
+    "name": "BDO Legazpi City - Rotonda",
+    "aliases": [
+      "Imperial Building, Rizal St, Old Albay District, Legazpi City"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.75279019999999,
+      13.147022699999999
+    ],
+    "address": "Imperial Building, Rizal St, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "bpi-legaspi-rotonda-branch",
+    "name": "BPI Legaspi Rotonda Branch",
+    "aliases": [
+      "Rizal Street corner, Quezon Ave, Legazpi City"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.75313200000001,
+      13.147269000000001
+    ],
+    "address": "Rizal Street corner, Quezon Ave, Legazpi City"
+  },
+  {
+    "id": "bpi-legazpi-albay-branch",
+    "name": "BPI Legazpi Albay Branch",
+    "aliases": [
+      "4PQM+F3G, Rizal, cor Monsignor Reyes St, Old Albay District, Legazpi City"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.73276659999999,
+      13.138707799999999
+    ],
+    "address": "4PQM+F3G, Rizal, cor Monsignor Reyes St, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "camalig-bank-head-office",
+    "name": "Camalig Bank - Head Office",
+    "aliases": [
+      "Rizal St, East, Legazpi City"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.73940809999999,
+      13.138441700000001
+    ],
+    "address": "Rizal St, East, Legazpi City"
+  },
+  {
+    "id": "chinabank",
+    "name": "Chinabank",
+    "aliases": [
+      "4PWX+PF7, F. Imperial St, Legazpi Port District, Legazpi City",
+      "Legazpi Port District"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.74866130000001,
+      13.146785999999999
+    ],
+    "branch": "Legazpi Port District",
+    "address": "4PWX+PF7, F. Imperial St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "chinabank-1",
+    "name": "Chinabank",
+    "aliases": [
+      "4PQJ+MW9, Old Albay District, Legazpi City",
+      "Old Albay District"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.7323508,
+      13.1391514
+    ],
+    "branch": "Old Albay District",
+    "address": "4PQJ+MW9, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "dbp",
+    "name": "DBP",
+    "aliases": [
+      "DBP Building, 2/F Quezon Ave, Legazpi Port District, Legazpi City"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.7542479,
+      13.1463837
+    ],
+    "address": "DBP Building, 2/F Quezon Ave, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "landbank",
+    "name": "Landbank",
+    "aliases": [
+      "4PQR+FV3, Landbank of the Philipipines, Rizal Avenue, Magdamit Subdivision, Rizal St, Barangay Cabagñan, Legazpi City"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.7421861,
+      13.1386346
+    ],
+    "address": "4PQR+FV3, Landbank of the Philipipines, Rizal Avenue, Magdamit Subdivision, Rizal St, Barangay Cabagñan, Legazpi City"
+  },
+  {
+    "id": "landbank-daraga",
+    "name": "Landbank Daraga",
+    "aliases": [
+      "4PX8+M32 Daraga Public Market Building 1, Daraga"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.71513290000001,
+      13.1491454
+    ],
+    "address": "4PX8+M32 Daraga Public Market Building 1, Daraga"
+  },
+  {
+    "id": "metrobank-albay-daraga",
+    "name": "Metrobank Albay - Daraga",
+    "aliases": [
+      "Rizal St, Daraga"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.7124449,
+      13.147961899999999
+    ],
+    "address": "Rizal St, Daraga"
+  },
+  {
+    "id": "metrobank-legazpi-rizal",
+    "name": "Metrobank Legazpi - Rizal",
+    "aliases": [
+      "Rizal Street, corner Mabini St, Legazpi City"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.75280469999998,
+      13.145817599999999
+    ],
+    "address": "Rizal Street, corner Mabini St, Legazpi City"
+  },
+  {
+    "id": "pag-ibig-fund-legazpi",
+    "name": "Pag - Ibig Fund Legazpi",
+    "aliases": [
+      "4PWV+FRM, F. Imperial St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.7445508,
+      13.1462232
+    ],
+    "address": "4PWV+FRM, F. Imperial St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "pnb-legazpi-city-imperial",
+    "name": "PNB LEGAZPI CITY-IMPERIAL",
+    "aliases": [
+      "35 F. Imperial St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.751995,
+      13.14639
+    ],
+    "address": "35 F. Imperial St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "rcbc-branch-legazpi-city",
+    "name": "RCBC BRANCH - LEGAZPI CITY",
+    "aliases": [
+      "G/F TYLER BLDG, Rizal St, Legazpi City"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.75264399999999,
+      13.145691
+    ],
+    "address": "G/F TYLER BLDG, Rizal St, Legazpi City"
+  },
+  {
+    "id": "security-bank-legazpi",
+    "name": "Security Bank - Legazpi",
+    "aliases": [
+      "Lot 34-36 Block 7, Landco Business Park, Bitano, Legazpi City, Legazpi City"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.74913099999999,
+      13.145631499999999
+    ],
+    "address": "Lot 34-36 Block 7, Landco Business Park, Bitano, Legazpi City, Legazpi City"
+  },
+  {
+    "id": "unionbank-of-the-philippines-legaspi",
+    "name": "UnionBank of the Philippines - Legaspi",
+    "aliases": [
+      "85 Landco, Legazpi Port District, Legazpi City"
+    ],
+    "category": "bank",
+    "coordinates": [
+      123.75016600000001,
+      13.1452619
+    ],
+    "address": "85 Landco, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "caltex",
+    "name": "Caltex",
+    "aliases": [
+      "4PX7+9QV, Rizal St, Daraga, Legazpi City",
+      "Daraga"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.7144238,
+      13.1484974
+    ],
+    "branch": "Daraga",
+    "address": "4PX7+9QV, Rizal St, Daraga, Legazpi City"
+  },
+  {
+    "id": "caltex-1",
+    "name": "Caltex",
+    "aliases": [
+      "149 Lakandula Dr, Legazpi City",
+      "Lakandula Dr"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.75106219999998,
+      13.1547887
+    ],
+    "branch": "Lakandula Dr",
+    "address": "149 Lakandula Dr, Legazpi City"
+  },
+  {
+    "id": "foursome-trading",
+    "name": "Foursome Trading",
+    "aliases": [
+      "Brgy 49 Bigaa, Legazpi City"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.7550364,
+      13.2005612
+    ],
+    "address": "Brgy 49 Bigaa, Legazpi City"
+  },
+  {
+    "id": "jacem-fuel",
+    "name": "JACEM Fuel",
+    "aliases": [
+      "Purok 1, Brgy. San Fransisco, Diversion Rd, Guinobatan"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.60786519999999,
+      13.1887054
+    ],
+    "address": "Purok 1, Brgy. San Fransisco, Diversion Rd, Guinobatan"
+  },
+  {
+    "id": "petro-gazz-bigaa",
+    "name": "Petro Gazz Bigaa",
+    "aliases": [
+      "Legazpi City"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.75529630000001,
+      13.196299699999999
+    ],
+    "address": "Legazpi City"
+  },
+  {
+    "id": "petron",
+    "name": "Petron",
+    "aliases": [
+      "Petron Oil depot, 37 Lakandula Dr, Legazpi City",
+      "Lakandula Dr"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.74947879999999,
+      13.1551443
+    ],
+    "branch": "Lakandula Dr",
+    "address": "Petron Oil depot, 37 Lakandula Dr, Legazpi City"
+  },
+  {
+    "id": "petron-1",
+    "name": "Petron",
+    "aliases": [
+      "279 Rizal St, Legazpi Port District, Legazpi City",
+      "Legazpi Port District"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.75268279999999,
+      13.144141699999999
+    ],
+    "branch": "Legazpi Port District",
+    "address": "279 Rizal St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "petron-2",
+    "name": "Petron",
+    "aliases": [
+      "KM 3172A, 1, Daraga",
+      "1"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.695382,
+      13.1657564
+    ],
+    "branch": "1",
+    "address": "KM 3172A, 1, Daraga"
+  },
+  {
+    "id": "petron-3",
+    "name": "Petron",
+    "aliases": [
+      "4M7X+6G5, Maharlika Hwy, Barangay Buscaran, Daraga",
+      "Barangay Buscaran"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.6988653,
+      13.113005999999999
+    ],
+    "branch": "Barangay Buscaran",
+    "address": "4M7X+6G5, Maharlika Hwy, Barangay Buscaran, Daraga"
+  },
+  {
+    "id": "petron-4",
+    "name": "Petron",
+    "aliases": [
+      "4PX8+JR3, Daraga",
+      "4PX8+JR3"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.71706239999999,
+      13.1490206
+    ],
+    "branch": "4PX8+JR3",
+    "address": "4PX8+JR3, Daraga"
+  },
+  {
+    "id": "petron-5",
+    "name": "Petron",
+    "aliases": [
+      "831 F. Aquende Dr, Legazpi City",
+      "F. Aquende Dr"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.73440779999999,
+      13.1451172
+    ],
+    "branch": "F. Aquende Dr",
+    "address": "831 F. Aquende Dr, Legazpi City"
+  },
+  {
+    "id": "petron-binitayan",
+    "name": "Petron Binitayan",
+    "aliases": [
+      "1542 Daraga-Legazpi Diversion Rd, Daraga"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.7177193,
+      13.1559712
+    ],
+    "address": "1542 Daraga-Legazpi Diversion Rd, Daraga"
+  },
+  {
+    "id": "phoenix-gas-station",
+    "name": "Phoenix Gas Station",
+    "aliases": [
+      "5MQ6+8R7, Camalig Bypass Road, Camalig",
+      "Camalig Bypass Road"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.66204969999998,
+      13.1882919
+    ],
+    "branch": "Camalig Bypass Road",
+    "address": "5MQ6+8R7, Camalig Bypass Road, Camalig"
+  },
+  {
+    "id": "phoenix-gas-station-1",
+    "name": "Phoenix Gas Station",
+    "aliases": [
+      "5P49+RMR, Daraga",
+      "5P49+RMR"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.71915480000001,
+      13.1571187
+    ],
+    "branch": "5P49+RMR",
+    "address": "5P49+RMR, Daraga"
+  },
+  {
+    "id": "seaoil-bascaran-daraga-albay",
+    "name": "SEAOIL - BASCARAN DARAGA - ALBAY",
+    "aliases": [
+      "Daraga"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.69846629999999,
+      13.112367899999999
+    ],
+    "address": "Daraga"
+  },
+  {
+    "id": "seaoil-ba-ag-albay",
+    "name": "Seaoil Bañag Albay",
+    "aliases": [
+      "1674 Binitayan Road, Daraga"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.71203079999998,
+      13.1544334
+    ],
+    "address": "1674 Binitayan Road, Daraga"
+  },
+  {
+    "id": "shell",
+    "name": "Shell",
+    "aliases": [
+      "4PX6+6P2, 1, Daraga",
+      "1"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.71177180000001,
+      13.148014199999999
+    ],
+    "branch": "1",
+    "address": "4PX6+6P2, 1, Daraga"
+  },
+  {
+    "id": "shell-1",
+    "name": "Shell",
+    "aliases": [
+      "Imelda Roces Ave, Legazpi City",
+      "Imelda Roces Ave"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.74332600000001,
+      13.154387
+    ],
+    "branch": "Imelda Roces Ave",
+    "address": "Imelda Roces Ave, Legazpi City"
+  },
+  {
+    "id": "shell-2",
+    "name": "Shell",
+    "aliases": [
+      "Rizal Street, Legazpi City - Tiwi Coastal Rd, Bgy. 24 - Rizal Street, Legazpi City",
+      "Bgy. 24 - Rizal Street"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.752693,
+      13.1434748
+    ],
+    "branch": "Bgy. 24 - Rizal Street",
+    "address": "Rizal Street, Legazpi City - Tiwi Coastal Rd, Bgy. 24 - Rizal Street, Legazpi City"
+  },
+  {
+    "id": "shell-3",
+    "name": "Shell",
+    "aliases": [
+      "Airport Rd, Bascaran, Daraga",
+      "Bascaran"
+    ],
+    "category": "gas",
+    "coordinates": [
+      123.69842299999999,
+      13.112551999999999
+    ],
+    "branch": "Bascaran",
+    "address": "Airport Rd, Bascaran, Daraga"
+  },
+  {
+    "id": "7-eleven-camalig-bypass-exit-camila",
+    "name": "7 Eleven Camalig Bypass Exit - Camila",
+    "aliases": [
+      "5MQ6+8R7, Camalig Bypass Road, Camalig"
+    ],
+    "category": "store",
+    "coordinates": [
+      123.66186259999999,
+      13.1881603
+    ],
+    "address": "5MQ6+8R7, Camalig Bypass Road, Camalig"
+  },
+  {
+    "id": "7-eleven",
+    "name": "7-Eleven",
+    "aliases": [
+      "5MH3+WRF, Poblacion, Camalig"
+    ],
+    "category": "store",
+    "coordinates": [
+      123.6545521,
+      13.1798041
+    ],
+    "address": "5MH3+WRF, Poblacion, Camalig"
+  },
+  {
+    "id": "7-eleven-1333-legazpi-4",
+    "name": "7-Eleven (1333) Legazpi 4",
+    "aliases": [
+      "5Q92+XP3, Legazpi City"
+    ],
+    "category": "store",
+    "coordinates": [
+      123.7517969,
+      13.1698875
+    ],
+    "address": "5Q92+XP3, Legazpi City"
+  },
+  {
+    "id": "7-eleven-1175-daraga",
+    "name": "7-Eleven 1175 Daraga",
+    "aliases": [
+      "4PX9+9JM, Rizal St, Daraga"
+    ],
+    "category": "store",
+    "coordinates": [
+      123.7190493,
+      13.148473399999999
+    ],
+    "address": "4PX9+9JM, Rizal St, Daraga"
+  },
+  {
+    "id": "7-eleven-1275-legazpi-5",
+    "name": "7-Eleven 1275 Legazpi 5",
+    "aliases": [
+      "4PWV+GPH HTCDC Building, Alternate Rd, Legazpi City"
+    ],
+    "category": "store",
+    "coordinates": [
+      123.74437329999999,
+      13.146300799999999
+    ],
+    "address": "4PWV+GPH HTCDC Building, Alternate Rd, Legazpi City"
+  },
+  {
+    "id": "7-eleven-1996-cpi-washington",
+    "name": "7-Eleven 1996 CPI Washington",
+    "aliases": [
+      "5P2M+2RQ, Legazpi City"
+    ],
+    "category": "store",
+    "coordinates": [
+      123.7346245,
+      13.150089999999999
+    ],
+    "address": "5P2M+2RQ, Legazpi City"
+  },
+  {
+    "id": "7-eleven-2595-albay-capitol",
+    "name": "7-Eleven 2595 Albay Capitol",
+    "aliases": [
+      "738 Rizal St, Old Albay District, Legazpi City"
+    ],
+    "category": "store",
+    "coordinates": [
+      123.73638749999999,
+      13.1386723
+    ],
+    "address": "738 Rizal St, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "7-eleven-3233-daraga-highway",
+    "name": "7-Eleven 3233 Daraga Highway",
+    "aliases": [
+      "1, Brgy. Bañag, Daraga"
+    ],
+    "category": "store",
+    "coordinates": [
+      123.7110473,
+      13.153818099999999
+    ],
+    "address": "1, Brgy. Bañag, Daraga"
+  },
+  {
+    "id": "7-eleven-bu-main",
+    "name": "7-Eleven BU Main",
+    "aliases": [
+      "1106 Rizal St, Legazpi City"
+    ],
+    "category": "store",
+    "coordinates": [
+      123.7262136,
+      13.1439231
+    ],
+    "address": "1106 Rizal St, Legazpi City"
+  },
+  {
+    "id": "7-eleven-camalig-bypass-road",
+    "name": "7-Eleven Camalig Bypass Road",
+    "aliases": [
+      "Camalig Bypass Road, Camalig"
+    ],
+    "category": "store",
+    "coordinates": [
+      123.662042,
+      13.1883542
+    ],
+    "address": "Camalig Bypass Road, Camalig"
+  },
+  {
+    "id": "albay-pilinut-candy",
+    "name": "Albay Pilinut Candy",
+    "aliases": [
+      "873 Rizal St, Old Albay District, Legazpi City"
+    ],
+    "category": "store",
+    "coordinates": [
+      123.7316047,
+      13.139308000000002
+    ],
+    "address": "873 Rizal St, Old Albay District, Legazpi City"
+  },
+  {
+    "id": "lcc-expressmart-tagas-daraga-albay",
+    "name": "LCC Expressmart (Tagas, Daraga, Albay)",
+    "aliases": [
+      "2541 Lakandula Dr, Daraga"
+    ],
+    "category": "store",
+    "coordinates": [
+      123.71991500000001,
+      13.1575651
+    ],
+    "address": "2541 Lakandula Dr, Daraga"
+  },
+  {
+    "id": "lg-mazo-store",
+    "name": "LG Mazo store",
+    "aliases": [
+      "zone 2 malobago daraga, Legazpi City"
+    ],
+    "category": "store",
+    "coordinates": [
+      123.69362389999999,
+      13.067792899999999
+    ],
+    "address": "zone 2 malobago daraga, Legazpi City"
+  },
+  {
+    "id": "mercury-drug-albay-legazpi-pe-aranda",
+    "name": "Mercury Drug - Albay Legazpi Peñaranda",
+    "aliases": [
+      "4QX3+M75, Serra Bldg., Peñaranda St., Brgy. 34 - Oro Site, Magallanes St., Poblacion, 96 Peñaranda St, Legazpi Port District, Legazpi City"
+    ],
+    "category": "store",
+    "coordinates": [
+      123.7531761,
+      13.149369799999999
+    ],
+    "address": "4QX3+M75, Serra Bldg., Peñaranda St., Brgy. 34 - Oro Site, Magallanes St., Poblacion, 96 Peñaranda St, Legazpi Port District, Legazpi City"
+  },
+  {
+    "id": "mercury-drug-daraga-albay",
+    "name": "Mercury Drug DARAGA ALBAY",
+    "aliases": [
+      "Bicol University Arcade, Rizal St, Daraga"
+    ],
+    "category": "store",
+    "coordinates": [
+      123.71672059999999,
+      13.1487599
+    ],
+    "address": "Bicol University Arcade, Rizal St, Daraga"
+  },
+  {
+    "id": "savemore-market-silverscreen",
+    "name": "Savemore Market Silverscreen",
+    "aliases": [
+      "A. Bichara Silverscreens Entertainment Center Magallanes &, T. Alonzo St, Legazpi City"
+    ],
+    "category": "store",
+    "coordinates": [
+      123.75282170000001,
+      13.1491562
+    ],
+    "address": "A. Bichara Silverscreens Entertainment Center Magallanes &, T. Alonzo St, Legazpi City"
+  }
+]

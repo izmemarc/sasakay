@@ -1,0 +1,120 @@
+import { Polyline, Marker } from "react-leaflet";
+import L from "leaflet";
+import { useAppStore } from "../store/useAppStore";
+import type { JeepneyRoute } from "../types";
+
+function toLatLng(coords: [number, number][]): [number, number][] {
+  return coords.map(([lng, lat]) => [lat, lng]);
+}
+
+function usedRouteCodes(steps: { routeCode?: string }[]): Set<string> {
+  const s = new Set<string>();
+  for (const step of steps) if (step.routeCode) s.add(step.routeCode);
+  return s;
+}
+
+function haversineM(
+  [lng1, lat1]: [number, number],
+  [lng2, lat2]: [number, number]
+): number {
+  const R = 6371000;
+  const toRad = (d: number) => (d * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(a));
+}
+
+function arrowPoints(
+  coords: [number, number][],
+  everyMeters: number
+): Array<{ lat: number; lng: number; bearingDeg: number }> {
+  const out: Array<{ lat: number; lng: number; bearingDeg: number }> = [];
+  let accum = 0;
+  let nextMark = everyMeters;
+  for (let i = 1; i < coords.length; i++) {
+    const a = coords[i - 1];
+    const b = coords[i];
+    const segLen = haversineM(a, b);
+    if (segLen === 0) continue;
+    while (accum + segLen >= nextMark) {
+      const t = (nextMark - accum) / segLen;
+      const lng = a[0] + (b[0] - a[0]) * t;
+      const lat = a[1] + (b[1] - a[1]) * t;
+      const dLng = b[0] - a[0];
+      const dLat = b[1] - a[1];
+      const bearingDeg = (Math.atan2(dLng, dLat) * 180) / Math.PI;
+      out.push({ lat, lng, bearingDeg });
+      nextMark += everyMeters;
+    }
+    accum += segLen;
+  }
+  return out;
+}
+
+function arrowIcon(color: string, bearingDeg: number) {
+  return L.divIcon({
+    className: "",
+    html: `<div style="transform:rotate(${bearingDeg}deg);transform-origin:50% 50%;width:12px;height:12px;display:flex;align-items:center;justify-content:center;">
+      <svg width="12" height="12" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7 2 L11 10 L7 8 L3 10 Z" fill="${color}" stroke="white" stroke-width="0.7"/>
+      </svg>
+    </div>`,
+    iconSize: [12, 12],
+    iconAnchor: [6, 6],
+  });
+}
+
+export function RoutesLayer() {
+  const routes = useAppStore((s) => s.routes);
+  const tripPlan = useAppStore((s) => s.tripPlan);
+  const showRoutes = useAppStore((s) => s.showRoutes);
+  const visibleRouteIds = useAppStore((s) => s.visibleRouteIds);
+
+  if (!showRoutes) return null;
+
+  const active = tripPlan ? usedRouteCodes(tripPlan.steps) : null;
+  const filtered = routes.filter((r) => visibleRouteIds.has(r.id));
+
+  return (
+    <>
+      {filtered.flatMap((r: JeepneyRoute) => {
+        const isActive = active ? active.has(r.code) : null;
+        // When a trip is active, the active route's sliced A→B path is drawn
+        // by TripLayer; skip its full polyline here to avoid visual clutter.
+        if (isActive) return [];
+        const opacity = active === null ? 0.7 : 0.15;
+        const weight = 3;
+        const elements: React.ReactNode[] = [];
+        r.segments.forEach((seg, si) => {
+          elements.push(
+            <Polyline
+              key={`${r.id}-${si}`}
+              positions={toLatLng(seg)}
+              pathOptions={{
+                color: r.color,
+                opacity,
+                weight,
+              }}
+            />
+          );
+          if (active === null && r.topology === "loop") {
+            arrowPoints(seg, 400).forEach((a, j) =>
+              elements.push(
+                <Marker
+                  key={`${r.id}-${si}-arrow-${j}`}
+                  position={[a.lat, a.lng]}
+                  icon={arrowIcon(r.color, a.bearingDeg)}
+                  interactive={false}
+                />
+              )
+            );
+          }
+        });
+        return elements;
+      })}
+    </>
+  );
+}
