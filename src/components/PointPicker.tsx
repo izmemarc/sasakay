@@ -247,7 +247,7 @@ export function PointRow({
         {label}
       </label>
       <div
-        className={`flex items-center rounded-lg border bg-white transition-shadow overflow-hidden ${
+        className={`flex items-center rounded-lg border bg-white transition-shadow ${
           focused
             ? "border-emerald-500 ring-2 ring-emerald-500/20"
             : "border-gray-200 hover:border-gray-300"
@@ -266,26 +266,7 @@ export function PointRow({
           onFocus={() => setFocused(true)}
           onBlur={() => window.setTimeout(() => setFocused(false), 150)}
           placeholder="Search a place…"
-          // Real font-size stays 16px on mobile so iOS Safari does
-          // NOT auto-zoom on focus. We then visually shrink with
-          // `transform: scale(0.85)` anchored left-center so the
-          // text reads ~13.6px without triggering iOS's zoom-in.
-          // Width compensates so the placeholder/caret can reach the
-          // same right edge after scaling. Desktop unscaled at 13px.
-          className="flex-1 min-w-0 px-2 py-2 text-[16px] md:text-[13px] bg-transparent placeholder:text-gray-400 focus:outline-none md:transform-none md:w-auto"
-          style={{
-            transform:
-              typeof window !== "undefined" &&
-              window.matchMedia("(max-width: 767px)").matches
-                ? "scale(0.85)"
-                : undefined,
-            transformOrigin: "left center",
-            width:
-              typeof window !== "undefined" &&
-              window.matchMedia("(max-width: 767px)").matches
-                ? "117.65%" // = 1/0.85, so the box still fills the row
-                : undefined,
-          }}
+          className="flex-1 min-w-0 px-2 py-2 text-[14px] md:text-[13px] bg-transparent placeholder:text-gray-400 focus:outline-none"
         />
         {(text || point) && (
           <button

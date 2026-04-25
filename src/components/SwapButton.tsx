@@ -7,36 +7,23 @@ import { useAppStore } from "../store/useAppStore";
  *  put From/To on the wrong rows or wants to plan the reverse trip
  *  (e.g. work → home, then home → work).
  *
- *  Position is computed by measuring the actual input boxes (via
- *  data-point-target on the inputs) so the button always lands at
- *  the midpoint between the From and To input boxes, aligned with
- *  the trailing icon column — no guessing. */
+ *  Position is measured from the actual rendered DOM (the From/To
+ *  input rows), so the arrow lands precisely in the visible gap
+ *  between the two input boxes, aligned horizontally with the map
+ *  icon column. Re-measures on resize. */
 export function SwapButton() {
   const swapPoints = useAppStore((s) => s.swapPoints);
   const [pos, setPos] = useState<{ top: number; right: number } | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-  // Server-side debug logger.
-  const logDbg = (data: Record<string, string | number | boolean>) => {
-    const params = new URLSearchParams();
-    Object.entries(data).forEach(([k, v]) => params.set(k, String(v)));
-    fetch(`/__swap?${params.toString()}`).catch(() => {});
-  };
-
-  // useLayoutEffect runs synchronously after DOM mutations but
-  // before paint — measurement and reposition happen in the same
-  // frame, so the user never sees the fallback position.
   useLayoutEffect(() => {
     const button = buttonRef.current;
-    if (!button) {
-      logDbg({ event: "no-button" });
-      return;
-    }
+    if (!button) return;
     // Walk up to the smallest ancestor that contains BOTH inputs.
-    // offsetParent can resolve to a higher ancestor (the whole card)
-    // on iOS Safari; we want the tightest wrapper around the rows so
-    // the swap button is centered between them, not between the
-    // header and Find button.
+    // offsetParent can resolve to a higher ancestor on iOS Safari;
+    // we want the tightest wrapper around the rows so the swap is
+    // centered between them, not between the card header and the
+    // Find button.
     let container: HTMLElement | null = button.parentElement;
     while (container) {
       const a = container.querySelector('input[data-point-target="A"]');
@@ -44,65 +31,41 @@ export function SwapButton() {
       if (a && b) break;
       container = container.parentElement;
     }
-    if (!container) {
-      logDbg({ event: "no-container" });
-      return;
-    }
-    logDbg({ event: "mount", hasContainer: true });
+    if (!container) return;
+    const c = container;
     const measure = () => {
-      const inputA = container.querySelector<HTMLInputElement>(
+      const inputA = c.querySelector<HTMLInputElement>(
         'input[data-point-target="A"]'
       );
-      const inputB = container.querySelector<HTMLInputElement>(
+      const inputB = c.querySelector<HTMLInputElement>(
         'input[data-point-target="B"]'
       );
-      if (!inputA || !inputB) {
-        logDbg({
-          event: "no-inputs",
-          A: !!inputA,
-          B: !!inputB,
-          inputs: container.querySelectorAll("input").length,
-        });
-        return;
-      }
-      const cRect = container.getBoundingClientRect();
+      if (!inputA || !inputB) return;
+      const cRect = c.getBoundingClientRect();
       // `inputA.parentElement` = the rounded input flex row (the
       // visible "box" with the search icon and trailing buttons).
       const rowA = inputA.parentElement!.getBoundingClientRect();
       const rowB = inputB.parentElement!.getBoundingClientRect();
-      // To find the start of the second row's "label area" (the
-      // FROM/TO uppercase tag), walk up from rowB to find its
-      // PointRow root (the wrapper containing the label + input
-      // box). Its top is where the label starts — and that's the
-      // visually empty space we want to center the arrow in.
+      // To find where the second row's "label area" begins (FROM/TO
+      // uppercase tag), use the PointRow root (data-point-row marker).
+      // Its top is the start of the label — and the visually empty
+      // gap is from From-input-bottom to that label-top.
       const pointRowB = inputB.closest("[data-point-row]");
       const pointRowBRect = pointRowB
         ? pointRowB.getBoundingClientRect()
-        : rowB; // fallback to input row if marker missing
-      // Visually empty gap: from From-input-bottom to To-row-top
-      // (where the "TO" label begins). Center the arrow there.
+        : rowB;
       const gapTop = rowA.bottom;
       const gapBottom = pointRowBRect.top;
       const top = (gapTop + gapBottom) / 2 - cRect.top;
       // Map icon's center sits ~15px inside the input row's right
       // edge (p-2 padding + half-icon). Place the swap button's
-      // CENTER at that same x, accounting for half its width (14px).
+      // center at that same x, accounting for half its width (14px).
       const right = cRect.right - rowA.right + 15 - 14;
-      logDbg({
-        event: "measured",
-        cRectTop: Math.round(cRect.top),
-        cRectRight: Math.round(cRect.right),
-        rowARight: Math.round(rowA.right),
-        rowATop: Math.round(rowA.top),
-        rowBTop: Math.round(rowB.top),
-        top: Math.round(top),
-        right: Math.round(right),
-      });
       setPos({ top: Math.round(top), right: Math.round(right) });
     };
     measure();
     const ro = new ResizeObserver(measure);
-    ro.observe(container);
+    ro.observe(c);
     window.addEventListener("resize", measure);
     return () => {
       ro.disconnect();
