@@ -28,7 +28,7 @@ export function BoundsController({ bounds }: Props) {
     const latSpan = base.getNorth() - base.getSouth();
     const lngSpan = base.getEast() - base.getWest();
     const PAD_LNG = 0.6;
-    const PAD_LAT = 0;
+    const PAD_LAT = 0.07;
     const padded = L.latLngBounds(
       L.latLng(
         base.getSouth() - latSpan * PAD_LAT,

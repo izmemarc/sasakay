@@ -6,6 +6,7 @@ import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { cityConfig } from "../config";
 import { BoundsController } from "./BoundsController";
+import { MapPanController } from "./MapPanController";
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
@@ -66,6 +67,7 @@ export function BaseMap({ children }: { children?: ReactNode }) {
           loosest pinch-out is bigger than any reasonable padded box,
           so any clamp during the gesture feels like a snap. */}
       {!isMobile && <BoundsController bounds={cityConfig.bounds} />}
+      <MapPanController />
       {children}
     </MapContainer>
   );

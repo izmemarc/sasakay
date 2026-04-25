@@ -31,6 +31,11 @@ interface AppState {
    *  "not yet initialized" — the store fills it with all known categories
    *  on first data load. */
   visibleCategories: Set<string> | null;
+  /** Map-pan request: a controller mounted inside the MapContainer
+   *  consumes this and calls flyTo, then clears the field. Decouples
+   *  pan triggers (geolocation button, app start, etc.) from the
+   *  Leaflet instance which lives deeper in the tree. */
+  panRequest: { coords: LatLng; zoom?: number } | null;
   dataLoaded: boolean;
   loadError: string | null;
 
@@ -45,6 +50,8 @@ interface AppState {
   setVisibleRouteIds: (ids: Set<string>) => void;
   toggleCategory: (category: string) => void;
   setVisibleCategories: (ids: Set<string>) => void;
+  requestPan: (coords: LatLng, zoom?: number) => void;
+  clearPanRequest: () => void;
   clearTrip: () => void;
   loadData: () => Promise<void>;
 }
@@ -63,6 +70,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   showRoutes: false,
   visibleRouteIds: new Set<string>(),
   visibleCategories: null,
+  panRequest: null,
   dataLoaded: false,
   loadError: null,
 
@@ -94,6 +102,8 @@ export const useAppStore = create<AppState>((set, get) => ({
       return { visibleCategories: next };
     }),
   setVisibleCategories: (ids) => set({ visibleCategories: ids }),
+  requestPan: (coords, zoom) => set({ panRequest: { coords, zoom } }),
+  clearPanRequest: () => set({ panRequest: null }),
 
   clearTrip: () =>
     set({

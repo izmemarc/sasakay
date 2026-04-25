@@ -15,6 +15,7 @@ import { RoutesManager } from "./components/RoutesManager";
 import { CategoryFilter } from "./components/CategoryFilter";
 import { MobileBottomSheet } from "./components/MobileBottomSheet";
 import { MobileFilterRail } from "./components/MobileFilterRail";
+import { LocateMeButton } from "./components/LocateMeButton";
 import { AboutSheet } from "./components/AboutSheet";
 import { CreditStrip } from "./components/CreditStrip";
 import { WelcomeSplash } from "./components/WelcomeSplash";
@@ -28,6 +29,7 @@ export default function App() {
 
 function TripPlanner() {
   const loadData = useAppStore((s) => s.loadData);
+  const requestPan = useAppStore((s) => s.requestPan);
   const [preloadPct, setPreloadPct] = useState<number | null>(null);
   // Auto-open the routes manager when returning from the editor
   // (`/?manage=1`) so Back lands on a known surface, not the blank
@@ -40,6 +42,47 @@ function TripPlanner() {
   useEffect(() => {
     void loadData();
   }, [loadData]);
+
+  // Silent best-effort geolocation on mount. If the user has already
+  // granted permission in a prior session, this succeeds and we
+  // smoothly center the map on them. If permission is "Ask" or denied,
+  // it fails quietly — we don't want a permission prompt the moment
+  // the app opens (rude UX). The explicit Locate-Me FAB and the
+  // crosshair on each input are the proper places to ask.
+  useEffect(() => {
+    if (typeof navigator === "undefined" || !navigator.geolocation) return;
+    let cancelled = false;
+    // Use Permissions API where available so we don't trigger a
+    // prompt on browsers that haven't already granted.
+    const tryLocate = () => {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          if (cancelled) return;
+          requestPan(
+            [pos.coords.longitude, pos.coords.latitude],
+            16
+          );
+        },
+        () => {
+          /* silent */
+        },
+        { enableHighAccuracy: false, timeout: 8000, maximumAge: 5 * 60_000 }
+      );
+    };
+    if ("permissions" in navigator) {
+      navigator.permissions
+        .query({ name: "geolocation" as PermissionName })
+        .then((p) => {
+          if (p.state === "granted") tryLocate();
+        })
+        .catch(() => {
+          /* permissions API not available; skip silent locate */
+        });
+    }
+    return () => {
+      cancelled = true;
+    };
+  }, [requestPan]);
 
   // Strip ?manage=1 from the URL once consumed so the user's address
   // bar doesn't carry it around forever.
@@ -77,6 +120,7 @@ function TripPlanner() {
       <CategoryFilter />
       <MobileBottomSheet onOpenAbout={() => setAboutOpen(true)} />
       <MobileFilterRail />
+      <LocateMeButton />
       {/* RoutesToggle (the "Routes" / Manage button) is hidden in
           production. The RoutesManager itself stays mounted so the
           editor's Back link (?manage=1) still opens it. */}

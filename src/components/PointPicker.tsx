@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Crosshair,
   Map as MapIcon,
@@ -148,28 +148,65 @@ export function PointRow({
   );
   const pickingFor = useAppStore((s) => s.pickingFor);
   const setPickingFor = useAppStore((s) => s.setPickingFor);
+  const requestPan = useAppStore((s) => s.requestPan);
 
   const [text, setText] = useState("");
   const [focused, setFocused] = useState(false);
   const [geoError, setGeoError] = useState<string | null>(null);
+  const [geoLoading, setGeoLoading] = useState(false);
 
   const matches = useMemo(() => searchPlaces(places, text), [places, text]);
   const grouped = useMemo(() => groupByCategory(places), [places]);
   const isPicking = pickingFor === target;
   const showDropdown = focused && (matches.length > 0 || text.trim() === "");
+  // Keep dropdown DOM mounted briefly after blur so it can fade out
+  // gracefully (unmount = snap-disappear, which looks abrupt).
+  const [mountDropdown, setMountDropdown] = useState(showDropdown);
+  useEffect(() => {
+    if (showDropdown) {
+      setMountDropdown(true);
+      return;
+    }
+    const id = window.setTimeout(() => setMountDropdown(false), 200);
+    return () => window.clearTimeout(id);
+  }, [showDropdown]);
 
   const useMyLocation = () => {
     setGeoError(null);
     if (!("geolocation" in navigator)) {
-      setGeoError("Geolocation not available");
+      setGeoError("Geolocation not available on this device.");
       return;
     }
+    setGeoLoading(true);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        setPoint([pos.coords.longitude, pos.coords.latitude]);
-        setText("My location");
+        const coords: [number, number] = [
+          pos.coords.longitude,
+          pos.coords.latitude,
+        ];
+        setPoint(coords);
+        setText("Current location");
+        requestPan(coords, 16);
+        setGeoLoading(false);
       },
-      (err) => setGeoError(err.message || "Location denied")
+      (err) => {
+        setGeoLoading(false);
+        if (err.code === err.PERMISSION_DENIED) {
+          // iOS: Settings → Privacy & Security → Location Services →
+          // Safari Websites must be set to "Ask" or "While Using",
+          // not "Never". (See memory/reference_geolocation_ios.md)
+          setGeoError(
+            "Location blocked. Enable Safari Websites in Settings → Privacy & Security → Location Services."
+          );
+        } else if (err.code === err.POSITION_UNAVAILABLE) {
+          setGeoError("Couldn't determine your location. Try again outdoors.");
+        } else if (err.code === err.TIMEOUT) {
+          setGeoError("Location request timed out. Try again.");
+        } else {
+          setGeoError(err.message || "Couldn't get your location.");
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
     );
   };
 
@@ -177,6 +214,11 @@ export function PointRow({
     setPoint(p.coordinates);
     setText(p.branch ? `${p.name} — ${p.branch}` : p.name);
     setFocused(false);
+    // Drop focus from the input so the mobile sheet collapses out of
+    // compact-search mode and shows both From/To rows again.
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
   };
 
   const clearThis = () => {
@@ -185,7 +227,7 @@ export function PointRow({
   };
 
   return (
-    <div>
+    <div className={focused ? "relative z-20" : "relative"}>
       <label className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-gray-500 mb-1.5">
         <span
           className="inline-block w-2 h-2 rounded-full"
@@ -207,12 +249,17 @@ export function PointRow({
         />
         <input
           type="text"
+          data-point-target={target}
           value={text}
           onChange={(e) => setText(e.target.value)}
           onFocus={() => setFocused(true)}
           onBlur={() => window.setTimeout(() => setFocused(false), 150)}
           placeholder="Search a place…"
-          className="flex-1 min-w-0 px-2 py-2 text-sm bg-transparent placeholder:text-gray-400 focus:outline-none"
+          // 16px on mobile suppresses iOS Safari's auto-zoom (which
+          // mis-targets when the input is inside a fixed bottom sheet
+          // and ends up zooming to empty space). Desktop drops to 14px
+          // (text-sm) where the visual difference matters more.
+          className="flex-1 min-w-0 px-2 py-2 text-[16px] md:text-sm bg-transparent placeholder:text-gray-400 focus:outline-none"
         />
         {(text || point) && (
           <button
@@ -230,9 +277,14 @@ export function PointRow({
             type="button"
             onClick={useMyLocation}
             title="Use my location"
-            className="p-2 text-gray-500 hover:text-emerald-700 hover:bg-emerald-50 transition-colors"
+            disabled={geoLoading}
+            className="p-2 text-gray-500 hover:text-emerald-700 hover:bg-emerald-50 disabled:text-gray-300 disabled:cursor-not-allowed transition-colors"
           >
-            <Crosshair size={15} />
+            {geoLoading ? (
+              <Loader2 size={15} className="animate-spin" />
+            ) : (
+              <Crosshair size={15} />
+            )}
           </button>
           <button
             type="button"
@@ -248,8 +300,17 @@ export function PointRow({
           </button>
         </div>
       </div>
-      {showDropdown && (
-        <div className="mt-1.5 border border-gray-200 rounded-lg bg-white max-h-72 overflow-y-auto shadow-lg">
+      {mountDropdown && (
+        <div
+          className="absolute left-0 right-0 top-full mt-1.5 z-30 transition-opacity duration-200 ease-out"
+          style={{
+            opacity: showDropdown ? 1 : 0,
+            pointerEvents: showDropdown ? "auto" : "none",
+          }}
+        >
+        <div
+          className="border border-gray-200 rounded-lg bg-white max-h-[168px] md:max-h-72 overflow-y-auto shadow-lg"
+        >
           {text.trim() === "" ? (
             grouped.map(([cat, list]) => (
               <div key={cat}>
@@ -281,6 +342,7 @@ export function PointRow({
               ))}
             </div>
           )}
+        </div>
         </div>
       )}
       {geoError && <p className="mt-1.5 text-xs text-red-600">{geoError}</p>}
