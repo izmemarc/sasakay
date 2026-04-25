@@ -34,7 +34,7 @@ export function CategoryFilter() {
         md:left-[calc(1rem+clamp(340px,24vw,560px)+0.75rem)]
       "
     >
-      <div className="pointer-events-auto rounded-2xl bg-white/95 backdrop-blur shadow-xl ring-1 ring-black/5 overflow-hidden">
+      <div className="pointer-events-auto rounded-2xl bg-white/70 backdrop-blur-xl backdrop-saturate-150 shadow-xl ring-1 ring-black/5 overflow-hidden">
         <div className="flex items-stretch gap-1 md:gap-1.5 px-1.5 md:px-2 py-1.5 md:py-2 overflow-x-auto md:overflow-visible scrollbar-thin">
           <button
             type="button"

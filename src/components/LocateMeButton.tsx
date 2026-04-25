@@ -7,6 +7,7 @@ import { useAppStore } from "../store/useAppStore";
  *  filter rail on mobile and at top-right on desktop. */
 export function LocateMeButton() {
   const requestPan = useAppStore((s) => s.requestPan);
+  const setUserLocation = useAppStore((s) => s.setUserLocation);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,7 +20,12 @@ export function LocateMeButton() {
     setLoading(true);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        requestPan([pos.coords.longitude, pos.coords.latitude], 16);
+        const coords: [number, number] = [
+          pos.coords.longitude,
+          pos.coords.latitude,
+        ];
+        setUserLocation(coords);
+        requestPan(coords, 16);
         setLoading(false);
       },
       (err) => {
@@ -36,7 +42,11 @@ export function LocateMeButton() {
         // Auto-clear so the toast doesn't linger.
         window.setTimeout(() => setError(null), 4500);
       },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+      // Skip enableHighAccuracy: iOS Safari sometimes fires two
+      // success callbacks (a coarse fix then a refined one), each
+      // triggering a flyTo and producing a visible jitter. Coarse
+      // GPS is fine for centering the map.
+      { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 }
     );
   };
 
@@ -48,7 +58,7 @@ export function LocateMeButton() {
         disabled={loading}
         title="Locate me"
         aria-label="Locate me"
-        className="absolute z-[1000] right-3 md:right-4 bg-white text-gray-700 hover:text-emerald-700 active:bg-emerald-50 disabled:text-gray-300 shadow-[0_4px_14px_rgba(0,0,0,0.12)] ring-1 ring-black/5 rounded-full w-11 h-11 flex items-center justify-center transition-colors"
+        className="absolute z-[1000] right-3 md:right-4 bg-white/70 backdrop-blur-xl backdrop-saturate-150 text-gray-700 hover:text-emerald-700 active:bg-emerald-50 disabled:text-gray-300 shadow-[0_4px_14px_rgba(0,0,0,0.12)] ring-1 ring-black/5 rounded-full w-11 h-11 flex items-center justify-center transition-colors"
         style={{
           // Sit above the mobile filter rail (which is at top-right
           // ~12px from top with 44px buttons stacked). On desktop,

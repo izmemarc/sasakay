@@ -35,8 +35,8 @@ export function PointMarkers() {
     click(e) {
       if (!pickingFor) return;
       const coords: [number, number] = [e.latlng.lng, e.latlng.lat];
-      if (pickingFor === "A") setPointA(coords);
-      else setPointB(coords);
+      if (pickingFor === "A") setPointA(coords, "Pinned location");
+      else setPointB(coords, "Pinned location");
       setPickingFor(null);
     },
   });

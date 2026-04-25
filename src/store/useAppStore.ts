@@ -12,6 +12,12 @@ interface AppState {
   roads: RoadWay[];
   pointA: LatLng | null;
   pointB: LatLng | null;
+  /** Display labels for the From/To inputs. Stored alongside the
+   *  coords so swap, reset, deep-link share, and any future
+   *  "recents" feature can preserve the human-readable text rather
+   *  than just lat/lng. */
+  pointAText: string;
+  pointBText: string;
   tripPlan: TripPlan | null;
   /** All alternative plans for the current A/B search, ranked fastest. */
   tripCandidates: TripCandidate[];
@@ -35,12 +41,27 @@ interface AppState {
    *  consumes this and calls flyTo, then clears the field. Decouples
    *  pan triggers (geolocation button, app start, etc.) from the
    *  Leaflet instance which lives deeper in the tree. */
-  panRequest: { coords: LatLng; zoom?: number } | null;
+  panRequest:
+    | { kind: "pan"; coords: LatLng; zoom?: number }
+    | { kind: "fit"; bounds: [LatLng, LatLng]; padding?: number }
+    | null;
+  /** Last known user GPS location. Drives the blue "you are here" dot
+   *  rendered on the map. Cleared by `clearTrip` so resetting the
+   *  trip planner also clears the dot. */
+  userLocation: LatLng | null;
   dataLoaded: boolean;
   loadError: string | null;
 
-  setPointA: (p: LatLng | null) => void;
-  setPointB: (p: LatLng | null) => void;
+  /** Set the From point. Pass `text` to display a label in the input
+   *  (e.g. "SM Legazpi" or "Current location"); omit to leave the
+   *  current text untouched. */
+  setPointA: (p: LatLng | null, text?: string) => void;
+  setPointB: (p: LatLng | null, text?: string) => void;
+  setPointAText: (text: string) => void;
+  setPointBText: (text: string) => void;
+  /** Swap From↔To (coords AND display text). Clears the trip since
+   *  the planner needs to re-run on the swapped pair. */
+  swapPoints: () => void;
   setTripPlan: (t: TripPlan | null) => void;
   setTripCandidates: (c: TripCandidate[]) => void;
   setTripChoice: (idx: number) => void;
@@ -51,7 +72,9 @@ interface AppState {
   toggleCategory: (category: string) => void;
   setVisibleCategories: (ids: Set<string>) => void;
   requestPan: (coords: LatLng, zoom?: number) => void;
+  requestFit: (bounds: [LatLng, LatLng], padding?: number) => void;
   clearPanRequest: () => void;
+  setUserLocation: (coords: LatLng | null) => void;
   clearTrip: () => void;
   loadData: () => Promise<void>;
 }
@@ -62,6 +85,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   roads: [],
   pointA: null,
   pointB: null,
+  pointAText: "",
+  pointBText: "",
   tripPlan: null,
   tripCandidates: [],
   tripChoiceIdx: 0,
@@ -71,13 +96,38 @@ export const useAppStore = create<AppState>((set, get) => ({
   visibleRouteIds: new Set<string>(),
   visibleCategories: null,
   panRequest: null,
+  userLocation: null,
   dataLoaded: false,
   loadError: null,
 
-  setPointA: (p) =>
-    set({ pointA: p, tripPlan: null, tripCandidates: [], tripChoiceIdx: 0 }),
-  setPointB: (p) =>
-    set({ pointB: p, tripPlan: null, tripCandidates: [], tripChoiceIdx: 0 }),
+  setPointA: (p, text) =>
+    set((s) => ({
+      pointA: p,
+      pointAText: text !== undefined ? text : s.pointAText,
+      tripPlan: null,
+      tripCandidates: [],
+      tripChoiceIdx: 0,
+    })),
+  setPointB: (p, text) =>
+    set((s) => ({
+      pointB: p,
+      pointBText: text !== undefined ? text : s.pointBText,
+      tripPlan: null,
+      tripCandidates: [],
+      tripChoiceIdx: 0,
+    })),
+  setPointAText: (text) => set({ pointAText: text }),
+  setPointBText: (text) => set({ pointBText: text }),
+  swapPoints: () =>
+    set((s) => ({
+      pointA: s.pointB,
+      pointB: s.pointA,
+      pointAText: s.pointBText,
+      pointBText: s.pointAText,
+      tripPlan: null,
+      tripCandidates: [],
+      tripChoiceIdx: 0,
+    })),
   setTripPlan: (t) => set({ tripPlan: t }),
   setTripCandidates: (c) =>
     set({
@@ -102,13 +152,19 @@ export const useAppStore = create<AppState>((set, get) => ({
       return { visibleCategories: next };
     }),
   setVisibleCategories: (ids) => set({ visibleCategories: ids }),
-  requestPan: (coords, zoom) => set({ panRequest: { coords, zoom } }),
+  requestPan: (coords, zoom) =>
+    set({ panRequest: { kind: "pan", coords, zoom } }),
+  requestFit: (bounds, padding) =>
+    set({ panRequest: { kind: "fit", bounds, padding } }),
   clearPanRequest: () => set({ panRequest: null }),
+  setUserLocation: (coords) => set({ userLocation: coords }),
 
   clearTrip: () =>
     set({
       pointA: null,
       pointB: null,
+      pointAText: "",
+      pointBText: "",
       tripPlan: null,
       tripCandidates: [],
       tripChoiceIdx: 0,

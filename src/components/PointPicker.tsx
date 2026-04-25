@@ -12,6 +12,7 @@ import {
 import { useAppStore } from "../store/useAppStore";
 import type { Place } from "../types";
 import { planTrips } from "../lib/routing";
+import { PointRowsWithSwap } from "./PointRowsWithSwap";
 
 type Target = "A" | "B";
 
@@ -111,14 +112,14 @@ function PlaceRow({
         {CATEGORY_EMOJI[place.category] ?? "📍"}
       </span>
       <div className="flex-1 min-w-0">
-        <div className="truncate text-sm text-gray-900">
+        <div className="truncate text-sm md:text-[12.5px] text-gray-900">
           <span className="font-medium">{place.name}</span>
           {place.branch && (
             <span className="text-gray-500"> — {place.branch}</span>
           )}
         </div>
         {place.address && (
-          <div className="text-[11px] text-gray-400 truncate mt-0.5">
+          <div className="text-[11px] md:text-[10.5px] text-gray-400 truncate mt-0.5">
             {place.address}
           </div>
         )}
@@ -146,11 +147,19 @@ export function PointRow({
   const setPoint = useAppStore((s) =>
     target === "A" ? s.setPointA : s.setPointB
   );
+  // Display text lives in the store so swap, share-link, recents, etc.
+  // can preserve the human label rather than just lat/lng.
+  const text = useAppStore((s) =>
+    target === "A" ? s.pointAText : s.pointBText
+  );
+  const setText = useAppStore((s) =>
+    target === "A" ? s.setPointAText : s.setPointBText
+  );
   const pickingFor = useAppStore((s) => s.pickingFor);
   const setPickingFor = useAppStore((s) => s.setPickingFor);
   const requestPan = useAppStore((s) => s.requestPan);
+  const setUserLocation = useAppStore((s) => s.setUserLocation);
 
-  const [text, setText] = useState("");
   const [focused, setFocused] = useState(false);
   const [geoError, setGeoError] = useState<string | null>(null);
   const [geoLoading, setGeoLoading] = useState(false);
@@ -167,7 +176,7 @@ export function PointRow({
       setMountDropdown(true);
       return;
     }
-    const id = window.setTimeout(() => setMountDropdown(false), 200);
+    const id = window.setTimeout(() => setMountDropdown(false), 320);
     return () => window.clearTimeout(id);
   }, [showDropdown]);
 
@@ -184,8 +193,8 @@ export function PointRow({
           pos.coords.longitude,
           pos.coords.latitude,
         ];
-        setPoint(coords);
-        setText("Current location");
+        setUserLocation(coords);
+        setPoint(coords, "Current location");
         requestPan(coords, 16);
         setGeoLoading(false);
       },
@@ -206,13 +215,13 @@ export function PointRow({
           setGeoError(err.message || "Couldn't get your location.");
         }
       },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+      { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 }
     );
   };
 
   const selectPlace = (p: Place) => {
-    setPoint(p.coordinates);
-    setText(p.branch ? `${p.name} — ${p.branch}` : p.name);
+    const label = p.branch ? `${p.name} — ${p.branch}` : p.name;
+    setPoint(p.coordinates, label);
     setFocused(false);
     // Drop focus from the input so the mobile sheet collapses out of
     // compact-search mode and shows both From/To rows again.
@@ -222,13 +231,15 @@ export function PointRow({
   };
 
   const clearThis = () => {
-    setPoint(null);
-    setText("");
+    setPoint(null, "");
   };
 
   return (
-    <div className={focused ? "relative z-20" : "relative"}>
-      <label className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-gray-500 mb-1.5">
+    <div
+      data-point-row={target}
+      className={focused ? "relative z-20" : "relative"}
+    >
+      <label className="flex items-center gap-1.5 text-[10.5px] font-semibold uppercase tracking-[0.08em] text-gray-500 mb-1.5">
         <span
           className="inline-block w-2 h-2 rounded-full"
           style={{ background: dotColor }}
@@ -236,7 +247,7 @@ export function PointRow({
         {label}
       </label>
       <div
-        className={`flex items-center rounded-lg border bg-white transition-shadow ${
+        className={`flex items-center rounded-lg border bg-white transition-shadow overflow-hidden ${
           focused
             ? "border-emerald-500 ring-2 ring-emerald-500/20"
             : "border-gray-200 hover:border-gray-300"
@@ -255,11 +266,26 @@ export function PointRow({
           onFocus={() => setFocused(true)}
           onBlur={() => window.setTimeout(() => setFocused(false), 150)}
           placeholder="Search a place…"
-          // 16px on mobile suppresses iOS Safari's auto-zoom (which
-          // mis-targets when the input is inside a fixed bottom sheet
-          // and ends up zooming to empty space). Desktop drops to 14px
-          // (text-sm) where the visual difference matters more.
-          className="flex-1 min-w-0 px-2 py-2 text-[16px] md:text-sm bg-transparent placeholder:text-gray-400 focus:outline-none"
+          // Real font-size stays 16px on mobile so iOS Safari does
+          // NOT auto-zoom on focus. We then visually shrink with
+          // `transform: scale(0.85)` anchored left-center so the
+          // text reads ~13.6px without triggering iOS's zoom-in.
+          // Width compensates so the placeholder/caret can reach the
+          // same right edge after scaling. Desktop unscaled at 13px.
+          className="flex-1 min-w-0 px-2 py-2 text-[16px] md:text-[13px] bg-transparent placeholder:text-gray-400 focus:outline-none md:transform-none md:w-auto"
+          style={{
+            transform:
+              typeof window !== "undefined" &&
+              window.matchMedia("(max-width: 767px)").matches
+                ? "scale(0.85)"
+                : undefined,
+            transformOrigin: "left center",
+            width:
+              typeof window !== "undefined" &&
+              window.matchMedia("(max-width: 767px)").matches
+                ? "117.65%" // = 1/0.85, so the box still fills the row
+                : undefined,
+          }}
         />
         {(text || point) && (
           <button
@@ -302,14 +328,25 @@ export function PointRow({
       </div>
       {mountDropdown && (
         <div
-          className="absolute left-0 right-0 top-full mt-1.5 z-30 transition-opacity duration-200 ease-out"
+          // Mobile: in-flow (relative + mt) so the dropdown's height
+          // pushes the card up — the card has max-height capped by
+          // visible viewport, so it grows above the keyboard.
+          // Desktop: absolute overlay (top-full) so it floats below
+          // the input without affecting card layout.
+          //
+          // Animate height via the grid `0fr ↔ 1fr` trick AND fade
+          // opacity, both 200ms with the same ease so they finish
+          // together — gives a single graceful expand/collapse.
+          className="grid grid-cols-[minmax(0,1fr)] w-full transition-[grid-template-rows,opacity,margin-top] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] md:absolute md:left-0 md:right-0 md:top-full z-30"
           style={{
+            gridTemplateRows: showDropdown ? "1fr" : "0fr",
             opacity: showDropdown ? 1 : 0,
+            marginTop: showDropdown ? "6px" : "0px",
             pointerEvents: showDropdown ? "auto" : "none",
           }}
         >
         <div
-          className="border border-gray-200 rounded-lg bg-white max-h-[168px] md:max-h-72 overflow-y-auto shadow-lg"
+          className="border border-gray-200 rounded-lg bg-white max-h-[168px] md:max-h-72 overflow-y-auto shadow-lg min-h-0"
         >
           {text.trim() === "" ? (
             grouped.map(([cat, list]) => (
@@ -406,6 +443,37 @@ export function PointPicker({ onOpenAbout }: PointPickerProps = {}) {
             return;
           }
           setTripCandidates(candidates);
+          // Auto-fit the map to show the whole trip from end to end.
+          const plan = candidates[0]?.plan;
+          if (plan) {
+            let minLng = Infinity,
+              minLat = Infinity,
+              maxLng = -Infinity,
+              maxLat = -Infinity;
+            const visit = ([lng, lat]: [number, number]) => {
+              if (lng < minLng) minLng = lng;
+              if (lat < minLat) minLat = lat;
+              if (lng > maxLng) maxLng = lng;
+              if (lat > maxLat) maxLat = lat;
+            };
+            visit(pointA);
+            visit(pointB);
+            for (const step of plan.steps) {
+              if (step.coordinates) step.coordinates.forEach(visit);
+              else {
+                visit(step.from);
+                visit(step.to);
+              }
+            }
+            if (Number.isFinite(minLng)) {
+              useAppStore
+                .getState()
+                .requestFit([
+                  [minLng, minLat],
+                  [maxLng, maxLat],
+                ]);
+            }
+          }
           if (window.matchMedia("(max-width: 767px)").matches) {
             setMobileExpanded(false);
           }
@@ -417,25 +485,22 @@ export function PointPicker({ onOpenAbout }: PointPickerProps = {}) {
   };
 
   return (
-    <div className="hidden md:block absolute md:top-4 md:left-4 md:right-auto z-[1000] md:w-[clamp(340px,24vw,560px)] md:max-w-[calc(100vw-2rem)] rounded-2xl bg-white/95 backdrop-blur shadow-xl ring-1 ring-black/5 overflow-hidden">
+    <div className="hidden md:block absolute md:top-4 md:left-4 md:right-auto z-[1000] md:w-[clamp(340px,24vw,560px)] md:max-w-[calc(100vw-2rem)] rounded-2xl bg-white/70 backdrop-blur-xl backdrop-saturate-150 shadow-xl ring-1 ring-black/5">
       <div className="px-4 pt-3 pb-2 flex items-center justify-between gap-2">
         <button
           type="button"
           onClick={onOpenAbout}
           className="min-w-0 flex-1 text-left rounded-md -mx-1 px-1 py-0.5 hover:bg-gray-50 transition-colors"
-          title="About Sasakay"
+          title="About komyut.online"
         >
-          <h1 className="text-[15px] font-bold text-gray-900 leading-tight flex items-center gap-1.5">
-            Sasakay
-            <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded">
-              by bytebento.ph
-            </span>
+          <h1 className="text-[45px] font-extrabold text-gray-900 leading-none tracking-[-0.03em]">
+            komyut<span className="text-emerald-600">.online</span>
           </h1>
-          <p className="text-[11px] text-gray-500 mt-0.5 truncate">
-            {!mobileExpanded && tripPlan
-              ? "Trip ready — tap to edit"
-              : "Legazpi jeepney trip planner"}
-          </p>
+          {!mobileExpanded && tripPlan && (
+            <p className="text-[11px] text-gray-500 mt-0.5 truncate">
+              Trip ready — tap to edit
+            </p>
+          )}
         </button>
         <div className="flex items-center gap-1 shrink-0">
           {hasAnything && (
@@ -472,15 +537,15 @@ export function PointPicker({ onOpenAbout }: PointPickerProps = {}) {
           mobileExpanded ? "" : "hidden md:block"
         }`}
       >
-        <PointRow target="A" label="From" dotColor="#059669" />
-        <PointRow target="B" label="To" dotColor="#dc2626" />
+        <PointRowsWithSwap spacingClass="space-y-3" />
+
 
         <button
           type="button"
           disabled={!canFind}
           onClick={onFind}
           aria-busy={searching}
-          className="group w-full mt-1 py-2.5 text-sm font-semibold rounded-lg bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 hover:shadow disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed transition-all flex items-center justify-center gap-1.5"
+          className="group w-full mt-1 py-2.5 text-sm font-bold tracking-[-0.005em] rounded-lg bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 hover:shadow disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed transition-all flex items-center justify-center gap-1.5"
         >
           {searching ? (
             <>

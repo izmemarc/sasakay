@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Footprints,
   Bus,
@@ -100,7 +100,7 @@ function StepRow({
               aria-expanded={hasInstructions ? expanded : undefined}
               disabled={!hasInstructions}
             >
-              <div className="text-sm font-medium text-gray-900 flex items-center gap-1.5">
+              <div className="text-sm font-semibold text-gray-900 flex items-center gap-1.5 tabular-nums">
                 Walk {formatMeters(step.distanceMeters)}
                 {hasInstructions &&
                   (expanded ? (
@@ -110,7 +110,7 @@ function StepRow({
                   ))}
               </div>
               {step.durationMinutes && (
-                <div className="text-xs text-gray-500 mt-0.5">
+                <div className="text-xs text-gray-500 mt-0.5 tabular-nums">
                   ~{step.durationMinutes} min
                   {hasInstructions && !expanded && (
                     <span className="text-gray-400">
@@ -149,11 +149,11 @@ function StepRow({
               >
                 {step.routeCode}
               </span>
-              <span className="text-sm text-gray-900 font-medium">
+              <span className="text-sm text-gray-900 font-semibold">
                 {step.routeName}
               </span>
             </div>
-            <div className="text-xs text-gray-500 mt-1 flex items-center gap-2">
+            <div className="text-xs text-gray-500 mt-1 flex items-center gap-2 tabular-nums">
               <span>Ride {formatMeters(step.distanceMeters)}</span>
               <span className="text-gray-300">·</span>
               <span>₱{step.fare ?? 0}</span>
@@ -185,6 +185,47 @@ export function DirectionsPanel() {
   // On mobile, let the user collapse the directions sheet to just the
   // summary row so they can see more of the map.
   const [collapsed, setCollapsed] = useState(false);
+  // Same approach as MobileBottomSheet: cap max-height by the
+  // VISIBLE viewport (visualViewport.height), which iOS Safari
+  // shrinks to exclude the URL bar. The card sits at `bottom: 8` and
+  // grows upward up to `vvHeight - 16`, so all content stays in the
+  // truly-visible area regardless of URL-bar state.
+  const [vvHeight, setVvHeight] = useState(
+    typeof window !== "undefined" ? window.innerHeight : 0
+  );
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined"
+      ? window.matchMedia("(max-width: 767px)").matches
+      : false
+  );
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 767px)");
+    const handler = () => setIsMobile(mq.matches);
+    handler();
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const vv = window.visualViewport;
+    if (!vv) return;
+    let raf = 0;
+    const update = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() =>
+        setVvHeight(Math.round(vv.height))
+      );
+    };
+    update();
+    vv.addEventListener("resize", update);
+    vv.addEventListener("scroll", update);
+    return () => {
+      cancelAnimationFrame(raf);
+      vv.removeEventListener("resize", update);
+      vv.removeEventListener("scroll", update);
+    };
+  }, []);
   if (!tripPlan) return null;
 
   const totalMin =
@@ -193,13 +234,28 @@ export function DirectionsPanel() {
   return (
     <div
       className={`
-        absolute z-[1000] bg-white/95 backdrop-blur shadow-xl ring-1 ring-black/5
-        left-0 right-0 bottom-0 rounded-t-2xl
-        md:left-auto md:right-4 md:bottom-4 md:top-auto
-        md:w-[clamp(360px,26vw,580px)] md:max-h-[calc(100vh-2rem)] md:rounded-2xl
+        fixed z-[1000] bg-white/70 backdrop-blur-xl backdrop-saturate-150 shadow-xl ring-1 ring-black/5
+        left-2 right-2 rounded-2xl
+        md:left-auto md:right-4 md:top-auto md:bottom-4
+        md:w-[clamp(340px,24vw,560px)] md:max-h-[calc(100vh-2rem)]
         flex flex-col overflow-hidden
-        ${collapsed ? "max-h-[88px]" : "max-h-[65vh]"}
+        ${collapsed ? "max-h-[88px]" : ""}
       `}
+      style={{
+        // Mobile-only: mirror MobileBottomSheet's verified-working
+        // formula. Floor 20px keeps card off the Safari toolbar on
+        // phones without a home indicator; expand to safe-area when
+        // there is one. max-height bounded by visible viewport so
+        // content never sits behind the toolbar.
+        ...(isMobile
+          ? {
+              bottom: "max(8px, env(safe-area-inset-bottom, 0px))",
+              maxHeight: collapsed
+                ? "88px"
+                : `${Math.max(180, vvHeight - 16)}px`,
+            }
+          : {}),
+      }}
     >
       {/* Mobile drag-handle pill */}
       <button
@@ -210,39 +266,33 @@ export function DirectionsPanel() {
       >
         <span className="w-10 h-1 rounded-full bg-gray-300" />
       </button>
-      <div className="px-4 pt-1 md:pt-3.5 pb-3 border-b border-gray-100">
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-[15px] font-bold text-gray-900">Directions</h2>
-          <div className="flex items-center gap-2">
-            <span className="text-[11px] text-gray-400">
-              {candidates.length > 1 ? `${candidates.length} options` : ""}
-            </span>
-            <button
-              type="button"
-              onClick={() => setCollapsed((v) => !v)}
-              className="md:hidden p-1 text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-full"
-              title={collapsed ? "Expand" : "Collapse"}
-            >
-              {collapsed ? (
-                <ChevronUp size={16} />
-              ) : (
-                <ChevronDown size={16} />
-              )}
-            </button>
+      <div className="px-4 pt-1 md:pt-3.5 pb-3 border-b border-gray-100 flex items-center gap-3">
+        <div className="flex-1 min-w-0">
+          <h2 className="text-[16px] font-extrabold tracking-[-0.02em] text-gray-900 mb-2">
+            Directions
+          </h2>
+          <div className="flex items-center gap-3 text-sm tabular-nums">
+            <div className="flex items-center gap-1 text-gray-900 font-semibold">
+              <Clock size={14} className="text-gray-500" />~{totalMin} min
+            </div>
+            <div className="flex items-center gap-1 text-gray-700">
+              <Wallet size={14} className="text-gray-500" />₱
+              {tripPlan.totalFare}
+            </div>
+            <div className="flex items-center gap-1 text-gray-700">
+              <ArrowLeftRight size={14} className="text-gray-500" />
+              {tripPlan.transfers}×
+            </div>
           </div>
         </div>
-        <div className="flex items-center gap-3 text-sm">
-          <div className="flex items-center gap-1 text-gray-900 font-semibold">
-            <Clock size={14} className="text-gray-500" />~{totalMin} min
-          </div>
-          <div className="flex items-center gap-1 text-gray-700">
-            <Wallet size={14} className="text-gray-500" />₱{tripPlan.totalFare}
-          </div>
-          <div className="flex items-center gap-1 text-gray-700">
-            <ArrowLeftRight size={14} className="text-gray-500" />
-            {tripPlan.transfers}×
-          </div>
-        </div>
+        <button
+          type="button"
+          onClick={() => useAppStore.getState().clearTrip()}
+          title="Plan a new trip"
+          className="shrink-0 text-[12px] font-bold tracking-[-0.005em] text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 px-3 py-1.5 rounded-lg shadow-sm transition-colors"
+        >
+          + New trip
+        </button>
       </div>
 
       {candidates.length > 1 && (
@@ -263,7 +313,7 @@ export function DirectionsPanel() {
                   key={i}
                   type="button"
                   onClick={() => setChoice(i)}
-                  className={`px-3 py-1.5 rounded-lg text-xs whitespace-nowrap border transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs whitespace-nowrap border transition-all tabular-nums ${
                     selected
                       ? "bg-emerald-600 text-white border-emerald-600 shadow-sm"
                       : "bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
@@ -296,15 +346,6 @@ export function DirectionsPanel() {
           <StepRow key={i} step={s} isLast={i === tripPlan.steps.length - 1} />
         ))}
       </ol>
-
-      <div
-        className={`px-4 py-2.5 border-t border-gray-100 bg-gray-50/70 text-[11px] text-gray-500 flex items-center justify-between ${
-          collapsed ? "hidden md:flex" : ""
-        }`}
-      >
-        <span>{formatMeters(tripPlan.totalDistance)} total</span>
-        <span>{tripPlan.totalWalkMinutes} min walking</span>
-      </div>
     </div>
   );
 }

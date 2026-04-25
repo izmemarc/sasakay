@@ -85,10 +85,10 @@ function Fab({
       aria-pressed={active}
       className="shrink-0 w-11 h-11 flex items-center justify-center rounded-full ring-1 ring-black/5 shadow-[0_2px_8px_rgba(0,0,0,0.12),_0_1px_2px_rgba(0,0,0,0.08)] transition-colors"
       style={{
-        background: active ? activeBg ?? "#1f2937" : "rgba(255,255,255,0.97)",
+        background: active ? activeBg ?? "#1f2937" : "rgba(255,255,255,0.7)",
         color: active ? "#fff" : "#374151",
-        backdropFilter: "blur(8px)",
-        WebkitBackdropFilter: "blur(8px)",
+        backdropFilter: "blur(18px) saturate(150%)",
+        WebkitBackdropFilter: "blur(18px) saturate(150%)",
       }}
     >
       {icon}

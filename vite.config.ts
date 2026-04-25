@@ -39,10 +39,10 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: "Sasakay — Legazpi Jeepney Map",
-        short_name: "Sasakay",
+        name: "komyut.online — Legazpi Jeepney Map",
+        short_name: "komyut",
         description:
-          "Free offline-first jeepney trip planner for Legazpi City, by bytebento.ph.",
+          "Free offline-first jeepney trip planner for Legazpi City.",
         theme_color: "#059669",
         background_color: "#ffffff",
         display: "standalone",

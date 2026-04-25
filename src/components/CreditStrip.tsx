@@ -31,7 +31,7 @@ export function CreditStrip({ onOpen }: Props) {
     <button
       type="button"
       onClick={onOpen}
-      title="About Sasakay"
+      title="About komyut.online"
       style={{
         position: "fixed",
         bottom: "max(12px, env(safe-area-inset-bottom, 0px))",

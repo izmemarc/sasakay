@@ -20,7 +20,7 @@ export function RoutesToggle({ onOpenManager }: Props) {
         type="button"
         onClick={onOpenManager}
         title="Show or hide routes on the map"
-        className="flex items-center gap-1.5 rounded-xl bg-white/95 backdrop-blur shadow-md ring-1 ring-black/5 px-3 py-2 text-sm font-medium text-gray-800 hover:bg-white hover:shadow-lg transition-all"
+        className="flex items-center gap-1.5 rounded-xl bg-white/70 backdrop-blur-xl backdrop-saturate-150 shadow-md ring-1 ring-black/5 px-3 py-2 text-sm font-medium text-gray-800 hover:bg-white/85 hover:shadow-lg transition-all"
       >
         <List className="w-4 h-4" aria-hidden />
         <span>Routes</span>

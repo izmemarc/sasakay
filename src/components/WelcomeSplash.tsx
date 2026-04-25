@@ -44,8 +44,8 @@ export function WelcomeSplash() {
               <Sparkles size={11} />
               Free · Offline-ready
             </div>
-            <h1 className="text-4xl font-black tracking-tight leading-none">
-              Sasakay
+            <h1 className="text-4xl font-black tracking-[-0.03em] leading-none">
+              komyut<span className="text-emerald-200">.online</span>
             </h1>
             <p className="mt-2 text-sm text-emerald-50/95">
               Your free jeepney trip planner for Legazpi City.
@@ -58,7 +58,7 @@ export function WelcomeSplash() {
           <Feature
             icon={<MapPin size={18} />}
             title="Plan any trip"
-            desc="Pick a starting point and destination — Sasakay finds the jeepney route, walks, and transfers."
+            desc="Pick a starting point and destination — komyut finds the jeepney route, walks, and transfers."
           />
           <Feature
             icon={<Bus size={18} />}

@@ -3,6 +3,7 @@ import { ArrowRight, Loader2, X, Info } from "lucide-react";
 import { useAppStore } from "../store/useAppStore";
 import { planTrips } from "../lib/routing";
 import { PointRow } from "./PointPicker";
+import { SwapButton } from "./SwapButton";
 
 interface Props {
   onOpenAbout: () => void;
@@ -35,10 +36,13 @@ export function MobileBottomSheet({ onOpenAbout }: Props) {
 
   const [searching, setSearching] = useState(false);
   const [noRouteMsg, setNoRouteMsg] = useState<string | null>(null);
+  // Which PointRow input is focused, if any. We hide the inactive
+  // row + Find button while typing so the dropdown for the active
+  // row has more vertical room above the keyboard.
+  const [focusedTarget, setFocusedTarget] = useState<"A" | "B" | null>(null);
 
-  // Visual viewport — `vvBottom` is the bottom edge of the visible
-  // area in layout-viewport coords; shrinks when iOS keyboard opens.
-  // `vvHeight` is the visible viewport height — used to cap the card.
+  // Visual viewport — `vvHeight` is the visible viewport height; on
+  // iOS Safari it shrinks when the on-screen keyboard opens.
   const [vvHeight, setVvHeight] = useState(
     typeof window !== "undefined" ? window.innerHeight : 0
   );
@@ -49,9 +53,7 @@ export function MobileBottomSheet({ onOpenAbout }: Props) {
     let raf = 0;
     const update = () => {
       cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        setVvHeight(Math.round(vv.height));
-      });
+      raf = requestAnimationFrame(() => setVvHeight(Math.round(vv.height)));
     };
     update();
     vv.addEventListener("resize", update);
@@ -84,6 +86,35 @@ export function MobileBottomSheet({ onOpenAbout }: Props) {
             return;
           }
           setTripCandidates(candidates);
+          // Auto-fit map to the trip extent.
+          const plan = candidates[0]?.plan;
+          if (plan && pointA && pointB) {
+            let minLng = Infinity,
+              minLat = Infinity,
+              maxLng = -Infinity,
+              maxLat = -Infinity;
+            const visit = ([lng, lat]: [number, number]) => {
+              if (lng < minLng) minLng = lng;
+              if (lat < minLat) minLat = lat;
+              if (lng > maxLng) maxLng = lng;
+              if (lat > maxLat) maxLat = lat;
+            };
+            visit(pointA);
+            visit(pointB);
+            for (const step of plan.steps) {
+              if (step.coordinates) step.coordinates.forEach(visit);
+              else {
+                visit(step.from);
+                visit(step.to);
+              }
+            }
+            if (Number.isFinite(minLng)) {
+              useAppStore.getState().requestFit([
+                [minLng, minLat],
+                [maxLng, maxLat],
+              ]);
+            }
+          }
         } finally {
           setSearching(false);
         }
@@ -91,27 +122,30 @@ export function MobileBottomSheet({ onOpenAbout }: Props) {
     });
   };
 
-  // Anchor with `top: 0` + `transform: translateY(N)`. On iOS Safari
-  // iOS Safari 26 shrinks `window.innerHeight` itself when the
-  // on-screen keyboard opens — the layout viewport ends where the
-  // keyboard starts. So a plain `bottom: 8px` is enough to place the
-  // card above the keyboard; no visualViewport math required. We
-  // still clamp `maxHeight` to the visible viewport so the card
-  // never extends behind the keyboard area on browsers (or older iOS
-  // versions) that don't shrink the layout viewport.
   const maxH = Math.max(180, vvHeight - 16);
 
   return (
     <div
-      className="md:hidden fixed left-2 right-2 z-[1100] flex flex-col bg-white shadow-[0_8px_30px_rgba(0,0,0,0.18),_0_-2px_8px_rgba(0,0,0,0.04)] rounded-2xl ring-1 ring-black/5"
+      className="md:hidden fixed left-2 right-2 z-[1100] flex flex-col bg-white/70 backdrop-blur-xl backdrop-saturate-150 shadow-[0_8px_30px_rgba(0,0,0,0.18),_0_-2px_8px_rgba(0,0,0,0.04)] rounded-2xl ring-1 ring-black/5"
+      onFocusCapture={(e) => {
+        if (e.target instanceof HTMLInputElement) {
+          const t = e.target.dataset.pointTarget as "A" | "B" | undefined;
+          if (t === "A" || t === "B") setFocusedTarget(t);
+        }
+      }}
+      onBlurCapture={(e) => {
+        if (!(e.target instanceof HTMLInputElement)) return;
+        if (!e.target.dataset.pointTarget) return;
+        // Defer briefly so a tap-switch From↔To doesn't flicker
+        // through the "no focus" state.
+        window.setTimeout(() => {
+          const a = document.activeElement;
+          if (a instanceof HTMLInputElement && a.dataset.pointTarget) return;
+          setFocusedTarget(null);
+        }, 50);
+      }}
       style={{
-        // iOS Safari 26 shrinks the LAYOUT viewport when the keyboard
-        // opens (window.innerHeight drops from 699 → 377), so a
-        // simple `bottom: 8px` puts the card 8px above the keyboard
-        // automatically — no math, no visualViewport tracking needed.
-        // We keep the transition brief so swap-on-second-focus still
-        // looks smooth instead of jumping.
-        bottom: 8,
+        bottom: "max(8px, env(safe-area-inset-bottom, 0px))",
         top: "auto",
         transform: "none",
         maxHeight: `${maxH}px`,
@@ -119,83 +153,144 @@ export function MobileBottomSheet({ onOpenAbout }: Props) {
           "bottom 200ms cubic-bezier(.32,.72,0,1), max-height 220ms cubic-bezier(.32,.72,0,1)",
       }}
     >
-      <div className="shrink-0">
-        <div className="px-5 pt-4 pb-3 flex items-start justify-between gap-3">
+      <div className="shrink-0 relative">
+        {/* Centered title with absolutely-positioned action buttons so
+            the wordmark sits dead-center regardless of the side icons. */}
+        <div className="px-5 pt-4 pb-3 flex items-center justify-center">
           <button
             type="button"
             onClick={onOpenAbout}
-            className="min-w-0 flex-1 text-left"
+            className="text-center"
           >
-            <h1 className="text-[20px] font-bold text-gray-900 leading-tight tracking-tight">
-              Sasakay
+            <h1 className="text-[30px] font-extrabold text-gray-900 leading-none tracking-[-0.025em]">
+              komyut<span className="text-emerald-600">.online</span>
             </h1>
-            <p className="text-[13px] text-gray-500 mt-0.5 truncate">
-              Legazpi jeepney trip planner
-            </p>
           </button>
-          <div className="flex items-center gap-1 shrink-0 -mr-1.5">
-            {hasAnything && (
-              <button
-                type="button"
-                onClick={() => {
-                  clearTrip();
-                  setNoRouteMsg(null);
-                }}
-                title="Clear all"
-                aria-label="Clear all"
-                className="w-9 h-9 flex items-center justify-center text-gray-500 hover:bg-gray-100 active:bg-gray-200 rounded-full"
-              >
-                <X size={18} />
-              </button>
-            )}
+        </div>
+        <div className="absolute right-3 top-3 flex items-center gap-1">
+          {hasAnything && (
             <button
               type="button"
-              onClick={onOpenAbout}
-              title="About"
-              aria-label="About"
+              onClick={() => {
+                clearTrip();
+                setNoRouteMsg(null);
+              }}
+              title="Clear all"
+              aria-label="Clear all"
               className="w-9 h-9 flex items-center justify-center text-gray-500 hover:bg-gray-100 active:bg-gray-200 rounded-full"
             >
-              <Info size={18} />
+              <X size={18} />
             </button>
-          </div>
+          )}
+          <button
+            type="button"
+            onClick={onOpenAbout}
+            title="About"
+            aria-label="About"
+            className="w-9 h-9 flex items-center justify-center text-gray-500 hover:bg-gray-100 active:bg-gray-200 rounded-full"
+          >
+            <Info size={18} />
+          </button>
         </div>
       </div>
 
-      <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-5 pt-1 pb-5">
+      <div className="flex-1 min-h-0 overflow-visible px-5 pt-1 pb-5">
         <div className="space-y-4">
-          <PointRow target="A" label="From" dotColor="#059669" />
-          <PointRow target="B" label="To" dotColor="#dc2626" />
-
-          <button
-            type="button"
-            disabled={!canFind}
-            onClick={onFind}
-            aria-busy={searching}
-            className="w-full h-12 text-[15px] font-semibold rounded-xl bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 active:bg-emerald-800 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+          <div className="relative space-y-4">
+          {/* From row — collapses when To is focused. On return,
+              expand FIRST (no delay) so the user sees the input
+              they're heading to come back into view immediately. */}
+          <div
+            className="grid grid-cols-[minmax(0,1fr)] transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[grid-template-rows]"
+            style={{
+              gridTemplateRows: focusedTarget === "B" ? "0fr" : "1fr",
+              opacity: focusedTarget === "B" ? 0 : 1,
+              transitionDelay: focusedTarget ? "0ms" : "0ms",
+            }}
+            aria-hidden={focusedTarget === "B"}
           >
-            {searching ? (
-              <>
-                <Loader2 size={16} className="animate-spin" />
-                Finding routes…
-              </>
-            ) : (
-              <>
-                Find route
-                <ArrowRight size={16} />
-              </>
-            )}
-          </button>
+            <div
+              className={
+                focusedTarget === "B"
+                  ? "overflow-hidden min-h-0"
+                  : "overflow-visible min-h-0"
+              }
+            >
+              <PointRow target="A" label="From" dotColor="#059669" />
+            </div>
+          </div>
+          {/* To row — same pattern. */}
+          <div
+            className="grid grid-cols-[minmax(0,1fr)] transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[grid-template-rows]"
+            style={{
+              gridTemplateRows: focusedTarget === "A" ? "0fr" : "1fr",
+              opacity: focusedTarget === "A" ? 0 : 1,
+              transitionDelay: focusedTarget ? "0ms" : "0ms",
+            }}
+            aria-hidden={focusedTarget === "A"}
+          >
+            <div
+              className={
+                focusedTarget === "A"
+                  ? "overflow-hidden min-h-0"
+                  : "overflow-visible min-h-0"
+              }
+            >
+              <PointRow target="B" label="To" dotColor="#dc2626" />
+            </div>
+          </div>
+          {!focusedTarget && <SwapButton />}
+          </div>
 
-          {loadError && (
-            <div className="text-[13px] text-red-700 bg-red-50 ring-1 ring-red-100 rounded-xl px-3 py-2.5">
-              Data error: {loadError}
+          {/* Find button + errors — STAGGERED: when collapsing
+              (focusedTarget set), this animates first; when
+              expanding back (focusedTarget cleared), this waits
+              140ms so the rows finish appearing before the button
+              area opens — feels more like a deliberate sequence
+              than three things resolving simultaneously. */}
+          <div
+            className="grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[grid-template-rows]"
+            style={{
+              gridTemplateRows: focusedTarget ? "0fr" : "1fr",
+              opacity: focusedTarget ? 0 : 1,
+              transitionDelay: focusedTarget ? "0ms" : "140ms",
+            }}
+            aria-hidden={!!focusedTarget}
+          >
+            <div className="overflow-hidden space-y-4">
+              <button
+                type="button"
+                disabled={!canFind}
+                onClick={onFind}
+                aria-busy={searching}
+                tabIndex={focusedTarget ? -1 : 0}
+                className="w-full h-12 text-[15px] font-bold tracking-[-0.005em] rounded-xl bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 active:bg-emerald-800 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+              >
+                {searching ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" />
+                    Finding routes…
+                  </>
+                ) : (
+                  <>
+                    Find route
+                    <ArrowRight size={16} />
+                  </>
+                )}
+              </button>
+
+              {loadError && (
+                <div className="text-[13px] text-red-700 bg-red-50 ring-1 ring-red-100 rounded-xl px-3 py-2.5">
+                  Data error: {loadError}
+                </div>
+              )}
+              {noRouteMsg && (
+                <div className="text-[13px] text-amber-800 bg-amber-50 ring-1 ring-amber-100 rounded-xl px-3 py-2.5">
+                  {noRouteMsg}
+                </div>
+              )}
             </div>
-          )}
-          {noRouteMsg && (
-            <div className="text-[13px] text-amber-800 bg-amber-50 ring-1 ring-amber-100 rounded-xl px-3 py-2.5">
-              {noRouteMsg}
-            </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

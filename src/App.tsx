@@ -4,6 +4,7 @@ import { preloadTiles } from "./lib/preloadTiles";
 import { cityConfig } from "./config";
 import { BaseMap } from "./components/BaseMap";
 import { PointMarkers } from "./components/PointMarkers";
+import { UserLocationMarker } from "./components/UserLocationMarker";
 import { PlacesLayer } from "./components/PlacesLayer";
 import { RoutesLayer } from "./components/RoutesLayer";
 import { PointPicker } from "./components/PointPicker";
@@ -30,6 +31,7 @@ export default function App() {
 function TripPlanner() {
   const loadData = useAppStore((s) => s.loadData);
   const requestPan = useAppStore((s) => s.requestPan);
+  const setUserLocation = useAppStore((s) => s.setUserLocation);
   const [preloadPct, setPreloadPct] = useState<number | null>(null);
   // Auto-open the routes manager when returning from the editor
   // (`/?manage=1`) so Back lands on a known surface, not the blank
@@ -43,13 +45,15 @@ function TripPlanner() {
     void loadData();
   }, [loadData]);
 
-  // Silent best-effort geolocation on mount. If the user has already
-  // granted permission in a prior session, this succeeds and we
-  // smoothly center the map on them. If permission is "Ask" or denied,
-  // it fails quietly — we don't want a permission prompt the moment
-  // the app opens (rude UX). The explicit Locate-Me FAB and the
-  // crosshair on each input are the proper places to ask.
+  // Silent best-effort geolocation on mount — MOBILE ONLY. Desktop
+  // users mostly aren't physically near Legazpi (the city this app
+  // is for); auto-recentering can teleport them away from the map
+  // they were exploring. The Locate-Me FAB stays available for
+  // explicit re-center. Mobile users opening the app while nearby
+  // benefit from the auto-center, so we keep it there.
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!window.matchMedia("(max-width: 767px)").matches) return;
     if (typeof navigator === "undefined" || !navigator.geolocation) return;
     let cancelled = false;
     // Use Permissions API where available so we don't trigger a
@@ -58,10 +62,12 @@ function TripPlanner() {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           if (cancelled) return;
-          requestPan(
-            [pos.coords.longitude, pos.coords.latitude],
-            16
-          );
+          const coords: [number, number] = [
+            pos.coords.longitude,
+            pos.coords.latitude,
+          ];
+          setUserLocation(coords);
+          requestPan(coords, 16);
         },
         () => {
           /* silent */
@@ -82,7 +88,7 @@ function TripPlanner() {
     return () => {
       cancelled = true;
     };
-  }, [requestPan]);
+  }, [requestPan, setUserLocation]);
 
   // Strip ?manage=1 from the URL once consumed so the user's address
   // bar doesn't carry it around forever.
@@ -115,6 +121,7 @@ function TripPlanner() {
         <PlacesLayer />
         <TripLayer />
         <PointMarkers />
+        <UserLocationMarker />
       </BaseMap>
       <PointPicker onOpenAbout={() => setAboutOpen(true)} />
       <CategoryFilter />

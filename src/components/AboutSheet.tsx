@@ -52,11 +52,11 @@ export function AboutSheet({ open, onClose }: Props) {
         <div className="px-6 py-5 space-y-4">
           <div>
             <div className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 mb-2">
-              About Sasakay
+              About komyut.online
             </div>
             <p className="text-sm text-gray-700 leading-relaxed">
               A free, offline-first jeepney trip planner for Legazpi City.
-              Pick a starting point and a destination — Sasakay finds the
+              Pick a starting point and a destination — komyut finds the
               jeepney route, transfers, and walks for you.
             </p>
           </div>
