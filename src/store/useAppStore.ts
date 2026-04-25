@@ -18,6 +18,10 @@ interface AppState {
   /** Which candidate is currently selected (index into tripCandidates). */
   tripChoiceIdx: number;
   pickingFor: "A" | "B" | null;
+  /** UI hint: is the mobile point-picker card currently expanded? Other
+   *  floating overlays use this to step out of the way so they don't
+   *  overlap the picker's inputs on small screens. */
+  mobilePickerExpanded: boolean;
   showRoutes: boolean;
   /** Per-route visibility override. If a route id is present here it is
    *  drawn; if the set is empty and initialized, the store auto-fills
@@ -36,6 +40,7 @@ interface AppState {
   setTripCandidates: (c: TripCandidate[]) => void;
   setTripChoice: (idx: number) => void;
   setPickingFor: (p: "A" | "B" | null) => void;
+  setMobilePickerExpanded: (v: boolean) => void;
   toggleRoutes: () => void;
   setVisibleRouteIds: (ids: Set<string>) => void;
   toggleCategory: (category: string) => void;
@@ -54,7 +59,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   tripCandidates: [],
   tripChoiceIdx: 0,
   pickingFor: null,
-  showRoutes: true,
+  mobilePickerExpanded: true,
+  showRoutes: false,
   visibleRouteIds: new Set<string>(),
   visibleCategories: null,
   dataLoaded: false,
@@ -76,6 +82,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     if (cand) set({ tripChoiceIdx: idx, tripPlan: cand.plan });
   },
   setPickingFor: (p) => set({ pickingFor: p }),
+  setMobilePickerExpanded: (v) => set({ mobilePickerExpanded: v }),
   toggleRoutes: () => set((s) => ({ showRoutes: !s.showRoutes })),
   setVisibleRouteIds: (ids) => set({ visibleRouteIds: ids }),
   toggleCategory: (category) =>
@@ -112,14 +119,17 @@ export const useAppStore = create<AppState>((set, get) => ({
       const current = get().visibleRouteIds;
       const currentCats = get().visibleCategories;
       const allCats = new Set(placesRes.map((p) => p.category));
+      const allRouteIds = new Set(routes.map((r) => r.id));
+      // Default to "everything visible" so the user sees the full
+      // jeepney network the moment the app opens. The RoutesManager
+      // (when present) can still narrow the visible set; we only fill
+      // from defaults when there's nothing already selected.
+      const visibleRouteIds = current.size === 0 ? allRouteIds : current;
       set({
         routes,
         places: placesRes,
         roads,
-        // Routes start hidden — user opens RoutesManager to toggle on
-        // the ones they care about. Avoids cluttering the trip-planning
-        // map with every line on first load.
-        visibleRouteIds: current,
+        visibleRouteIds,
         visibleCategories: currentCats ?? allCats,
         dataLoaded: true,
         loadError: null,

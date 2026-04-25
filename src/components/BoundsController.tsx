@@ -21,15 +21,23 @@ export function BoundsController({ bounds }: Props) {
       L.latLng(b[1][0], b[1][1])
     );
 
-    // Pad by the full box extent on each side. That guarantees the viewport
-    // edge can always reach any corner of the original box, at every zoom,
-    // with room to spare. Beyond the original box the user sees nothing
-    // interesting anyway.
+    // Asymmetric padding: extra slack horizontally so wide desktop
+    // viewports can scroll a bit east/west of the city, tighter
+    // vertically so users don't pan into empty ocean above or below
+    // Legazpi.
     const latSpan = base.getNorth() - base.getSouth();
     const lngSpan = base.getEast() - base.getWest();
+    const PAD_LNG = 0.6;
+    const PAD_LAT = 0;
     const padded = L.latLngBounds(
-      L.latLng(base.getSouth() - latSpan, base.getWest() - lngSpan),
-      L.latLng(base.getNorth() + latSpan, base.getEast() + lngSpan)
+      L.latLng(
+        base.getSouth() - latSpan * PAD_LAT,
+        base.getWest() - lngSpan * PAD_LNG
+      ),
+      L.latLng(
+        base.getNorth() + latSpan * PAD_LAT,
+        base.getEast() + lngSpan * PAD_LNG
+      )
     );
     map.setMaxBounds(padded);
   }, [map, bounds]);

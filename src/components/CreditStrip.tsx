@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Info } from "lucide-react";
+import { useAppStore } from "../store/useAppStore";
 
 interface Props {
   onOpen: () => void;
@@ -11,8 +12,21 @@ interface Props {
  *  styles for guaranteed specificity over any leaflet/tailwind rule. */
 export function CreditStrip({ onOpen }: Props) {
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const [isMobile, setIsMobile] = useState(false);
+  const tripPlan = useAppStore((s) => s.tripPlan);
+  useEffect(() => {
+    setMounted(true);
+    const mq = window.matchMedia("(max-width: 767px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
   if (!mounted) return null;
+  // The mobile bottom sheet owns the bottom edge and includes its own
+  // bytebento credit link, so the floating pill is desktop-only.
+  if (isMobile) return null;
+  void tripPlan; // eslint-disable-line @typescript-eslint/no-unused-expressions
   return createPortal(
     <button
       type="button"

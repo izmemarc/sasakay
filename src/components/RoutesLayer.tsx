@@ -1,8 +1,12 @@
-import { memo } from "react";
-import { Polyline, Marker } from "react-leaflet";
+import { memo, useEffect, useState } from "react";
+import { Polyline, Marker, useMap } from "react-leaflet";
 import L from "leaflet";
 import { useAppStore } from "../store/useAppStore";
 import type { JeepneyRoute } from "../types";
+
+// Below this zoom level on mobile, the arrow markers turn into noisy
+// pixel clutter — hide them. Desktop keeps arrows at any zoom.
+const ARROW_HIDE_BELOW_ZOOM = 14;
 
 function toLatLng(coords: [number, number][]): [number, number][] {
   return coords.map(([lng, lat]) => [lat, lng]);
@@ -113,10 +117,20 @@ export function RoutesLayer() {
   const tripPlan = useAppStore((s) => s.tripPlan);
   const showRoutes = useAppStore((s) => s.showRoutes);
   const visibleRouteIds = useAppStore((s) => s.visibleRouteIds);
+  const map = useMap();
+  const [zoom, setZoom] = useState(() => map.getZoom());
+  useEffect(() => {
+    const update = () => setZoom(map.getZoom());
+    map.on("zoomend", update);
+    return () => {
+      map.off("zoomend", update);
+    };
+  }, [map]);
 
   if (!showRoutes) return null;
 
   const active = tripPlan ? usedRouteCodes(tripPlan.steps) : null;
+  const zoomedOut = zoom < ARROW_HIDE_BELOW_ZOOM;
 
   return (
     <>
@@ -128,7 +142,9 @@ export function RoutesLayer() {
         // visual clutter.
         if (isActive) return null;
         const opacity = active === null ? 0.7 : 0.15;
-        const showArrows = active === null;
+        // Hide arrows on the active-trip view (cleaner) AND when zoomed
+        // out far enough that they'd be unreadable noise.
+        const showArrows = active === null && !zoomedOut;
         return (
           <RouteOverlay
             key={r.id}

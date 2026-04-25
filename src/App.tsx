@@ -13,6 +13,8 @@ import { RouteEditor } from "./components/RouteEditor";
 import { RoutesToggle } from "./components/RoutesToggle";
 import { RoutesManager } from "./components/RoutesManager";
 import { CategoryFilter } from "./components/CategoryFilter";
+import { MobileBottomSheet } from "./components/MobileBottomSheet";
+import { MobileFilterRail } from "./components/MobileFilterRail";
 import { AboutSheet } from "./components/AboutSheet";
 import { CreditStrip } from "./components/CreditStrip";
 import { WelcomeSplash } from "./components/WelcomeSplash";
@@ -73,7 +75,14 @@ function TripPlanner() {
       </BaseMap>
       <PointPicker onOpenAbout={() => setAboutOpen(true)} />
       <CategoryFilter />
-      <RoutesToggle onOpenManager={() => setManagerOpen(true)} />
+      <MobileBottomSheet onOpenAbout={() => setAboutOpen(true)} />
+      <MobileFilterRail />
+      {/* RoutesToggle (the "Routes" / Manage button) is hidden in
+          production. The RoutesManager itself stays mounted so the
+          editor's Back link (?manage=1) still opens it. */}
+      {import.meta.env.DEV && (
+        <RoutesToggle onOpenManager={() => setManagerOpen(true)} />
+      )}
       <RoutesManager open={managerOpen} onClose={() => setManagerOpen(false)} />
       <DirectionsPanel />
       <CreditStrip onOpen={() => setAboutOpen(true)} />

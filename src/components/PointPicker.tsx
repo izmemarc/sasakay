@@ -132,7 +132,7 @@ function PlaceRow({
   );
 }
 
-function PointRow({
+export function PointRow({
   target,
   label,
   dotColor,
@@ -316,9 +316,11 @@ export function PointPicker({ onOpenAbout }: PointPickerProps = {}) {
   const [noRouteMsg, setNoRouteMsg] = useState<string | null>(null);
   const [searching, setSearching] = useState(false);
   // On mobile, the whole card can collapse to a single-line summary so
-  // it doesn't eat the map. Defaults to collapsed when a trip is already
-  // planned (the DirectionsPanel is doing the work); expanded otherwise.
-  const [mobileExpanded, setMobileExpanded] = useState(true);
+  // it doesn't eat the map. State is in the store so other overlays
+  // (CategoryFilter, RoutesToggle) can step out of the way when the
+  // picker is expanded on small screens.
+  const mobileExpanded = useAppStore((s) => s.mobilePickerExpanded);
+  const setMobileExpanded = useAppStore((s) => s.setMobilePickerExpanded);
 
   const canFind = pointA && pointB && routes.length > 0 && !searching;
   const hasAnything = pointA || pointB || tripPlan;
@@ -353,7 +355,7 @@ export function PointPicker({ onOpenAbout }: PointPickerProps = {}) {
   };
 
   return (
-    <div className="absolute top-3 left-3 right-3 md:top-4 md:left-4 md:right-auto z-[1000] md:w-[clamp(340px,24vw,560px)] md:max-w-[calc(100vw-2rem)] rounded-2xl bg-white/95 backdrop-blur shadow-xl ring-1 ring-black/5 overflow-hidden">
+    <div className="hidden md:block absolute md:top-4 md:left-4 md:right-auto z-[1000] md:w-[clamp(340px,24vw,560px)] md:max-w-[calc(100vw-2rem)] rounded-2xl bg-white/95 backdrop-blur shadow-xl ring-1 ring-black/5 overflow-hidden">
       <div className="px-4 pt-3 pb-2 flex items-center justify-between gap-2">
         <button
           type="button"
@@ -390,7 +392,7 @@ export function PointPicker({ onOpenAbout }: PointPickerProps = {}) {
           )}
           <button
             type="button"
-            onClick={() => setMobileExpanded((v) => !v)}
+            onClick={() => setMobileExpanded(!mobileExpanded)}
             title={mobileExpanded ? "Collapse" : "Expand"}
             className="md:hidden p-1.5 text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-full transition-colors"
           >

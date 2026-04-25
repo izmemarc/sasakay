@@ -1,32 +1,7 @@
 import { useMemo } from "react";
 import { Eye, EyeOff, Bus } from "lucide-react";
 import { useAppStore } from "../store/useAppStore";
-
-// Shared order + label + emoji + color for categories. Kept here so
-// toolbar and map markers can stay visually aligned.
-const CATEGORIES: {
-  id: string;
-  label: string;
-  emoji: string;
-  color: string;
-}[] = [
-  { id: "mall", label: "Malls", emoji: "🛍", color: "#7c3aed" },
-  { id: "terminal", label: "Terminals", emoji: "🚌", color: "#f59e0b" },
-  { id: "government", label: "Gov't", emoji: "🏛", color: "#2563eb" },
-  { id: "hospital", label: "Hospitals", emoji: "🏥", color: "#dc2626" },
-  { id: "school", label: "Schools", emoji: "🎓", color: "#0891b2" },
-  { id: "church", label: "Churches", emoji: "⛪", color: "#6b7280" },
-  { id: "landmark", label: "Landmarks", emoji: "📍", color: "#059669" },
-  { id: "market", label: "Markets", emoji: "🥬", color: "#ea580c" },
-  { id: "park", label: "Parks", emoji: "🌳", color: "#16a34a" },
-  { id: "sports", label: "Sports", emoji: "⚽", color: "#0ea5e9" },
-  { id: "hotel", label: "Hotels", emoji: "🏨", color: "#be185d" },
-  { id: "food", label: "Food", emoji: "🍽", color: "#e11d48" },
-  { id: "cafe", label: "Cafes", emoji: "☕", color: "#a16207" },
-  { id: "bank", label: "Banks", emoji: "🏦", color: "#1e40af" },
-  { id: "gas", label: "Gas", emoji: "⛽", color: "#374151" },
-  { id: "store", label: "Stores", emoji: "🏪", color: "#0d9488" },
-];
+import { CATEGORIES } from "./categories";
 
 // Chip size scales to fill the desktop gap between the PointPicker and
 // the Routes toggle. Grows on wider screens so the bar doesn't leave
@@ -54,14 +29,13 @@ export function CategoryFilter() {
     <div
       className="
         absolute z-[1000] pointer-events-none
-        top-[calc(4rem+env(safe-area-inset-top,0px))] md:top-4
-        left-1/2 -translate-x-1/2 w-[calc(100vw-1.5rem)]
+        hidden md:block
+        md:top-4
         md:left-[calc(1rem+clamp(340px,24vw,560px)+0.75rem)]
-        md:translate-x-0 md:w-auto
       "
     >
       <div className="pointer-events-auto rounded-2xl bg-white/95 backdrop-blur shadow-xl ring-1 ring-black/5 overflow-hidden">
-        <div className="flex items-stretch gap-1 md:gap-1.5 px-1.5 md:px-2 py-1.5 md:py-2">
+        <div className="flex items-stretch gap-1 md:gap-1.5 px-1.5 md:px-2 py-1.5 md:py-2 overflow-x-auto md:overflow-visible scrollbar-thin">
           <button
             type="button"
             onClick={toggleRoutes}
@@ -108,7 +82,7 @@ export function CategoryFilter() {
             className="shrink-0 w-px self-stretch bg-gray-200"
             aria-hidden
           />
-          <div className="flex flex-nowrap items-center gap-[3px] md:gap-1 min-w-0 flex-1 justify-start">
+          <div className="flex flex-nowrap items-center gap-[3px] md:gap-1 md:min-w-0 md:flex-1 justify-start">
             {present.map((c) => {
               const on = visible.has(c.id);
               return (

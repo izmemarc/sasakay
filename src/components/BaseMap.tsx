@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import L from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -13,12 +13,36 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
+// Allow phones to pinch out wider than the desktop floor — the smaller
+// viewport benefits from more context. Desktop keeps the tighter floor
+// since the canvas is already large.
+const MOBILE_MIN_ZOOM_OFFSET = 3;
+
 export function BaseMap({ children }: { children?: ReactNode }) {
+  // Synchronously initialize so the very first render already has the
+  // right minZoom — otherwise the map mounts at desktop floor on
+  // mobile and Leaflet locks viewers out of pinching wider.
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" &&
+    window.matchMedia("(max-width: 767px)").matches
+  );
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  const minZoom = isMobile
+    ? Math.max(1, cityConfig.minZoom - MOBILE_MIN_ZOOM_OFFSET)
+    : cityConfig.minZoom;
+
   return (
     <MapContainer
       center={cityConfig.center}
       zoom={cityConfig.defaultZoom}
-      minZoom={cityConfig.minZoom}
+      minZoom={minZoom}
       maxZoom={cityConfig.maxZoom}
       maxBoundsViscosity={1}
       scrollWheelZoom
@@ -26,7 +50,9 @@ export function BaseMap({ children }: { children?: ReactNode }) {
       zoomDelta={0.5}
       wheelPxPerZoomLevel={60}
       wheelDebounceTime={20}
-      zoomControl
+      // Hide the default +/- buttons on every viewport — pinch / scroll
+      // wheel handle zooming and the buttons are visual clutter.
+      zoomControl={false}
       className="h-full w-full"
     >
       <TileLayer
@@ -36,7 +62,10 @@ export function BaseMap({ children }: { children?: ReactNode }) {
         maxZoom={cityConfig.maxZoom}
         maxNativeZoom={cityConfig.maxNativeZoom}
       />
-      <BoundsController bounds={cityConfig.bounds} />
+      {/* Bounds clamp on desktop only. On mobile the viewport at the
+          loosest pinch-out is bigger than any reasonable padded box,
+          so any clamp during the gesture feels like a snap. */}
+      {!isMobile && <BoundsController bounds={cityConfig.bounds} />}
       {children}
     </MapContainer>
   );
