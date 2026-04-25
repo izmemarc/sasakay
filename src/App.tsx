@@ -24,7 +24,13 @@ import { WelcomeSplash } from "./components/WelcomeSplash";
 export default function App() {
   const params = new URLSearchParams(window.location.search);
   const editId = params.get("edit");
-  if (editId) return <RouteEditor initialId={editId} />;
+  // Editor is dev-only. In production, ?edit= falls through to the
+  // normal trip planner — the read-only deployment has no edit-server
+  // to accept writes anyway, and rendering the editor UI on prod
+  // would just confuse users.
+  if (editId && import.meta.env.DEV) {
+    return <RouteEditor initialId={editId} />;
+  }
   return <TripPlanner />;
 }
 
@@ -35,9 +41,11 @@ function TripPlanner() {
   const [preloadPct, setPreloadPct] = useState<number | null>(null);
   // Auto-open the routes manager when returning from the editor
   // (`/?manage=1`) so Back lands on a known surface, not the blank
-  // trip planner.
-  const [managerOpen, setManagerOpen] = useState(() =>
-    new URLSearchParams(window.location.search).has("manage")
+  // trip planner. Dev-only — production has no editor.
+  const [managerOpen, setManagerOpen] = useState(
+    () =>
+      import.meta.env.DEV &&
+      new URLSearchParams(window.location.search).has("manage")
   );
   const [aboutOpen, setAboutOpen] = useState(false);
 

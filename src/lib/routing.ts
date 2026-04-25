@@ -17,6 +17,14 @@ const MAX_WALK_TO_STOP = 800;
 const MAX_TRANSFER_WALK = 400;
 const WALK_SPEED = 80; // m/min
 const JEEPNEY_SPEED = 250; // m/min ~ 15 km/h city jeepney
+// No one rides a jeepney for less than ~400m — they'd just walk.
+// Filter out trip candidates whose actual ride distance falls below
+// this so we don't suggest riding 119m for ₱13.
+const MIN_RIDE_METERS = 400;
+// If A→B is closer than this on foot, we surface a "walk" candidate
+// even when there are jeepney options — short trips are usually
+// better walked than waiting for a jeepney + paying fare.
+const WALK_ONLY_MAX_METERS = 1500;
 // Walk time feels worse than ride time — riders will accept noticeably
 // longer rides to avoid walking. OTP-style "walk reluctance" of 2.0 is
 // industry standard. We apply it to scoring (route selection) but not
@@ -710,9 +718,27 @@ export function planTrips(
     }))
     .filter((x) => x.hits.length > 0);
 
-  if (boarding.length === 0 || alighting.length === 0) return [];
-
   const plans: TripPlan[] = [];
+
+  // Walk-only candidate. For short trips this is faster + free, and
+  // we surface it so users aren't pushed onto a jeepney for 200m.
+  // Only included when the direct walk is reasonable on foot.
+  const directWalk = buildWalk(pointA, pointB, walkGraph);
+  if (
+    directWalk &&
+    directWalk.distanceMeters <= WALK_ONLY_MAX_METERS
+  ) {
+    plans.push(assembleTrip([directWalk]));
+  }
+
+  if (boarding.length === 0 || alighting.length === 0) {
+    // No jeepney options — return walk-only if we have it, else empty.
+    if (plans.length > 0) {
+      const minutes = totalMinutes(plans[0]);
+      return [{ plan: plans[0], minutes }];
+    }
+    return [];
+  }
 
   // Direct trips — per route, pick the (board, alight) pair that
   // minimizes total travel time: walk_minutes + ride_minutes. Walking
@@ -759,13 +785,13 @@ export function planTrips(
       // Skip plans where either walk leg is infeasible — drawing a
       // straight line over impassable terrain misleads the rider.
       if (boardWalk && alightWalk) {
-        plans.push(
-          assembleTrip([
-            boardWalk,
-            buildJeepney(route, bestPair.bh, bestPair.ah),
-            alightWalk,
-          ])
-        );
+        const jeepney = buildJeepney(route, bestPair.bh, bestPair.ah);
+        // Skip absurdly short rides — no rider hops on a jeep for
+        // 100-300m, they walk it. Suggesting it makes the planner
+        // look broken.
+        if (jeepney.distanceMeters >= MIN_RIDE_METERS) {
+          plans.push(assembleTrip([boardWalk, jeepney, alightWalk]));
+        }
       }
     }
   }
@@ -824,14 +850,22 @@ export function planTrips(
             const boardWalk = buildWalk(pointA, bHit.point, walkGraph);
             const alightWalk = buildWalk(aHit.point, pointB, walkGraph);
             if (!boardWalk || !alightWalk) continue;
+            const jeepneyA = buildJeepney(b.route, bHit, hitOnA);
+            const jeepneyB = buildJeepney(a.route, hitOnB, aHit);
+            // Both ride legs must be long enough to be worth boarding.
+            if (
+              jeepneyA.distanceMeters < MIN_RIDE_METERS ||
+              jeepneyB.distanceMeters < MIN_RIDE_METERS
+            )
+              continue;
             const steps: TripStep[] = [boardWalk];
-            steps.push(buildJeepney(b.route, bHit, hitOnA));
+            steps.push(jeepneyA);
             if (x.walkMeters >= MIN_TRANSFER_WALK_RENDERED) {
               const transferWalk = buildWalk(x.onA, x.onB, walkGraph);
               if (!transferWalk) continue;
               steps.push(transferWalk);
             }
-            steps.push(buildJeepney(a.route, hitOnB, aHit));
+            steps.push(jeepneyB);
             steps.push(alightWalk);
             plans.push(assembleTrip(steps));
           }
