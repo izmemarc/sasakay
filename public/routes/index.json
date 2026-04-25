@@ -1,5 +1,9 @@
 {
   "files": [
-    "ddl.json"
+    "adl.json",
+    "ddl.json",
+    "drb.json",
+    "l1.json",
+    "l2.json"
   ]
 }

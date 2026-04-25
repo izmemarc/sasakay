@@ -17,6 +17,11 @@ const MAX_WALK_TO_STOP = 500;
 const MAX_TRANSFER_WALK = 300;
 const WALK_SPEED = 80; // m/min
 const JEEPNEY_SPEED = 250; // m/min ~ 15 km/h city jeepney
+// Walk time feels worse than ride time — riders will accept noticeably
+// longer rides to avoid walking. OTP-style "walk reluctance" of 2.0 is
+// industry standard. We apply it to scoring (route selection) but not
+// to the displayed durationMinutes, which should remain wall-clock.
+const WALK_RELUCTANCE = 2.0;
 const TRANSFER_PENALTY_MIN = 5; // wait + boarding overhead per transfer
 const MIN_TRANSFER_WALK_RENDERED = 20;
 const SAMPLE_WINDOW = 500;
@@ -119,25 +124,112 @@ function positionOfPointOnPolyline(
   return segStart + (segEnd - segStart) * bestT;
 }
 
-function nearestOnRoute(route: JeepneyRoute, pt: LngLat): NearestHit {
-  if (route.coordinates.length < 2) {
-    return { point: pt, distMeters: Infinity, position: 0 };
-  }
+/** All per-segment snap candidates: project `pt` onto every segment of
+ *  the polyline, return the local minima that are within `maxDist` m.
+ *  For self-overlapping paths (lollipops) this yields one candidate per
+ *  pass instead of collapsing to a single nearest. */
+function allSnapCandidates(
+  route: JeepneyRoute,
+  pt: LngLat,
+  maxDist: number
+): NearestHit[] {
+  const coords = route.coordinates;
+  if (coords.length < 2) return [];
   const cache = getRouteCache(route);
-  const snapped = nearestPointOnLine(cache.line, point(pt), {
-    units: "meters",
-  });
-  const snapCoord = snapped.geometry.coordinates as LngLat;
-  const position = positionOfPointOnPolyline(
-    route.coordinates,
-    cache.vertexPositions,
-    snapCoord
-  );
-  return {
-    point: [snapCoord[0], snapCoord[1]],
-    distMeters: snapped.properties.dist ?? 0,
-    position,
+  const perSeg: { dist: number; pos: number; coord: LngLat }[] = [];
+  for (let i = 1; i < coords.length; i++) {
+    const a = coords[i - 1];
+    const b = coords[i];
+    const dx = b[0] - a[0];
+    const dy = b[1] - a[1];
+    const len2 = dx * dx + dy * dy;
+    let t = len2 === 0 ? 0 : ((pt[0] - a[0]) * dx + (pt[1] - a[1]) * dy) / len2;
+    if (t < 0) t = 0;
+    else if (t > 1) t = 1;
+    const projx = a[0] + dx * t;
+    const projy = a[1] + dy * t;
+    const d = metersBetween([projx, projy], pt);
+    const segStart = cache.vertexPositions[i - 1];
+    const segEnd = cache.vertexPositions[i];
+    perSeg.push({
+      dist: d,
+      pos: segStart + (segEnd - segStart) * t,
+      coord: [projx, projy],
+    });
+  }
+  // Find every local minimum in the per-segment distance profile that
+  // is within maxDist. A "pass" is a local minimum: the polyline came
+  // close to `pt`, then moved away. For out-and-back routes (jeep goes
+  // up to a turnaround and comes back), this correctly emits one
+  // candidate per pass even though the polyline never strays beyond
+  // maxDist between them.
+  //
+  // Implementation: walk the profile, track whether the distance is
+  // currently rising or falling. Each transition from "falling/equal"
+  // to "rising" marks a local min — emit it if under maxDist. Then
+  // dedupe candidates within MIN_PASS_GAP along-line so tiny noise
+  // wiggles don't double-count the same physical pass.
+  const MIN_PASS_GAP = 80; // meters along-line; keeps real out-and-back
+                           // turnarounds (~hundreds of m) but eats noise
+  const picks: NearestHit[] = [];
+  for (let i = 0; i < perSeg.length; i++) {
+    const cur = perSeg[i].dist;
+    const prev = i > 0 ? perSeg[i - 1].dist : Infinity;
+    const next = i < perSeg.length - 1 ? perSeg[i + 1].dist : Infinity;
+    const isLocalMin = cur <= prev && cur <= next;
+    if (isLocalMin && cur <= maxDist) {
+      picks.push({
+        point: perSeg[i].coord,
+        distMeters: cur,
+        position: perSeg[i].pos,
+      });
+    }
+  }
+  // Dedupe near-coincident picks. Two minima close together along-line
+  // *normally* mean noise (re-merge), but on lollipops the outbound and
+  // return leg can pass the same query point a few segments apart with
+  // the polyline travelling in opposite directions. Detect that via the
+  // local segment bearing — picks within MIN_PASS_GAP along-line are
+  // only merged if they're heading in roughly the same direction.
+  picks.sort((a, b) => a.position - b.position);
+  const deduped: NearestHit[] = [];
+  const bearingAt = (pos: number): number => {
+    // Bearing of the segment containing `pos`. Linear scan is fine —
+    // routes have ≤ a few hundred vertices.
+    let cursor = 0;
+    for (let i = 1; i < coords.length; i++) {
+      const segLen = cache.vertexPositions[i] - cache.vertexPositions[i - 1];
+      if (cursor + segLen >= pos) {
+        const a = coords[i - 1];
+        const b = coords[i];
+        return Math.atan2(b[0] - a[0], b[1] - a[1]) * (180 / Math.PI);
+      }
+      cursor += segLen;
+    }
+    return 0;
   };
+  const angleDiff = (a: number, b: number) => {
+    let d = Math.abs(a - b) % 360;
+    if (d > 180) d = 360 - d;
+    return d;
+  };
+  for (const p of picks) {
+    const last = deduped[deduped.length - 1];
+    if (!last || p.position - last.position > MIN_PASS_GAP) {
+      deduped.push(p);
+      continue;
+    }
+    // Same along-line region — check if directions agree.
+    const sameDir = angleDiff(bearingAt(last.position), bearingAt(p.position)) < 60;
+    if (sameDir) {
+      // Genuine duplicate; keep closer of the two.
+      if (p.distMeters < last.distMeters) deduped[deduped.length - 1] = p;
+    } else {
+      // Different directions — distinct passes (outbound vs return).
+      deduped.push(p);
+    }
+  }
+  return deduped;
 }
 
 /** One Dijkstra run covers all candidate alight points — we do the run
@@ -183,65 +275,68 @@ function makeWalkOracle(
   };
 }
 
-/** Pick the point on `route` that minimizes actual walking distance
- *  to/from `pt`. Uses a single Dijkstra run (via WalkDistanceOracle)
- *  to score all candidate points cheaply. */
-function bestBoardingOrAlightingOnRoute(
+/** Return up to one refined NearestHit per "pass" of the polyline past
+ *  `pt` — one per local minimum within MAX_WALK_TO_STOP. Each hit's
+ *  distMeters is the real road-graph walking distance from `pt` to the
+ *  snap, so downstream scoring uses walk-accurate numbers.
+ *
+ *  For corridor routes this usually returns 1 hit. For lollipop routes
+ *  near a point the jeep visits twice, this returns 2. */
+function candidateHitsOnRoute(
   route: JeepneyRoute,
   pt: LngLat,
-  walkGraph: RoadGraph | null
-): NearestHit | null {
-  if (route.coordinates.length < 2) return null;
-  const baseline = nearestOnRoute(route, pt);
-  if (baseline.distMeters > MAX_WALK_TO_STOP) return null;
-  if (!walkGraph) return baseline;
-
-  const oracle = makeWalkOracle(pt, walkGraph);
-  const baselineWalk = oracle.distanceTo(baseline.point);
-
-  // Skip sampling when the baseline walk is already short — the user
-  // is essentially on the route, no point spending cycles.
-  if (baselineWalk < SKIP_SAMPLING_BELOW_M) {
-    return {
-      point: baseline.point,
-      distMeters: baselineWalk,
-      position: baseline.position,
-    };
-  }
+  walkGraph: RoadGraph | null,
+  oracle: WalkDistanceOracle | null
+): NearestHit[] {
+  if (route.coordinates.length < 2) return [];
+  const rawPicks = allSnapCandidates(route, pt, MAX_WALK_TO_STOP);
+  if (rawPicks.length === 0) return [];
+  if (!walkGraph || !oracle) return rawPicks;
 
   const { length: lineLen } = getRouteCache(route);
-  // Shift the window to compensate when clamped against the ends — we
-  // still get 2×SAMPLE_WINDOW of coverage whenever the line is long enough.
-  let loStart = baseline.position - SAMPLE_WINDOW;
-  let hiStart = baseline.position + SAMPLE_WINDOW;
-  if (loStart < 0) {
-    hiStart = Math.min(lineLen, hiStart - loStart);
-    loStart = 0;
-  }
-  if (hiStart > lineLen) {
-    loStart = Math.max(0, loStart - (hiStart - lineLen));
-    hiStart = lineLen;
-  }
 
-  let bestHit: NearestHit = {
-    point: baseline.point,
-    distMeters: baselineWalk,
-    position: baseline.position,
-  };
-  let bestWalk = baselineWalk;
-
-  for (let p = loStart; p <= hiStart; p += SAMPLE_STEP) {
-    if (Math.abs(p - baseline.position) < 1) continue;
-    const coords = samplePointOnLine(route.coordinates, p);
-    if (!coords) continue;
-    if (metersBetween(pt, coords) > bestWalk) continue;
-    const walk = oracle.distanceTo(coords);
-    if (walk < bestWalk) {
-      bestHit = { point: coords, distMeters: walk, position: p };
-      bestWalk = walk;
-    }
-  }
-  return bestHit;
+  return rawPicks
+    .map((baseline) => {
+      const baselineWalk = oracle.distanceTo(baseline.point);
+      if (baselineWalk < SKIP_SAMPLING_BELOW_M) {
+        return {
+          point: baseline.point,
+          distMeters: baselineWalk,
+          position: baseline.position,
+        };
+      }
+      // Small local search around this pass only, so we don't cross
+      // into another pass's territory.
+      let loStart = baseline.position - SAMPLE_WINDOW;
+      let hiStart = baseline.position + SAMPLE_WINDOW;
+      if (loStart < 0) {
+        hiStart = Math.min(lineLen, hiStart - loStart);
+        loStart = 0;
+      }
+      if (hiStart > lineLen) {
+        loStart = Math.max(0, loStart - (hiStart - lineLen));
+        hiStart = lineLen;
+      }
+      let bestHit: NearestHit = {
+        point: baseline.point,
+        distMeters: baselineWalk,
+        position: baseline.position,
+      };
+      let bestWalk = baselineWalk;
+      for (let p = loStart; p <= hiStart; p += SAMPLE_STEP) {
+        if (Math.abs(p - baseline.position) < 1) continue;
+        const coords = samplePointOnLine(route.coordinates, p);
+        if (!coords) continue;
+        if (metersBetween(pt, coords) > bestWalk) continue;
+        const walk = oracle.distanceTo(coords);
+        if (walk < bestWalk) {
+          bestHit = { point: coords, distMeters: walk, position: p };
+          bestWalk = walk;
+        }
+      }
+      return bestHit;
+    })
+    .filter((h) => h.distMeters <= MAX_WALK_TO_STOP);
 }
 
 /** Coordinate at a given along-line position (meters). Returns null
@@ -340,35 +435,26 @@ function sliceRoute(
   toHit: NearestHit
 ): { coordinates: LngLat[]; meters: number } {
   const { length: totalLen } = getRouteCache(route);
-  if (route.topology === "corridor") {
+  if (route.bidirectional) {
+    // Corridor: reverse travel is legal. Always slice the short arc.
     const lo = Math.min(fromHit.position, toHit.position);
     const hi = Math.max(fromHit.position, toHit.position);
     return sliceByPosition(route.coordinates, lo, hi);
   }
-  // Loop: path's start/end seam is arbitrary (it's just where the JSON
-  // author started listing nodes). Forward traversal from A to B can go
-  // two ways around the loop (short arc vs. wrap arc), and both are
-  // legal "forward" motion — the jeep never reverses. Pick the shorter.
-  const forward = sliceByPosition(
-    route.coordinates,
-    Math.min(fromHit.position, toHit.position),
-    Math.max(fromHit.position, toHit.position)
-  );
-  const wrapLegA = sliceByPosition(
-    route.coordinates,
-    Math.max(fromHit.position, toHit.position),
-    totalLen
-  );
-  const wrapLegB = sliceByPosition(
-    route.coordinates,
-    0,
-    Math.min(fromHit.position, toHit.position)
-  );
-  const wrap = {
-    coordinates: wrapLegA.coordinates.concat(wrapLegB.coordinates.slice(1)),
-    meters: wrapLegA.meters + wrapLegB.meters,
+  // One-way route (loop or lollipop): travel is strictly in the
+  // direction of increasing along-line position. If to < from, we must
+  // wrap around the end of the path. Enumeration in `planOnRoute`
+  // already picks the candidate pair that produces the best ride — we
+  // just honor the chosen direction here.
+  if (toHit.position >= fromHit.position) {
+    return sliceByPosition(route.coordinates, fromHit.position, toHit.position);
+  }
+  const legA = sliceByPosition(route.coordinates, fromHit.position, totalLen);
+  const legB = sliceByPosition(route.coordinates, 0, toHit.position);
+  return {
+    coordinates: legA.coordinates.concat(legB.coordinates.slice(1)),
+    meters: legA.meters + legB.meters,
   };
-  return forward.meters <= wrap.meters ? forward : wrap;
 }
 
 interface IntersectionHit {
@@ -414,32 +500,56 @@ function findNearIntersections(
   }
   const cacheA = getRouteCache(routeA);
   const cacheB = getRouteCache(routeB);
-  const hits: IntersectionHit[] = [];
-  const accepted = new Set<string>();
-  const bucketKey = (c: LngLat) =>
-    `${Math.round(c[0] / 0.0005)},${Math.round(c[1] / 0.0005)}`;
+
+  // First pass: per-vertex distances. We keep the raw profile so we can
+  // group consecutive within-threshold runs (corridor where the routes
+  // run parallel) and emit a single transfer point per distinct corridor.
+  type Raw = { idx: number; dist: number; onB: LngLat };
+  const profile: Raw[] = [];
   for (let i = 0; i < routeA.coordinates.length; i++) {
     const vertex = routeA.coordinates[i];
     const snapped = nearestPointOnLine(cacheB.line, point(vertex), {
       units: "meters",
     });
     const dist = snapped.properties.dist ?? Infinity;
-    if (dist > threshold) continue;
-    const bk = bucketKey(vertex);
-    if (accepted.has(bk)) continue;
-    accepted.add(bk);
-    const onB = snapped.geometry.coordinates as LngLat;
+    profile.push({
+      idx: i,
+      dist,
+      onB: snapped.geometry.coordinates as LngLat,
+    });
+  }
+
+  // Group consecutive vertices that are within threshold into "corridors";
+  // for each corridor pick the single closest vertex as the transfer point.
+  // This collapses kilometers of parallel running into one candidate while
+  // still catching distinct crossings.
+  const hits: IntersectionHit[] = [];
+  let i = 0;
+  while (i < profile.length) {
+    if (profile[i].dist > threshold) {
+      i++;
+      continue;
+    }
+    let bestK = i;
+    let j = i;
+    while (j < profile.length && profile[j].dist <= threshold) {
+      if (profile[j].dist < profile[bestK].dist) bestK = j;
+      j++;
+    }
+    const r = profile[bestK];
+    const vertex = routeA.coordinates[r.idx];
     hits.push({
       onA: vertex,
-      onB,
-      walkMeters: dist,
-      posA: cacheA.vertexPositions[i],
+      onB: r.onB,
+      walkMeters: r.dist,
+      posA: cacheA.vertexPositions[r.idx],
       posB: positionOfPointOnPolyline(
         routeB.coordinates,
         cacheB.vertexPositions,
-        onB
+        r.onB
       ),
     });
+    i = j;
   }
   intersectionCache.set(key, {
     refA: routeA.coordinates,
@@ -464,7 +574,11 @@ function buildWalk(
       durationMinutes: Math.max(1, Math.round(meters / WALK_SPEED)),
     };
   }
-  const { coordinates, meters } = walkPathCoordinates(walkGraph, from, to);
+  const { coordinates, meters, instructions } = walkPathCoordinates(
+    walkGraph,
+    from,
+    to
+  );
   return {
     type: "walk",
     from,
@@ -472,6 +586,7 @@ function buildWalk(
     distanceMeters: meters,
     durationMinutes: Math.max(1, Math.round(meters / WALK_SPEED)),
     coordinates,
+    instructions,
   };
 }
 
@@ -523,6 +638,19 @@ function totalMinutes(plan: TripPlan): number {
   return t + plan.transfers * TRANSFER_PENALTY_MIN;
 }
 
+/** Score used to rank candidate plans against each other. Same units as
+ *  totalMinutes but applies WALK_RELUCTANCE so a plan that walks more
+ *  is penalized — even when its wall-clock total is comparable. */
+function rankingScore(plan: TripPlan): number {
+  let walkMin = 0;
+  let rideMin = 0;
+  for (const s of plan.steps) {
+    if (s.type === "walk") walkMin += s.durationMinutes ?? 0;
+    else if (s.type === "jeepney") rideMin += s.durationMinutes ?? 0;
+  }
+  return walkMin * WALK_RELUCTANCE + rideMin + plan.transfers * TRANSFER_PENALTY_MIN;
+}
+
 let cachedWalkGraph: RoadGraph | null = null;
 let cachedRoadsRef: RoadWay[] | null = null;
 function getWalkGraph(roads: RoadWay[] | undefined): RoadGraph | null {
@@ -555,41 +683,83 @@ export function planTrips(
   pointB: LngLat,
   routes: JeepneyRoute[],
   roads?: RoadWay[],
-  maxCandidates = 5
+  maxCandidates = 20
 ): TripCandidate[] {
   const usable = routes.filter((r) => r.coordinates.length >= 2);
   if (usable.length === 0) return [];
   const walkGraph = getWalkGraph(roads);
 
+  // Build one oracle per endpoint and reuse it across every route. Each
+  // oracle internally runs Dijkstra once from its source — hoisting
+  // collapses N-routes × 2 Dijkstra runs into just 2.
+  const oracleA = walkGraph ? makeWalkOracle(pointA, walkGraph) : null;
+  const oracleB = walkGraph ? makeWalkOracle(pointB, walkGraph) : null;
+
   const boarding = usable
     .map((r) => ({
       route: r,
-      hit: bestBoardingOrAlightingOnRoute(r, pointA, walkGraph),
+      hits: candidateHitsOnRoute(r, pointA, walkGraph, oracleA),
     }))
-    .filter((x): x is { route: JeepneyRoute; hit: NearestHit } => x.hit !== null);
+    .filter((x) => x.hits.length > 0);
   const alighting = usable
     .map((r) => ({
       route: r,
-      hit: bestBoardingOrAlightingOnRoute(r, pointB, walkGraph),
+      hits: candidateHitsOnRoute(r, pointB, walkGraph, oracleB),
     }))
-    .filter((x): x is { route: JeepneyRoute; hit: NearestHit } => x.hit !== null);
+    .filter((x) => x.hits.length > 0);
 
   if (boarding.length === 0 || alighting.length === 0) return [];
 
   const plans: TripPlan[] = [];
 
-  // Direct trips
+  // Direct trips — per route, pick the (board, alight) pair that
+  // minimizes total travel time: walk_minutes + ride_minutes. Walking
+  // is slower per meter (80 vs 250 m/min) so this naturally prefers
+  // shorter walks, but it lets the rider walk a bit further when doing
+  // so dodges a long loop ride (e.g. catching a return-leg pass instead
+  // of riding the whole outbound loop).
+  // For non-bidirectional routes we require forward-only travel to
+  // disambiguate which "pass" of a self-overlapping route the jeep is
+  // actually on.
   for (const b of boarding) {
     const a = alighting.find((x) => x.route.id === b.route.id);
     if (!a) continue;
-    if (metersBetween(b.hit.point, a.hit.point) < 10) continue;
-    plans.push(
-      assembleTrip([
-        buildWalk(pointA, b.hit.point, walkGraph),
-        buildJeepney(b.route, b.hit, a.hit),
-        buildWalk(a.hit.point, pointB, walkGraph),
-      ])
-    );
+    const route = b.route;
+    let bestPair: { bh: NearestHit; ah: NearestHit } | null = null;
+    let bestScore = Infinity;
+    for (const bh of b.hits) {
+      for (const ah of a.hits) {
+        if (metersBetween(bh.point, ah.point) < 10) continue;
+        if (!route.bidirectional && ah.position < bh.position) {
+          const p = route.path;
+          const isClosed = p.length > 2 && p[0] === p[p.length - 1];
+          if (!isClosed) continue;
+        }
+        const walkSum = bh.distMeters + ah.distMeters;
+        const { length: totalLen } = getRouteCache(route);
+        let ridelen: number;
+        if (ah.position >= bh.position) {
+          ridelen = ah.position - bh.position;
+        } else {
+          ridelen = totalLen - bh.position + ah.position;
+        }
+        const score =
+          (walkSum / WALK_SPEED) * WALK_RELUCTANCE + ridelen / JEEPNEY_SPEED;
+        if (score < bestScore) {
+          bestPair = { bh, ah };
+          bestScore = score;
+        }
+      }
+    }
+    if (bestPair) {
+      plans.push(
+        assembleTrip([
+          buildWalk(pointA, bestPair.bh.point, walkGraph),
+          buildJeepney(route, bestPair.bh, bestPair.ah),
+          buildWalk(bestPair.ah.point, pointB, walkGraph),
+        ])
+      );
+    }
   }
 
   // Routes that already cover both A and B on their own — a transfer
@@ -601,7 +771,10 @@ export function planTrips(
     }
   }
 
-  // One-transfer trips
+  // One-transfer trips — iterate every (boardHit, alightHit) pair so
+  // self-overlapping routes contribute every pass to transfer search,
+  // matching the direct-trip path. Downstream signature dedupe keeps
+  // only the best plan per (routeA→routeB) code pair.
   for (const b of boarding) {
     if (directRouteIds.has(b.route.id)) continue;
     for (const a of alighting) {
@@ -612,53 +785,79 @@ export function planTrips(
         a.route,
         MAX_TRANSFER_WALK
       );
-      for (const x of intersections) {
-        if (metersBetween(b.hit.point, x.onA) < 10) continue;
-        if (metersBetween(x.onB, a.hit.point) < 10) continue;
-        const hitOnA: NearestHit = {
-          point: x.onA,
-          distMeters: 0,
-          position: x.posA,
-        };
-        const hitOnB: NearestHit = {
-          point: x.onB,
-          distMeters: 0,
-          position: x.posB,
-        };
-        const steps: TripStep[] = [buildWalk(pointA, b.hit.point, walkGraph)];
-        steps.push(buildJeepney(b.route, b.hit, hitOnA));
-        if (x.walkMeters >= MIN_TRANSFER_WALK_RENDERED) {
-          steps.push(buildWalk(x.onA, x.onB, walkGraph));
+      // eslint-disable-next-line no-console
+      console.log(
+        `[transfer] ${b.route.code}→${a.route.code}: ${intersections.length} intersections`
+      );
+      if (intersections.length === 0) continue;
+      for (const bHit of b.hits) {
+        for (const aHit of a.hits) {
+          for (const x of intersections) {
+            if (metersBetween(bHit.point, x.onA) < 10) continue;
+            if (metersBetween(x.onB, aHit.point) < 10) continue;
+            // Forward-only guard on non-bidirectional routes, matching
+            // the direct-trip rule.
+            if (!b.route.bidirectional && x.posA < bHit.position) {
+              const p = b.route.path;
+              const isClosed = p.length > 2 && p[0] === p[p.length - 1];
+              if (!isClosed) continue;
+            }
+            if (!a.route.bidirectional && aHit.position < x.posB) {
+              const p = a.route.path;
+              const isClosed = p.length > 2 && p[0] === p[p.length - 1];
+              if (!isClosed) continue;
+            }
+            const hitOnA: NearestHit = {
+              point: x.onA,
+              distMeters: 0,
+              position: x.posA,
+            };
+            const hitOnB: NearestHit = {
+              point: x.onB,
+              distMeters: 0,
+              position: x.posB,
+            };
+            const steps: TripStep[] = [
+              buildWalk(pointA, bHit.point, walkGraph),
+            ];
+            steps.push(buildJeepney(b.route, bHit, hitOnA));
+            if (x.walkMeters >= MIN_TRANSFER_WALK_RENDERED) {
+              steps.push(buildWalk(x.onA, x.onB, walkGraph));
+            }
+            steps.push(buildJeepney(a.route, hitOnB, aHit));
+            steps.push(buildWalk(aHit.point, pointB, walkGraph));
+            plans.push(assembleTrip(steps));
+          }
         }
-        steps.push(buildJeepney(a.route, hitOnB, a.hit));
-        steps.push(buildWalk(a.hit.point, pointB, walkGraph));
-        plans.push(assembleTrip(steps));
       }
     }
   }
 
-  // Dedupe by jeepney-code signature, keep fastest per signature.
-  const bySig = new Map<string, TripCandidate>();
+  // Dedupe by jeepney-code signature. Within a signature, keep the plan
+  // with the lowest ranking score (walk-reluctance-weighted). The
+  // displayed `minutes` stays wall-clock so the UI is honest.
+  const bySig = new Map<string, TripCandidate & { score: number }>();
   for (const plan of plans) {
     const sig = plan.steps
       .filter((s) => s.type === "jeepney")
       .map((s) => s.routeCode)
       .join("→");
     const minutes = totalMinutes(plan);
+    const score = rankingScore(plan);
     const prev = bySig.get(sig);
-    if (!prev || minutes < prev.minutes) {
-      bySig.set(sig, { plan, minutes });
+    if (!prev || score < prev.score) {
+      bySig.set(sig, { plan, minutes, score });
     }
   }
-  const ranked = Array.from(bySig.values()).sort(
-    (p, q) => p.minutes - q.minutes
-  );
+  const ranked = Array.from(bySig.values()).sort((p, q) => p.score - q.score);
   if (ranked.length === 0) return [];
-  // Drop candidates >2× the best — almost always loop-wrap artifacts.
-  const bestMin = ranked[0].minutes;
+  // Drop candidates whose score is >3× the best — almost always
+  // loop-wrap artifacts.
+  const bestScore = ranked[0].score;
   return ranked
-    .filter((c) => c.minutes <= bestMin * 2)
-    .slice(0, maxCandidates);
+    .filter((c) => c.score <= bestScore * 3)
+    .slice(0, maxCandidates)
+    .map(({ plan, minutes }) => ({ plan, minutes }));
 }
 
 export function planTrip(

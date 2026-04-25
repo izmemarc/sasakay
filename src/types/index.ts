@@ -48,6 +48,22 @@ export interface Place {
   address?: string;
 }
 
+/** One human-readable instruction inside a walking leg, e.g.
+ *  "Walk south on Rizal Avenue for 200m" → { turn: "start", street:
+ *  "Rizal Avenue", meters: 200, bearing: "south" }. Generated from the
+ *  same node-path the walk polyline is rendered from, grouped by street. */
+export interface WalkInstruction {
+  /** "start" only for the first segment; "left"/"right"/"straight" at
+   *  street transitions; "arrive" for the final stub leg. */
+  turn: "start" | "left" | "right" | "straight" | "arrive";
+  /** Street name for this instruction's segment, or null if unnamed. */
+  street: string | null;
+  meters: number;
+  /** Compass bearing of the first segment in this instruction, used to
+   *  word "Walk south on…" in the UI. */
+  bearing: "N" | "NE" | "E" | "SE" | "S" | "SW" | "W" | "NW";
+}
+
 export interface TripStep {
   type: "walk" | "jeepney";
   from: [number, number];
@@ -59,6 +75,9 @@ export interface TripStep {
   fare?: number;
   coordinates?: [number, number][];
   durationMinutes?: number;
+  /** Turn-by-turn instructions, only populated on walk steps when the
+   *  road graph is available. Undefined for the straight-line fallback. */
+  instructions?: WalkInstruction[];
 }
 
 export interface TripPlan {

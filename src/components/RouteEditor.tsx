@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { CircleMarker, Polyline, useMapEvents } from "react-leaflet";
+import { CircleMarker, Marker, Polyline, useMapEvents } from "react-leaflet";
+import L from "leaflet";
 import {
   ArrowLeft,
   Download,
@@ -21,6 +22,7 @@ import {
   type GraphNode,
   type RoadGraph,
 } from "../lib/roadGraph";
+import { isJeepneyDrivable } from "../lib/roadFilter";
 
 type LngLat = [number, number];
 
@@ -34,18 +36,6 @@ const COLOR_PRESETS = [
   "#65a30d",
   "#7c3aed",
 ];
-
-const MAIN_HIGHWAY = new Set([
-  "trunk",
-  "trunk_link",
-  "primary",
-  "primary_link",
-  "secondary",
-  "secondary_link",
-  "tertiary",
-  "tertiary_link",
-  "unclassified",
-]);
 
 function toLatLng(c: LngLat[]): [number, number][] {
   return c.map(([lng, lat]) => [lat, lng]);
@@ -115,7 +105,7 @@ export function RouteEditor({ initialId }: Props) {
   }, [loadData]);
 
   const mainRoads = useMemo(
-    () => roads.filter((r) => MAIN_HIGHWAY.has(r.highway ?? "")),
+    () => roads.filter(isJeepneyDrivable),
     [roads]
   );
 
@@ -340,6 +330,43 @@ export function RouteEditor({ initialId }: Props) {
     return pathToCoordinates(graph, pathSteps);
   }, [graph, pathSteps]);
 
+  // Map each node id in the path to the ordered list of positions it
+  // occupies. E.g. a node visited 1st and 10th: [1, 10].
+  const pathIndexByNode = useMemo(() => {
+    const m = new Map<number, number[]>();
+    path.forEach((nodeId, idx) => {
+      const arr = m.get(nodeId) ?? [];
+      arr.push(idx + 1);
+      m.set(nodeId, arr);
+    });
+    return m;
+  }, [path]);
+
+  const seqLabelIcon = useCallback(
+    (label: string, color: string) =>
+      L.divIcon({
+        className: "route-seq",
+        html: `<div style="
+          display:inline-block;
+          background:#ffffff;
+          color:${color};
+          font:800 12px/1 system-ui,-apple-system,sans-serif;
+          padding:3px 7px;
+          border-radius:9999px;
+          border:2px solid ${color};
+          box-shadow:0 2px 4px rgba(0,0,0,0.25);
+          white-space:nowrap;
+          pointer-events:none;
+          text-shadow:0 0 2px #fff;
+        ">${label}</div>`,
+        // Anchor at the node center and let translate offset it up-right
+        // so the pill never sits on top of the node dot itself.
+        iconSize: [0, 0],
+        iconAnchor: [-8, 18],
+      }),
+    []
+  );
+
   const pathLength = useMemo(() => {
     if (!graph || !pathSteps) return 0;
     return pathSteps.reduce(
@@ -411,6 +438,63 @@ export function RouteEditor({ initialId }: Props) {
                   interactive={false}
                 />
               ))}
+              {/* One-way arrows on one-way edges so you can see why the
+                  router won't go a particular way. Drawn from the
+                  graph's edges (not raw OSM ways) so they reflect the
+                  same one-way semantics the editor uses. */}
+              {graph.edges
+                .filter((e) => e.oneway === "yes" || e.oneway === "-1")
+                .map((e) => {
+                  const cs = e.coordinates;
+                  if (cs.length < 2) return null;
+                  // Place the arrow at the midpoint of the edge's
+                  // longest segment so it's visible even on short edges.
+                  let bestI = 1;
+                  let bestLen = -1;
+                  for (let i = 1; i < cs.length; i++) {
+                    const dx = cs[i][0] - cs[i - 1][0];
+                    const dy = cs[i][1] - cs[i - 1][1];
+                    const len = dx * dx + dy * dy;
+                    if (len > bestLen) {
+                      bestLen = len;
+                      bestI = i;
+                    }
+                  }
+                  const a = cs[bestI - 1];
+                  const b = cs[bestI];
+                  const mid: LngLat = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+                  // Direction the jeep can legally travel along this
+                  // segment. "yes" = forward = a→b. "-1" = b→a, so
+                  // flip the rotation reference.
+                  const fromPt = e.oneway === "-1" ? b : a;
+                  const toPt = e.oneway === "-1" ? a : b;
+                  const dlng = toPt[0] - fromPt[0];
+                  const dlat = toPt[1] - fromPt[1];
+                  // SVG: 0deg = pointing up. We need the arrow to point
+                  // along (dlng, dlat) in lng/lat space. atan2(dlng,dlat)
+                  // gives compass bearing (north-up).
+                  const angle = (Math.atan2(dlng, dlat) * 180) / Math.PI;
+                  return (
+                    <Marker
+                      key={`arrow-${e.id}`}
+                      position={[mid[1], mid[0]]}
+                      icon={L.divIcon({
+                        className: "",
+                        iconSize: [14, 14],
+                        iconAnchor: [7, 7],
+                        html: `<div style="
+                          width:14px;height:14px;
+                          display:flex;align-items:center;justify-content:center;
+                          transform:rotate(${angle}deg);
+                          pointer-events:none;
+                        "><svg width="12" height="12" viewBox="0 0 12 12">
+                          <path d="M6 1 L10 9 L6 7 L2 9 Z" fill="#0ea5e9" stroke="#0369a1" stroke-width="0.6" stroke-linejoin="round"/>
+                        </svg></div>`,
+                      })}
+                      interactive={false}
+                    />
+                  );
+                })}
               <MapClicks graph={graph} onPick={addNode} />
               {/* Path preview on hover (ghost line). */}
               {hoverPreviewCoords && (
@@ -475,6 +559,24 @@ export function RouteEditor({ initialId }: Props) {
                   />
                 );
               })}
+              {/* Sequence-number labels on every path node so you can
+                  see traversal order (and spot duplicates/detours). */}
+              {Array.from(pathIndexByNode.entries()).map(([nodeId, indices]) => {
+                const n = graph.nodesById.get(nodeId);
+                if (!n) return null;
+                const label =
+                  indices.length <= 3
+                    ? indices.join(",")
+                    : `${indices[0]}…${indices[indices.length - 1]} (×${indices.length})`;
+                return (
+                  <Marker
+                    key={`seq-${nodeId}`}
+                    position={[n.coord[1], n.coord[0]]}
+                    icon={seqLabelIcon(label, meta.color)}
+                    interactive={false}
+                  />
+                );
+              })}
             </>
           )}
         </BaseMap>
@@ -508,8 +610,9 @@ export function RouteEditor({ initialId }: Props) {
       <aside className="bg-white border-l border-gray-200 flex flex-col">
         <div className="p-3 border-b border-gray-200 flex items-center justify-between gap-2">
           <a
-            href="/"
+            href="/?manage=1"
             className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 shrink-0"
+            title="Back to routes"
           >
             <ArrowLeft size={14} /> Back
           </a>

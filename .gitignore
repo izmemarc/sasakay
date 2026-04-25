@@ -10,3 +10,9 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# Local backups + dev clutter
+/backups/
+*.backup
+*.backup2
+/Map*.png

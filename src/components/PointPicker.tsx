@@ -7,6 +7,7 @@ import {
   ArrowRight,
   ChevronDown,
   ChevronUp,
+  Loader2,
 } from "lucide-react";
 import { useAppStore } from "../store/useAppStore";
 import type { Place } from "../types";
@@ -313,30 +314,42 @@ export function PointPicker({ onOpenAbout }: PointPickerProps = {}) {
   const loadError = useAppStore((s) => s.loadError);
 
   const [noRouteMsg, setNoRouteMsg] = useState<string | null>(null);
+  const [searching, setSearching] = useState(false);
   // On mobile, the whole card can collapse to a single-line summary so
   // it doesn't eat the map. Defaults to collapsed when a trip is already
   // planned (the DirectionsPanel is doing the work); expanded otherwise.
   const [mobileExpanded, setMobileExpanded] = useState(true);
 
-  const canFind = pointA && pointB && routes.length > 0;
+  const canFind = pointA && pointB && routes.length > 0 && !searching;
   const hasAnything = pointA || pointB || tripPlan;
 
   const onFind = () => {
-    if (!pointA || !pointB) return;
+    if (!pointA || !pointB || searching) return;
     setNoRouteMsg(null);
-    const candidates = planTrips(pointA, pointB, routes, roads, 5);
-    if (candidates.length === 0) {
-      setNoRouteMsg(
-        "No jeepney route found. Try moving the points closer to a road or pick a different destination."
-      );
-      setTripCandidates([]);
-      return;
-    }
-    setTripCandidates(candidates);
-    // Collapse on mobile so the user can see the map + directions.
-    if (window.matchMedia("(max-width: 767px)").matches) {
-      setMobileExpanded(false);
-    }
+    setSearching(true);
+    // Defer the heavy synchronous work so React paints the spinner
+    // first. requestAnimationFrame guarantees a paint cycle has run
+    // before we block the main thread with planTrips.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        try {
+          const candidates = planTrips(pointA, pointB, routes, roads, 20);
+          if (candidates.length === 0) {
+            setNoRouteMsg(
+              "No jeepney route found. Try moving the points closer to a road or pick a different destination."
+            );
+            setTripCandidates([]);
+            return;
+          }
+          setTripCandidates(candidates);
+          if (window.matchMedia("(max-width: 767px)").matches) {
+            setMobileExpanded(false);
+          }
+        } finally {
+          setSearching(false);
+        }
+      });
+    });
   };
 
   return (
@@ -402,13 +415,23 @@ export function PointPicker({ onOpenAbout }: PointPickerProps = {}) {
           type="button"
           disabled={!canFind}
           onClick={onFind}
+          aria-busy={searching}
           className="group w-full mt-1 py-2.5 text-sm font-semibold rounded-lg bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 hover:shadow disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed transition-all flex items-center justify-center gap-1.5"
         >
-          Find route
-          <ArrowRight
-            size={15}
-            className="transition-transform group-enabled:group-hover:translate-x-0.5"
-          />
+          {searching ? (
+            <>
+              <Loader2 size={15} className="animate-spin" />
+              Finding routes…
+            </>
+          ) : (
+            <>
+              Find route
+              <ArrowRight
+                size={15}
+                className="transition-transform group-enabled:group-hover:translate-x-0.5"
+              />
+            </>
+          )}
         </button>
 
         {loadError && (

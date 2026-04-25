@@ -7,13 +7,53 @@ import {
   ArrowLeftRight,
   ChevronDown,
   ChevronUp,
+  CornerDownLeft,
+  CornerDownRight,
+  ArrowUp,
+  MapPin,
+  PlayCircle,
 } from "lucide-react";
 import { useAppStore } from "../store/useAppStore";
-import type { TripStep } from "../types";
+import type { TripStep, WalkInstruction } from "../types";
 
 function formatMeters(m: number): string {
   if (m < 1000) return `${Math.round(m)}m`;
   return `${(m / 1000).toFixed(1)}km`;
+}
+
+const COMPASS_WORD: Record<WalkInstruction["bearing"], string> = {
+  N: "north",
+  NE: "northeast",
+  E: "east",
+  SE: "southeast",
+  S: "south",
+  SW: "southwest",
+  W: "west",
+  NW: "northwest",
+};
+
+function instructionText(ins: WalkInstruction, isFirst: boolean): string {
+  const where = ins.street ?? "the path";
+  const dist = formatMeters(ins.meters);
+  if (ins.turn === "arrive") {
+    return ins.street
+      ? `Continue on ${ins.street} for ${dist} to arrive`
+      : `Continue ${dist} to arrive`;
+  }
+  if (ins.turn === "start" || isFirst) {
+    return `Head ${COMPASS_WORD[ins.bearing]} on ${where} for ${dist}`;
+  }
+  if (ins.turn === "left") return `Turn left onto ${where}, ${dist}`;
+  if (ins.turn === "right") return `Turn right onto ${where}, ${dist}`;
+  return `Continue on ${where} for ${dist}`;
+}
+
+function instructionIcon(turn: WalkInstruction["turn"]) {
+  if (turn === "left") return <CornerDownLeft size={13} />;
+  if (turn === "right") return <CornerDownRight size={13} />;
+  if (turn === "arrive") return <MapPin size={13} />;
+  if (turn === "start") return <PlayCircle size={13} />;
+  return <ArrowUp size={13} />;
 }
 
 function StepRow({
@@ -24,6 +64,9 @@ function StepRow({
   isLast: boolean;
 }) {
   const isWalk = step.type === "walk";
+  const hasInstructions =
+    isWalk && step.instructions && step.instructions.length >= 2;
+  const [expanded, setExpanded] = useState(false);
   return (
     <li className="relative flex gap-3 pb-3 last:pb-0">
       {!isLast && (
@@ -41,16 +84,59 @@ function StepRow({
       >
         {isWalk ? <Footprints size={15} /> : <Bus size={15} />}
       </div>
-      <div className="flex-1 pt-0.5">
+      <div className="flex-1 pt-0.5 min-w-0">
         {isWalk ? (
           <>
-            <div className="text-sm font-medium text-gray-900">
-              Walk {formatMeters(step.distanceMeters)}
-            </div>
-            {step.durationMinutes && (
-              <div className="text-xs text-gray-500 mt-0.5">
-                ~{step.durationMinutes} min
+            <button
+              type="button"
+              onClick={
+                hasInstructions ? () => setExpanded((v) => !v) : undefined
+              }
+              className={`text-left w-full ${
+                hasInstructions
+                  ? "cursor-pointer hover:text-emerald-700 transition-colors"
+                  : "cursor-default"
+              }`}
+              aria-expanded={hasInstructions ? expanded : undefined}
+              disabled={!hasInstructions}
+            >
+              <div className="text-sm font-medium text-gray-900 flex items-center gap-1.5">
+                Walk {formatMeters(step.distanceMeters)}
+                {hasInstructions &&
+                  (expanded ? (
+                    <ChevronUp size={13} className="text-gray-400" />
+                  ) : (
+                    <ChevronDown size={13} className="text-gray-400" />
+                  ))}
               </div>
+              {step.durationMinutes && (
+                <div className="text-xs text-gray-500 mt-0.5">
+                  ~{step.durationMinutes} min
+                  {hasInstructions && !expanded && (
+                    <span className="text-gray-400">
+                      {" "}
+                      · {step.instructions!.length} steps
+                    </span>
+                  )}
+                </div>
+              )}
+            </button>
+            {hasInstructions && expanded && (
+              <ol className="mt-2 ml-1 space-y-1.5 border-l-2 border-gray-100 pl-3">
+                {step.instructions!.map((ins, k) => (
+                  <li
+                    key={k}
+                    className="flex items-start gap-1.5 text-xs text-gray-700"
+                  >
+                    <span className="shrink-0 mt-0.5 text-gray-400">
+                      {instructionIcon(ins.turn)}
+                    </span>
+                    <span className="leading-snug">
+                      {instructionText(ins, k === 0)}
+                    </span>
+                  </li>
+                ))}
+              </ol>
             )}
           </>
         ) : (

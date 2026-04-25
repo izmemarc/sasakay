@@ -69,6 +69,10 @@ function toGeoJSON(overpass) {
         highway: el.tags?.highway ?? null,
         name: el.tags?.name ?? null,
         oneway: el.tags?.oneway ?? null,
+        // junction=roundabout is needed so the editor can let you draw
+        // any direction through a roundabout instead of forcing a long
+        // way around (OSM tags roundabouts as one-way).
+        junction: el.tags?.junction ?? null,
         ref: el.tags?.ref ?? null,
       },
       geometry: {

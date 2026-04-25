@@ -6,6 +6,7 @@ import {
   pathToCoordinates,
   type RoadGraph,
 } from "./roadGraph";
+import { isJeepneyDrivable } from "./roadFilter";
 
 interface RouteIndex {
   files: string[];
@@ -122,22 +123,8 @@ function fileToRoute(
   };
 }
 
-const MAIN_HIGHWAY = new Set([
-  "trunk",
-  "trunk_link",
-  "primary",
-  "primary_link",
-  "secondary",
-  "secondary_link",
-  "tertiary",
-  "tertiary_link",
-  "unclassified",
-]);
-
 export async function loadRoutes(roads: RoadWay[]): Promise<JeepneyRoute[]> {
-  // IMPORTANT: must use the same road filter as the editor so node ids
-  // stay stable between saving (editor) and loading (app).
-  const mainRoads = roads.filter((r) => MAIN_HIGHWAY.has(r.highway ?? ""));
+  const mainRoads = roads.filter(isJeepneyDrivable);
   const graph = buildRoadGraph(mainRoads);
 
   const indexRes = await fetch("/routes/index.json");

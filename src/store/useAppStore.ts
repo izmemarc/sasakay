@@ -116,8 +116,10 @@ export const useAppStore = create<AppState>((set, get) => ({
         routes,
         places: placesRes,
         roads,
-        visibleRouteIds:
-          current.size === 0 ? new Set(routes.map((r) => r.id)) : current,
+        // Routes start hidden — user opens RoutesManager to toggle on
+        // the ones they care about. Avoids cluttering the trip-planning
+        // map with every line on first load.
+        visibleRouteIds: current,
         visibleCategories: currentCats ?? allCats,
         dataLoaded: true,
         loadError: null,

@@ -20,6 +20,8 @@ export default defineConfig({
       ],
       workbox: {
         globPatterns: ["**/*.{js,css,html,json,geojson,png,svg,ico,webmanifest}"],
+        // roads.geojson is ~2.2 MB — bump cap so it precaches for offline routing.
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         runtimeCaching: [
           {
             urlPattern: ({ url }) =>

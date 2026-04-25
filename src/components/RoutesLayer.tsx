@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Polyline, Marker } from "react-leaflet";
 import L from "leaflet";
 import { useAppStore } from "../store/useAppStore";
@@ -67,6 +68,46 @@ function arrowIcon(color: string, bearingDeg: number) {
   });
 }
 
+interface RouteOverlayProps {
+  route: JeepneyRoute;
+  opacity: number;
+  showArrows: boolean;
+}
+
+// Per-route subcomponent so React skips work when only an unrelated
+// route's props change. Polylines and arrow markers are recreated only
+// when this route's own props change — Leaflet's underlying layers stay
+// mounted across unrelated renders.
+const RouteOverlay = memo(function RouteOverlay({
+  route,
+  opacity,
+  showArrows,
+}: RouteOverlayProps) {
+  const elements: React.ReactNode[] = [];
+  route.segments.forEach((seg, si) => {
+    elements.push(
+      <Polyline
+        key={`${route.id}-${si}`}
+        positions={toLatLng(seg)}
+        pathOptions={{ color: route.color, opacity, weight: 3 }}
+      />
+    );
+    if (showArrows && route.topology === "loop") {
+      arrowPoints(seg, 400).forEach((a, j) =>
+        elements.push(
+          <Marker
+            key={`${route.id}-${si}-arrow-${j}`}
+            position={[a.lat, a.lng]}
+            icon={arrowIcon(route.color, a.bearingDeg)}
+            interactive={false}
+          />
+        )
+      );
+    }
+  });
+  return <>{elements}</>;
+});
+
 export function RoutesLayer() {
   const routes = useAppStore((s) => s.routes);
   const tripPlan = useAppStore((s) => s.tripPlan);
@@ -76,44 +117,26 @@ export function RoutesLayer() {
   if (!showRoutes) return null;
 
   const active = tripPlan ? usedRouteCodes(tripPlan.steps) : null;
-  const filtered = routes.filter((r) => visibleRouteIds.has(r.id));
 
   return (
     <>
-      {filtered.flatMap((r: JeepneyRoute) => {
+      {routes.map((r: JeepneyRoute) => {
+        if (!visibleRouteIds.has(r.id)) return null;
         const isActive = active ? active.has(r.code) : null;
-        // When a trip is active, the active route's sliced A→B path is drawn
-        // by TripLayer; skip its full polyline here to avoid visual clutter.
-        if (isActive) return [];
+        // When a trip is active, the active route's sliced A→B path is
+        // drawn by TripLayer; skip its full polyline here to avoid
+        // visual clutter.
+        if (isActive) return null;
         const opacity = active === null ? 0.7 : 0.15;
-        const weight = 3;
-        const elements: React.ReactNode[] = [];
-        r.segments.forEach((seg, si) => {
-          elements.push(
-            <Polyline
-              key={`${r.id}-${si}`}
-              positions={toLatLng(seg)}
-              pathOptions={{
-                color: r.color,
-                opacity,
-                weight,
-              }}
-            />
-          );
-          if (active === null && r.topology === "loop") {
-            arrowPoints(seg, 400).forEach((a, j) =>
-              elements.push(
-                <Marker
-                  key={`${r.id}-${si}-arrow-${j}`}
-                  position={[a.lat, a.lng]}
-                  icon={arrowIcon(r.color, a.bearingDeg)}
-                  interactive={false}
-                />
-              )
-            );
-          }
-        });
-        return elements;
+        const showArrows = active === null;
+        return (
+          <RouteOverlay
+            key={r.id}
+            route={r}
+            opacity={opacity}
+            showArrows={showArrows}
+          />
+        );
       })}
     </>
   );

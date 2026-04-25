@@ -27,12 +27,27 @@ export default function App() {
 function TripPlanner() {
   const loadData = useAppStore((s) => s.loadData);
   const [preloadPct, setPreloadPct] = useState<number | null>(null);
-  const [managerOpen, setManagerOpen] = useState(false);
+  // Auto-open the routes manager when returning from the editor
+  // (`/?manage=1`) so Back lands on a known surface, not the blank
+  // trip planner.
+  const [managerOpen, setManagerOpen] = useState(() =>
+    new URLSearchParams(window.location.search).has("manage")
+  );
   const [aboutOpen, setAboutOpen] = useState(false);
 
   useEffect(() => {
     void loadData();
   }, [loadData]);
+
+  // Strip ?manage=1 from the URL once consumed so the user's address
+  // bar doesn't carry it around forever.
+  useEffect(() => {
+    if (managerOpen && window.location.search.includes("manage")) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("manage");
+      window.history.replaceState({}, "", url.toString());
+    }
+  }, [managerOpen]);
 
   useEffect(() => {
     const id = window.setTimeout(() => {
