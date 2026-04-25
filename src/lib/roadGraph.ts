@@ -703,7 +703,12 @@ function sliceEdge(
 /** Return a road-following polyline from `fromPt` to `toPt`. Snaps each
  *  endpoint to the closest point on the closest road edge (not just to
  *  the nearest junction node), so walks start in the right direction
- *  even when the user is mid-block. */
+ *  even when the user is mid-block.
+ *
+ *  Returns null when there is no plausible road walk — the points are
+ *  too far from any road, no graph path exists, or the road walk would
+ *  be an absurd detour. Callers should treat null as "this leg isn't
+ *  walkable" rather than draw a misleading straight line. */
 export function walkPathCoordinates(
   graph: RoadGraph,
   fromPt: LngLat,
@@ -712,16 +717,14 @@ export function walkPathCoordinates(
   coordinates: LngLat[];
   meters: number;
   instructions?: WalkInstruction[];
-} {
+} | null {
   const directDist = haversineM(fromPt, toPt);
   if (directDist < 40) {
     return { coordinates: [fromPt, toPt], meters: directDist };
   }
   const projFrom = nearestPointOnGraph(graph, fromPt, 500);
   const projTo = nearestPointOnGraph(graph, toPt, 500);
-  if (!projFrom || !projTo) {
-    return { coordinates: [fromPt, toPt], meters: directDist };
-  }
+  if (!projFrom || !projTo) return null;
   const STUB_M = 15;
   const stubFrom = projFrom.distMeters;
   const stubTo = projTo.distMeters;
@@ -780,17 +783,13 @@ export function walkPathCoordinates(
       }
     }
   }
-  if (bestSrcId === -1) {
-    return { coordinates: [fromPt, toPt], meters: directDist };
-  }
+  if (bestSrcId === -1) return null;
 
   let midSteps: PathStep[] = [];
   let midCoords: LngLat[] = [];
   if (bestSrcId !== bestDstId) {
     const sp = shortestPath(graph, bestSrcId, bestDstId);
-    if (!sp) {
-      return { coordinates: [fromPt, toPt], meters: directDist };
-    }
+    if (!sp) return null;
     midSteps = sp;
     midCoords = pathToCoordinates(graph, sp);
   }
@@ -806,19 +805,6 @@ export function walkPathCoordinates(
     projTo.positionMeters
   );
   const meters = stubFrom + bestTotal + stubTo;
-
-  // Bail if road walk is absurdly long compared to direct line.
-  if (meters > directDist * 4.0) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      "[walk] road walk",
-      meters.toFixed(0),
-      "m >> direct",
-      directDist.toFixed(0),
-      "m — falling back"
-    );
-    return { coordinates: [fromPt, toPt], meters: directDist };
-  }
 
   const coords: LngLat[] = [];
   if (stubFrom > STUB_M) coords.push(fromPt);

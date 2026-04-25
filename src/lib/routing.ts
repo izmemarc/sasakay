@@ -13,8 +13,8 @@ import type { RoadWay } from "./loadRoads";
 
 type LngLat = [number, number];
 
-const MAX_WALK_TO_STOP = 500;
-const MAX_TRANSFER_WALK = 300;
+const MAX_WALK_TO_STOP = 800;
+const MAX_TRANSFER_WALK = 400;
 const WALK_SPEED = 80; // m/min
 const JEEPNEY_SPEED = 250; // m/min ~ 15 km/h city jeepney
 // Walk time feels worse than ride time — riders will accept noticeably
@@ -563,9 +563,13 @@ function buildWalk(
   from: LngLat,
   to: LngLat,
   walkGraph: RoadGraph | null
-): TripStep {
+): TripStep | null {
   if (!walkGraph) {
+    // Without a graph we can only honor very short walks — anything
+    // longer is almost certainly going to draw an implausible
+    // straight line over rivers / runways / etc.
     const meters = metersBetween(from, to);
+    if (meters > 150) return null;
     return {
       type: "walk",
       from,
@@ -574,11 +578,9 @@ function buildWalk(
       durationMinutes: Math.max(1, Math.round(meters / WALK_SPEED)),
     };
   }
-  const { coordinates, meters, instructions } = walkPathCoordinates(
-    walkGraph,
-    from,
-    to
-  );
+  const result = walkPathCoordinates(walkGraph, from, to);
+  if (!result) return null;
+  const { coordinates, meters, instructions } = result;
   return {
     type: "walk",
     from,
@@ -752,13 +754,19 @@ export function planTrips(
       }
     }
     if (bestPair) {
-      plans.push(
-        assembleTrip([
-          buildWalk(pointA, bestPair.bh.point, walkGraph),
-          buildJeepney(route, bestPair.bh, bestPair.ah),
-          buildWalk(bestPair.ah.point, pointB, walkGraph),
-        ])
-      );
+      const boardWalk = buildWalk(pointA, bestPair.bh.point, walkGraph);
+      const alightWalk = buildWalk(bestPair.ah.point, pointB, walkGraph);
+      // Skip plans where either walk leg is infeasible — drawing a
+      // straight line over impassable terrain misleads the rider.
+      if (boardWalk && alightWalk) {
+        plans.push(
+          assembleTrip([
+            boardWalk,
+            buildJeepney(route, bestPair.bh, bestPair.ah),
+            alightWalk,
+          ])
+        );
+      }
     }
   }
 
@@ -784,10 +792,6 @@ export function planTrips(
         b.route,
         a.route,
         MAX_TRANSFER_WALK
-      );
-      // eslint-disable-next-line no-console
-      console.log(
-        `[transfer] ${b.route.code}→${a.route.code}: ${intersections.length} intersections`
       );
       if (intersections.length === 0) continue;
       for (const bHit of b.hits) {
@@ -817,15 +821,18 @@ export function planTrips(
               distMeters: 0,
               position: x.posB,
             };
-            const steps: TripStep[] = [
-              buildWalk(pointA, bHit.point, walkGraph),
-            ];
+            const boardWalk = buildWalk(pointA, bHit.point, walkGraph);
+            const alightWalk = buildWalk(aHit.point, pointB, walkGraph);
+            if (!boardWalk || !alightWalk) continue;
+            const steps: TripStep[] = [boardWalk];
             steps.push(buildJeepney(b.route, bHit, hitOnA));
             if (x.walkMeters >= MIN_TRANSFER_WALK_RENDERED) {
-              steps.push(buildWalk(x.onA, x.onB, walkGraph));
+              const transferWalk = buildWalk(x.onA, x.onB, walkGraph);
+              if (!transferWalk) continue;
+              steps.push(transferWalk);
             }
             steps.push(buildJeepney(a.route, hitOnB, aHit));
-            steps.push(buildWalk(aHit.point, pointB, walkGraph));
+            steps.push(alightWalk);
             plans.push(assembleTrip(steps));
           }
         }
